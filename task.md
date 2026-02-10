@@ -16,7 +16,7 @@
 - [x] Backend API (.NET)
 - [x] C++ Hardware Simulation layer
 - [x] C++ Communication layer
-- [ ] C# Application layer
+- [/] C# Application layer
 - [ ] WPF UI layer
 - [ ] Integration & testing
 
