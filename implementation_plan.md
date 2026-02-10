@@ -420,8 +420,8 @@ sequenceDiagram
 ### 🟢 Phase 2 — ATM Client
 
 - [x] 1. WPF ATM UI (`Atm.Client`): Idle → PIN Entry → Main Menu flow
-- [ ] 2. C# App Layer: Session management, service orchestration
-- [ ] 3. Connect UI → App Layer → Backend + Native Logic + Hardware
+- [x] 2. C# App Layer: Session management, service orchestration
+- [x] 3. Connect UI → App Layer → Backend + Native Logic + Hardware
 
 ### 🟡 Phase 3 — Bank Office System (Admin App)
 

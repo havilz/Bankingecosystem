@@ -16,7 +16,7 @@
 - [x] Backend API (.NET)
 - [x] C++ Hardware Simulation layer
 - [x] C++ Communication layer
-- [/] C# Application layer
+- [x] C# Application layer
 - [x] WPF ATM UI (`BankingEcosystem.Atm.Client`)
   - [x] Views: Intro, Onboarding, PIN, Main Menu
   - [x] Fixed: Launch Failure (Rebuilt project)

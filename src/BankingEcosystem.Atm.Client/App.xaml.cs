@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Windows;
+using System.Net.Http;
 
 namespace BankingEcosystem.Atm.UI;
 
@@ -26,7 +27,17 @@ public partial class App : Application
     {
         // Core Services
         services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.AtmSessionService>();
-        services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.IAuthService, BankingEcosystem.Atm.AppLayer.Services.MockAuthService>();
+        
+        // Register HttpClient
+        services.AddSingleton(new HttpClient 
+        { 
+            BaseAddress = new Uri("http://localhost:5046/") 
+        });
+
+        // App Layer Services
+        services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.IAuthService, BankingEcosystem.Atm.AppLayer.Services.AuthService>();
+        services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.IHardwareInteropService, BankingEcosystem.Atm.AppLayer.Services.HardwareInteropService>();
+        services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.ITransactionService, BankingEcosystem.Atm.AppLayer.Services.TransactionService>();
 
         // Views (Transient recommended for Pages)
         services.AddTransient<MainWindow>();

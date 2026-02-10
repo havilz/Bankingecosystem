@@ -205,28 +205,26 @@ public partial class PinEntryView : Page
     {
         if (_currentPin.Length != MaxPinLength) return;
 
-        StatusText.Text = "Verifying PIN...";
+        StatusText.Text = "Memverifikasi PIN...";
         StatusText.Foreground = new SolidColorBrush(Color.FromRgb(255, 211, 116)); // Gold
 
-        // Use injected service if available (runtime), else mock for design-time/fallback
         bool isValid = false;
         
-        if (_authService != null)
+        if (_authService != null && _sessionService?.CardId != null)
         {
-            // Get CardNumber from session (simulated)
-            string cardNumber = _sessionService?.CurrentCardNumber ?? "1234567890"; 
-            isValid = await _authService.VerifyPinAsync(cardNumber, _currentPin);
+            // Real flow: use CardId from session (set during VerifyCard in OnboardingView)
+            isValid = await _authService.VerifyPinAsync(_sessionService.CardId.Value, _currentPin);
         }
         else
         {
-            // Fallback for testing without DI (shouldn't happen in real run)
+            // Fallback for testing without backend
             await Task.Delay(500);
             isValid = _currentPin == "123456"; 
         }
 
         if (isValid)
         {
-            StatusText.Text = "PIN Accepted";
+            StatusText.Text = "PIN Diterima ✓";
             StatusText.Foreground = new SolidColorBrush(Colors.LightGreen);
             await Task.Delay(500); 
 

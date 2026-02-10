@@ -1,34 +1,60 @@
-using System.Threading.Tasks;
+using System.Net.Http.Json;
+using BankingEcosystem.Shared.DTOs;
 
 namespace BankingEcosystem.Atm.AppLayer.Services;
 
 public interface IAuthService
 {
-    Task<bool> VerifyPinAsync(string cardNumber, string pin);
+    Task<VerifyCardResponse?> VerifyCardAsync(string cardNumber);
+    Task<bool> VerifyPinAsync(int cardId, string pin);
 }
 
-public class MockAuthService : IAuthService
+public class AuthService : IAuthService
 {
+    private readonly HttpClient _httpClient;
     private readonly AtmSessionService _sessionService;
 
-    public MockAuthService(AtmSessionService sessionService)
+    public AuthService(HttpClient httpClient, AtmSessionService sessionService)
     {
+        _httpClient = httpClient;
         _sessionService = sessionService;
     }
 
-    public async Task<bool> VerifyPinAsync(string cardNumber, string pin)
+    public async Task<VerifyCardResponse?> VerifyCardAsync(string cardNumber)
     {
-        // Mock logic: PIN "123456" is valid for any card
-        // In real implementation, this would call the Backend API
-        await Task.Delay(500); // Simulate network latency
-
-        if (pin == "123456")
+        try
         {
-            // Simulate successful login
-            _sessionService.Authenticate("mock_jwt_token", "John Doe", 101);
-            return true;
-        }
+            var response = await _httpClient.PostAsJsonAsync("api/auth/verify-card", new VerifyCardRequest(cardNumber));
+            if (!response.IsSuccessStatusCode) return null;
 
-        return false;
+            var result = await response.Content.ReadFromJsonAsync<ApiResponse<VerifyCardResponse>>();
+            return result?.Data; // Returns VerifyCardResponse if successful
+        }
+        catch
+        {
+            return null; // Network error or API down
+        }
+    }
+
+    public async Task<bool> VerifyPinAsync(int cardId, string pin)
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/auth/verify-pin", new VerifyPinRequest(cardId, pin));
+            if (!response.IsSuccessStatusCode) return false;
+
+            var result = await response.Content.ReadFromJsonAsync<ApiResponse<AuthResponse>>();
+            if (result?.Success == true && result.Data != null)
+            {
+                _sessionService.Authenticate(result.Data.Token, result.Data.CustomerName, result.Data.AccountId);
+                return true;
+            }
+            
+            return false;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

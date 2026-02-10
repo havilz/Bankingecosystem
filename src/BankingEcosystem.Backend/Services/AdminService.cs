@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using BankingEcosystem.Backend.Data;
-using BankingEcosystem.Backend.DTOs;
+using BankingEcosystem.Shared.DTOs;
 using BankingEcosystem.Backend.Models;
 
 namespace BankingEcosystem.Backend.Services;

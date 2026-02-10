@@ -173,7 +173,9 @@ Both DLLs built successfully via MSBuild (x64 Debug).
 
 ---
 
-## Phase 2 Step 1: WPF ATM UI
+# Phase 2 Step - ATM CLIENT
+
+## step 1 WPF ATM UI (`Atm.Client`): Idle → PIN Entry → Main Menu flow
 
 ### Theme & Styling
 

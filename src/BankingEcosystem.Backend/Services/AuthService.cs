@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using BankingEcosystem.Backend.Data;
-using BankingEcosystem.Backend.DTOs;
+using BankingEcosystem.Shared.DTOs;
 
 namespace BankingEcosystem.Backend.Services;
 
@@ -45,7 +45,7 @@ public class AuthService(BankingDbContext db, IConfiguration config)
         await db.SaveChangesAsync();
 
         var token = GenerateJwt(card.Customer.FullName, card.Account.AccountNumber, "ATMUser");
-        return new AuthResponse(token, card.Account.AccountNumber, card.Customer.FullName, card.Account.Balance);
+        return new AuthResponse(token, card.Account.AccountNumber, card.Customer.FullName, card.Account.Balance, card.AccountId);
     }
 
     public async Task<EmployeeLoginResponse?> EmployeeLoginAsync(string employeeCode, string password)

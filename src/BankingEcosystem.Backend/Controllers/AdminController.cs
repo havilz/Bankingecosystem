@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using BankingEcosystem.Backend.DTOs;
+using BankingEcosystem.Shared.DTOs;
 using BankingEcosystem.Backend.Services;
 
 namespace BankingEcosystem.Backend.Controllers;
