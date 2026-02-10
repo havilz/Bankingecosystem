@@ -10,6 +10,7 @@ C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\obj\Debug\net10.0-wi
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\obj\Debug\net10.0-windows\BankingEcosystem.Atm.AppLayer.AssemblyInfoInputs.cache
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\obj\Debug\net10.0-windows\BankingEcosystem.Atm.AppLayer.AssemblyInfo.cs
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\obj\Debug\net10.0-windows\BankingEcosystem.Atm.AppLayer.csproj.CoreCompileInputs.cache
+C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\obj\Debug\net10.0-windows\BankingEcosystem.Atm.AppLayer.sourcelink.json
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\obj\Debug\net10.0-windows\BankingE.7256491D.Up2Date
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\obj\Debug\net10.0-windows\BankingEcosystem.Atm.AppLayer.dll
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\obj\Debug\net10.0-windows\refint\BankingEcosystem.Atm.AppLayer.dll

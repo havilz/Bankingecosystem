@@ -9,7 +9,7 @@ Simulasi ekosistem perbankan lengkap dengan ATM, termasuk card reader, cash disp
 ```mermaid
 graph TB
     subgraph "Presentation Layer"
-        UI["WPF UI (XAML + C#)"]
+        UI["Atm.Client (WPF)"]
     end
 
     subgraph "Application Layer"
@@ -298,7 +298,7 @@ BankingEcosystem/
 ├── BankingEcosystem.sln                    # Main solution
 │
 ├── src/
-│   ├── BankingEcosystem.Atm.UI/            # WPF Project — ATM Client
+│   ├── BankingEcosystem.Atm.Client/        # WPF Project — ATM Client (Renamed from UI)
 │   │   ├── Views/                          # XAML screens
 │   │   ├── ViewModels/                     # MVVM ViewModels
 │   │   ├── Controls/                       # Custom WPF controls (keypad, etc)
@@ -419,9 +419,9 @@ sequenceDiagram
 
 ### 🟢 Phase 2 — ATM Client
 
-- [ ] 1. WPF ATM UI: Idle → PIN Entry → Main Menu flow
+- [x] 1. WPF ATM UI (`Atm.Client`): Idle → PIN Entry → Main Menu flow
 - [ ] 2. C# App Layer: Session management, service orchestration
-- [ ] 3. Connect UI → App Layer → Backend + Hardware
+- [ ] 3. Connect UI → App Layer → Backend + Native Logic + Hardware
 
 ### 🟡 Phase 3 — Bank Office System (Admin App)
 

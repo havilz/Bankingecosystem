@@ -140,29 +140,90 @@ Build succeeded.
 
 ---
 
-## Step 4  C++ Hardware Simulation + Communication Layer
+## Step 4 C++ Hardware Simulation + Communication Layer
 
 ### Hardware DLL (BankingEcosystem.Hardware)
+
 Simulasi hardware ATM, dikompilasi sebagai native DLL x64.
 
-| Module | File | Fungsi |
-|---|---|---|
-| CardReader | card_reader.cpp | Insert/eject kartu, state tracking |
-| CashDispenser | cash_dispenser.cpp | Dispense uang (validasi denominasi Rp50.000), tracking sisa uang, refill |
-| ReceiptPrinter | receipt_printer.cpp | Simulasi cetak struk ke stdout |
-| Keypad | keypad.cpp | Simulasi input PIN, ready state |
+| Module         | File                | Fungsi                                                                   |
+| -------------- | ------------------- | ------------------------------------------------------------------------ |
+| CardReader     | card_reader.cpp     | Insert/eject kartu, state tracking                                       |
+| CashDispenser  | cash_dispenser.cpp  | Dispense uang (validasi denominasi Rp50.000), tracking sisa uang, refill |
+| ReceiptPrinter | receipt_printer.cpp | Simulasi cetak struk ke stdout                                           |
+| Keypad         | keypad.cpp          | Simulasi input PIN, ready state                                          |
 
 ### NativeLogic DLL (BankingEcosystem.NativeLogic)
+
 Core logic ATM di native layer.
 
-| Module | File | Fungsi |
-|---|---|---|
-| ATM FSM | atm_state_machine.cpp | Finite State Machine: Idle - CardInserted - PinEntry - Authenticated - Transaction - Dispensing - Completed - Error |
-| TransactionValidator | transaction_validator.cpp | Cek withdrawal limit, sufficient balance, transfer amount max |
-| EncryptionHelper | encryption_helper.cpp | Simple hash PIN (simulasi, production pakai BCrypt di backend) |
+| Module               | File                      | Fungsi                                                                                                              |
+| -------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| ATM FSM              | atm_state_machine.cpp     | Finite State Machine: Idle - CardInserted - PinEntry - Authenticated - Transaction - Dispensing - Completed - Error |
+| TransactionValidator | transaction_validator.cpp | Cek withdrawal limit, sufficient balance, transfer amount max                                                       |
+| EncryptionHelper     | encryption_helper.cpp     | Simple hash PIN (simulasi, production pakai BCrypt di backend)                                                      |
 
 ### C# Interop (P/Invoke)
+
 `NativeMethods.cs` berisi `HardwareInterop` dan `NativeLogicInterop` classes dengan semua DllImport declarations.
 
 ### Build Status
+
 Both DLLs built successfully via MSBuild (x64 Debug).
+
+---
+
+## Phase 2 Step 1: WPF ATM UI
+
+### Theme & Styling
+
+- **Palette**: Mandiri Navy (`#003D7A`) & Gold (`#F5A623`)
+- **Window**: Portrait 768x1024 (Fixed size)
+- **Resources**: `AtmTheme.xaml` containing styles for buttons, keypad, and typography.
+
+### Screens Implemented
+
+1. **OnboardingView (Welcome Screen)**
+   - **Style**: Ultra Minimalist (Header Only: Logo + Jam), body kosong bersih.
+   - **Info Icon**: Ikon (i) kecil di pojok kiri bawah.
+     - **Hover**: Muncul tooltip "Press C to insert card or Enter for cardless".
+   - **Shortcuts**: C (Card), Enter (Cardless).
+
+2. **PinEntryView (Security)**
+   - **Input**: Mendukung keyboard fisik (0-9) dan on-screen keypad.
+   - **Masking**: 6-digit dot display.
+   - **Validation**: Visual feedback saat input.
+
+3. **MainMenuView (Dashboard)**
+   - **Layout**: Grid 2x3 untuk menu transaksi utama.
+   - **Menu Items**: Tarik Tunai, Setor Tunai, Transfer, Cek Saldo, Riwayat, Ubah PIN.
+   - **Header**: Menampilkan nama nasabah & saldo (placeholder/masked).
+   - **Footer**: Tombol Exit (Esc) kembali ke welcome screen.
+
+### Build Status
+
+Project `BankingEcosystem.Atm.UI` built successfully (net10.0-windows).
+
+### Important Configuration
+
+1. **Copy Native DLLs**: Added `<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>` for:
+   - `BankingEcosystem.Hardware.dll`
+   - `BankingEcosystem.NativeLogic.dll`
+2. **Platform Target**: Removed explicit `x64` target to allow `Any CPU` (default). This ensures compatibility with the .NET host (`dotnet.exe`) while still running as a 64-bit process on x64 Windows.
+
+### Running the Application
+
+Due to build configuration issues with the initial `Atm.UI` project, the working application is now located in `src/BankingEcosystem.Atm.Client`.
+
+1.  **Run the Client:**
+
+    ```bash
+    dotnet run --project src/BankingEcosystem.Atm.Client/BankingEcosystem.Atm.Client.csproj
+    ```
+
+    _Note: The project was rebuilt as `Atm.Client` to resolve a silent startup failure caused by corrupted build metadata. The original `Atm.UI` folder should be ignored._
+
+### Troubleshooting Notes
+
+- If you encounter a `XamlParseException` regarding `MandiriNavyBrush`, ensure you are using the latest code where references were corrected to `NavyBrush`.
+- If the application hangs silently, ensure no lingering `Atm.Client.exe` processes are running (`taskkill /F /IM BankingEcosystem.Atm.Client.exe`).

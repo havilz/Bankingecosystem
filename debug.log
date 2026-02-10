@@ -1,0 +1,26 @@
+2/10/2026 9:13:41 AM: App Constructor started
+2/10/2026 9:13:41 AM: App OnStartup started
+2/10/2026 9:13:41 AM: App OnStartup finished
+2/10/2026 9:35:29 AM: App Constructor started
+2/10/2026 9:35:29 AM: App OnStartup started
+2/10/2026 9:35:29 AM: App OnStartup finished
+2/10/2026 9:35:29 AM: MainWindow Constructor started
+2/10/2026 9:35:30 AM: MainWindow InitializeComponent finished
+2/10/2026 9:35:30 AM: CRITICAL ERROR: Unhandled Exception: 'Set property 'System.Windows.Documents.TextElement.Foreground' threw an exception.' Line number '68' and line position '26'.
+Inner Exception: '#FF003D7A' is not a valid value for property 'Foreground'.
+   at System.Windows.Markup.XamlReader.RewrapException(Exception e, IXamlLineInfo lineInfo, Uri baseUri)
+   at System.Windows.Markup.WpfXamlLoader.Load(XamlReader xamlReader, IXamlObjectWriterFactory writerFactory, Boolean skipJournaledProperties, Object rootObject, XamlObjectWriterSettings settings, Uri baseUri)
+   at System.Windows.Markup.WpfXamlLoader.LoadBaml(XamlReader xamlReader, Boolean skipJournaledProperties, Object rootObject, XamlAccessLevel accessLevel, Uri baseUri)
+   at System.Windows.Markup.XamlReader.LoadBaml(Stream stream, ParserContext parserContext, Object parent, Boolean closeStream)
+   at System.Windows.Application.LoadBamlStreamWithSyncInfo(Stream stream, ParserContext pc)
+   at System.Windows.Application.DoStartup()
+   at System.Windows.Application.<.ctor>b__1_0(Object unused)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2/10/2026 9:38:20 AM: App Constructor started
+2/10/2026 9:38:20 AM: App OnStartup started
+2/10/2026 9:38:20 AM: App OnStartup finished
+2/10/2026 9:38:20 AM: MainWindow Constructor started
+2/10/2026 9:38:20 AM: MainWindow InitializeComponent finished
+2/10/2026 9:38:21 AM: MainWindow Initial Navigation done
+2/10/2026 9:38:21 AM: MainWindow Loaded

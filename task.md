@@ -17,7 +17,11 @@
 - [x] C++ Hardware Simulation layer
 - [x] C++ Communication layer
 - [/] C# Application layer
-- [ ] WPF UI layer
+- [x] WPF ATM UI (`BankingEcosystem.Atm.Client`)
+  - [x] Views: Intro, Onboarding, PIN, Main Menu
+  - [x] Fixed: Launch Failure (Rebuilt project)
+  - [x] Fixed: Xaml Resource Crash (NavyBrush)
+  - [x] Documentation (English) `src/BankingEcosystem.Atm.Client/doc/README.md`
 - [ ] Integration & testing
 
 ## Phase 3: Future
