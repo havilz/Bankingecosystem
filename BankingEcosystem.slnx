@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/BankingEcosystem.Admin.UI/BankingEcosystem.Admin.UI.csproj" />
+    <Project Path="src/BankingEcosystem.Atm.AppLayer/BankingEcosystem.Atm.AppLayer.csproj" />
+    <Project Path="src/BankingEcosystem.Atm.UI/BankingEcosystem.Atm.UI.csproj" />
+    <Project Path="src/BankingEcosystem.Backend/BankingEcosystem.Backend.csproj" />
+    <Project Path="src/BankingEcosystem.Hardware/BankingEcosystem.Hardware.vcxproj" Id="a1b2c3d4-1111-2222-3333-444455556666" />
+    <Project Path="src/BankingEcosystem.Interop/BankingEcosystem.Interop.csproj" />
+    <Project Path="src/BankingEcosystem.NativeLogic/BankingEcosystem.NativeLogic.vcxproj" Id="b2c3d4e5-1111-2222-3333-555566667777" />
+    <Project Path="src/BankingEcosystem.Shared/BankingEcosystem.Shared.csproj" />
+  </Folder>
+</Solution>

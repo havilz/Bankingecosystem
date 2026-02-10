@@ -1,0 +1,11 @@
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\bin\Debug\net10.0-windows\BankingEcosystem.Interop.deps.json
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\bin\Debug\net10.0-windows\BankingEcosystem.Interop.dll
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\bin\Debug\net10.0-windows\BankingEcosystem.Interop.pdb
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\obj\Debug\net10.0-windows\BankingEcosystem.Interop.GeneratedMSBuildEditorConfig.editorconfig
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\obj\Debug\net10.0-windows\BankingEcosystem.Interop.AssemblyInfoInputs.cache
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\obj\Debug\net10.0-windows\BankingEcosystem.Interop.AssemblyInfo.cs
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\obj\Debug\net10.0-windows\BankingEcosystem.Interop.csproj.CoreCompileInputs.cache
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\obj\Debug\net10.0-windows\BankingEcosystem.Interop.dll
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\obj\Debug\net10.0-windows\refint\BankingEcosystem.Interop.dll
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\obj\Debug\net10.0-windows\BankingEcosystem.Interop.pdb
+C:\project\bank_ecosystem\src\BankingEcosystem.Interop\obj\Debug\net10.0-windows\ref\BankingEcosystem.Interop.dll

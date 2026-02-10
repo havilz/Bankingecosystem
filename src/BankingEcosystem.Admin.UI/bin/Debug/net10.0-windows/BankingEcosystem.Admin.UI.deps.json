@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "BankingEcosystem.Admin.UI/1.0.0": {
+        "dependencies": {
+          "BankingEcosystem.Shared": "1.0.0"
+        },
+        "runtime": {
+          "BankingEcosystem.Admin.UI.dll": {}
+        }
+      },
+      "BankingEcosystem.Shared/1.0.0": {
+        "runtime": {
+          "BankingEcosystem.Shared.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BankingEcosystem.Admin.UI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BankingEcosystem.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

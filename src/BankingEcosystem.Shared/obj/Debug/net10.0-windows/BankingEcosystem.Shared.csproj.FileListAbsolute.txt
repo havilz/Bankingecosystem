@@ -1,0 +1,11 @@
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\bin\Debug\net10.0-windows\BankingEcosystem.Shared.deps.json
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\bin\Debug\net10.0-windows\BankingEcosystem.Shared.dll
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\bin\Debug\net10.0-windows\BankingEcosystem.Shared.pdb
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\obj\Debug\net10.0-windows\BankingEcosystem.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\obj\Debug\net10.0-windows\BankingEcosystem.Shared.AssemblyInfoInputs.cache
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\obj\Debug\net10.0-windows\BankingEcosystem.Shared.AssemblyInfo.cs
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\obj\Debug\net10.0-windows\BankingEcosystem.Shared.csproj.CoreCompileInputs.cache
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\obj\Debug\net10.0-windows\BankingEcosystem.Shared.dll
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\obj\Debug\net10.0-windows\refint\BankingEcosystem.Shared.dll
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\obj\Debug\net10.0-windows\BankingEcosystem.Shared.pdb
+C:\project\bank_ecosystem\src\BankingEcosystem.Shared\obj\Debug\net10.0-windows\ref\BankingEcosystem.Shared.dll
