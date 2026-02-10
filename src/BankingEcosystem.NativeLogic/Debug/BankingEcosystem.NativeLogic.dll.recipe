@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\project\bank_ecosystem\bin\Debug\BankingEcosystem.NativeLogic.dll</FullPath>
+      <FullPath>C:\project\bank_ecosystem\src\BankingEcosystem.NativeLogic\bin\Debug\BankingEcosystem.NativeLogic.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

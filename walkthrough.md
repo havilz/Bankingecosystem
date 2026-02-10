@@ -137,3 +137,32 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 ```
+
+---
+
+## Step 4  C++ Hardware Simulation + Communication Layer
+
+### Hardware DLL (BankingEcosystem.Hardware)
+Simulasi hardware ATM, dikompilasi sebagai native DLL x64.
+
+| Module | File | Fungsi |
+|---|---|---|
+| CardReader | card_reader.cpp | Insert/eject kartu, state tracking |
+| CashDispenser | cash_dispenser.cpp | Dispense uang (validasi denominasi Rp50.000), tracking sisa uang, refill |
+| ReceiptPrinter | receipt_printer.cpp | Simulasi cetak struk ke stdout |
+| Keypad | keypad.cpp | Simulasi input PIN, ready state |
+
+### NativeLogic DLL (BankingEcosystem.NativeLogic)
+Core logic ATM di native layer.
+
+| Module | File | Fungsi |
+|---|---|---|
+| ATM FSM | atm_state_machine.cpp | Finite State Machine: Idle - CardInserted - PinEntry - Authenticated - Transaction - Dispensing - Completed - Error |
+| TransactionValidator | transaction_validator.cpp | Cek withdrawal limit, sufficient balance, transfer amount max |
+| EncryptionHelper | encryption_helper.cpp | Simple hash PIN (simulasi, production pakai BCrypt di backend) |
+
+### C# Interop (P/Invoke)
+`NativeMethods.cs` berisi `HardwareInterop` dan `NativeLogicInterop` classes dengan semua DllImport declarations.
+
+### Build Status
+Both DLLs built successfully via MSBuild (x64 Debug).

@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\project\bank_ecosystem\bin\Debug\BankingEcosystem.Hardware.dll</FullPath>
+      <FullPath>C:\project\bank_ecosystem\src\BankingEcosystem.Hardware\bin\Debug\BankingEcosystem.Hardware.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

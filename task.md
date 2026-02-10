@@ -1,6 +1,6 @@
 # Banking Ecosystem Simulation - Planning
 
-## Phase 1: Architecture Planning ✅
+## Phase 1: Architecture Planning
 
 - [x] Define overall system architecture & tech stack
 - [x] Design layer separation (UI → App → Logic → Backend → DB)
@@ -14,8 +14,8 @@
 - [x] Setup solution structure & projects
 - [x] Database layer (LocalDB + EF Core)
 - [x] Backend API (.NET)
-- [ ] C++ Hardware Simulation layer
-- [ ] C++ Communication layer
+- [x] C++ Hardware Simulation layer
+- [x] C++ Communication layer
 - [ ] C# Application layer
 - [ ] WPF UI layer
 - [ ] Integration & testing

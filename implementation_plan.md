@@ -411,39 +411,39 @@ sequenceDiagram
 
 ### 🔵 Phase 1 — Foundation (Core)
 
-1. Setup solution structure + semua project references [X]
-2. Database schema + EF Core migrations [X]
-3. Backend API: Auth + Account + basic Transaction [X]
-4. C++ Hardware DLL: CardReader + CashDispenser (minimal) []
-5. C# Interop wrapper (P/Invoke) []
+- [x] 1. Setup solution structure + semua project references
+- [x] 2. Database schema + EF Core migrations
+- [x] 3. Backend API: Auth + Account + basic Transaction
+- [x] 4. C++ Hardware DLL: CardReader + CashDispenser (minimal)
+- [x] 5. C# Interop wrapper (P/Invoke)
 
 ### 🟢 Phase 2 — ATM Client
 
-6. WPF ATM UI: Idle → PIN Entry → Main Menu flow []
-7. C# App Layer: Session management, service orchestration []
-8. Connect UI → App Layer → Backend + Hardware []
+- [ ] 1. WPF ATM UI: Idle → PIN Entry → Main Menu flow
+- [ ] 2. C# App Layer: Session management, service orchestration
+- [ ] 3. Connect UI → App Layer → Backend + Hardware
 
 ### 🟡 Phase 3 — Bank Office System (Admin App)
 
-9. WPF Admin UI: Login karyawan, dashboard []
-10. Manajemen nasabah (CRUD customer + account) []
-11. Manajemen ATM (refill, monitor status, on/offline) []
-12. Reporting & audit log viewer []
+- [ ] 1. WPF Admin UI: Login karyawan, dashboard
+- [ ] 2. Manajemen nasabah (CRUD customer + account)
+- [ ] 3. Manajemen ATM (refill, monitor status, on/offline)
+- [ ] 4. Reporting & audit log viewer
 
 ### 🟠 Phase 4 — Full ATM Features
 
-13. Transfer antar rekening []
-14. Balance inquiry + mini statement []
-15. Receipt generation []
-16. ATM state machine (C++ FSM) []
+- [ ] 1. Transfer antar rekening
+- [ ] 2. Balance inquiry + mini statement
+- [ ] 3. Receipt generation
+- [ ] 4. ATM state machine (C++ FSM)
 
 ### 🔴 Phase 5 — Polish & Security
 
-17. PIN encryption + secure communication []
-18. Fraud detection (max attempts, daily limit) []
-19. Error handling + recovery flows []
-20. UI polish (animations, realistic ATM skin) []
-21. Comprehensive testing + seeding data []
+- [ ] 1. PIN encryption + secure communication
+- [ ] 2. Fraud detection (max attempts, daily limit)
+- [ ] 3. Error handling + recovery flows
+- [ ] 4. UI polish (animations, realistic ATM skin)
+- [ ] 5. Comprehensive testing + seeding data
 
 ### ⚪ Phase 6 — Mobile Banking (Future)
 
