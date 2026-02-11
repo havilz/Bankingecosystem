@@ -75,7 +75,7 @@ namespace BankingEcosystem.Atm.UI.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/BankingEcosystem.Atm.Client;component/views/mainmenuview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/BankingEcosystem.Atm.Client;V1.0.0.0;component/views/mainmenuview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\MainMenuView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

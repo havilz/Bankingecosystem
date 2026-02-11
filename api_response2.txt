@@ -1,1 +1,0 @@
-{"success":true,"message":"OK","data":{"transactionId":10,"transactionType":"Unknown","amount":0,"balanceBefore":5000000.00,"balanceAfter":5000000.00,"referenceNumber":"TXN202602101820173661","targetAccountNumber":null,"status":"Success","description":null,"createdAt":"2026-02-10T18:20:17.2600494Z"}}
