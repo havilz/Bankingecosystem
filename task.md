@@ -91,3 +91,16 @@
   - [x] Register services + VMs in `App.xaml.cs`
   - [x] `NavigateToCustomers` command in `MainViewModel.cs`
 - [x] Build & Verify — Admin UI + Backend build passed ✅
+
+### Step 3: ATM Management
+
+- [/] 3. Manajemen ATM (refill, monitor status, on/offline)
+  - [x] Backend: Update `AdminApiService.cs` (add ATM endpoints)
+  - [x] ViewModel: `AtmListViewModel.cs` (List, Toggle Status, Nav to Create/Refill)
+  - [x] ViewModel: `AddAtmViewModel.cs` (Create form)
+  - [x] ViewModel: `RefillAtmViewModel.cs` (Refill dialog logic)
+  - [x] View: `AtmListView.xaml` (DataGrid + Actions)
+  - [x] View: `AddAtmView.xaml` (Form)
+  - [x] View: `RefillAtmView.xaml` (Dialog/Popup)
+  - [x] Navigation: Add "ATM" to sidebar & App.xaml DI
+  - [ ] Build & Verify — Admin UI build

@@ -50,3 +50,9 @@ c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-window
 c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\CustomerListView.g.cs
 c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AddCustomerView.baml
 c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AddCustomerView.g.cs
+C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AddAtmView.g.cs
+C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AtmListView.g.cs
+C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\RefillAtmView.g.cs
+C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AddAtmView.baml
+C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AtmListView.baml
+C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\RefillAtmView.baml

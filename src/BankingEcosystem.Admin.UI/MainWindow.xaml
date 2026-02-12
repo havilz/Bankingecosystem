@@ -26,6 +26,15 @@
         <DataTemplate DataType="{x:Type vm:AddCustomerViewModel}">
             <views:AddCustomerView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AtmListViewModel}">
+            <views:AtmListView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AddAtmViewModel}">
+            <views:AddAtmView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RefillAtmViewModel}">
+            <views:RefillAtmView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid Background="{StaticResource LightGrayBrush}">
@@ -50,6 +59,8 @@
                     <Button Content="Dashboard" Command="{Binding NavigateToDashboardCommand}" 
                             Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
                     <Button Content="Nasabah" Command="{Binding NavigateToCustomersCommand}" 
+                            Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
+                    <Button Content="ATM" Command="{Binding NavigateToAtmsCommand}" 
                             Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
                     <!-- More nav buttons will be added in later steps -->
                 </StackPanel>

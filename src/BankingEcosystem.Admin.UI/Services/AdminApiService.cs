@@ -69,4 +69,39 @@ public class AdminApiService(HttpClient httpClient)
         var resp = await httpClient.GetFromJsonAsync<ApiResponse<List<AccountTypeDto>>>("api/admin/account-types", JsonOpts);
         return resp?.Data ?? [];
     }
+
+    // ─── ATM Management ───
+    public async Task<List<AtmDto>> GetAtmsAsync()
+    {
+        var resp = await httpClient.GetFromJsonAsync<ApiResponse<List<AtmDto>>>("api/admin/atms", JsonOpts);
+        return resp?.Data ?? [];
+    }
+
+    public async Task<AtmDto?> CreateAtmAsync(CreateAtmRequest request)
+    {
+        var resp = await httpClient.PostAsJsonAsync("api/admin/atms", request);
+        var body = await resp.Content.ReadFromJsonAsync<ApiResponse<AtmDto>>(JsonOpts);
+        if (body is { Success: true }) return body.Data;
+        throw new Exception(body?.Message ?? "Failed to create ATM");
+    }
+
+    public async Task RefillAtmAsync(RefillAtmRequest request)
+    {
+        var resp = await httpClient.PostAsJsonAsync("api/admin/atms/refill", request);
+        if (!resp.IsSuccessStatusCode)
+        {
+             var body = await resp.Content.ReadFromJsonAsync<ApiResponse<object>>(JsonOpts);
+             throw new Exception(body?.Message ?? "Failed to refill ATM");
+        }
+    }
+
+    public async Task ToggleAtmStatusAsync(int atmId)
+    {
+        var resp = await httpClient.PatchAsync($"api/admin/atms/{atmId}/toggle", null);
+         if (!resp.IsSuccessStatusCode)
+        {
+             var body = await resp.Content.ReadFromJsonAsync<ApiResponse<object>>(JsonOpts);
+             throw new Exception(body?.Message ?? "Failed to toggle ATM status");
+        }
+    }
 }

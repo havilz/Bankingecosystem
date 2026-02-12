@@ -25,6 +25,10 @@ public partial class App : Application
         services.AddHttpClient("AdminApi", client =>
         {
             client.BaseAddress = new Uri("http://localhost:5046/");
+            client.Timeout = TimeSpan.FromSeconds(10);
+        }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
         });
 
         // Services
@@ -40,6 +44,10 @@ public partial class App : Application
         services.AddSingleton<MainViewModel>();
         services.AddTransient<LoginViewModel>();
         services.AddTransient<DashboardViewModel>();
+        // Note: Customer & ATM VMs are created manually in MainViewModel but good to have them if needed
+        services.AddTransient<AtmListViewModel>();
+        services.AddTransient<AddAtmViewModel>();
+        services.AddTransient<RefillAtmViewModel>();
 
         // Views
         services.AddSingleton<MainWindow>();

@@ -91,6 +91,44 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void NavigateToAtms()
+    {
+        var vm = new AtmListViewModel(
+            _apiService,
+            navigateToAdd: () => NavigateToAddAtm(),
+            showRefill: (id, onRefillDone) => ShowRefillAtm(id, onRefillDone)
+        );
+        CurrentView = vm;
+    }
+
+    private void NavigateToAddAtm()
+    {
+        var vm = new AddAtmViewModel(
+            _apiService,
+            onSuccess: () => NavigateToAtms(),
+            onCancel: () => NavigateToAtms()
+        );
+        CurrentView = vm;
+    }
+
+    private void ShowRefillAtm(int atmId, Action onRefillDone)
+    {
+        var vm = new RefillAtmViewModel(
+            _apiService,
+            onClose: () => 
+            {
+                NavigateToAtms();
+                // We might want to refresh the list, but NavigateToAtms creates a new VM which loads. 
+                // So onRefillDone is implicitly handled by reloading the list in the new VM.
+                // However, the original callback required "Action onRefillDone".
+                // We can just NavigateToAtms() which is simpler.
+            }
+        );
+        vm.Initialize(atmId, async () => { await Task.Yield(); }); // No extra action needed as we navigate back
+        CurrentView = vm;
+    }
+
+    [RelayCommand]
     private void Logout()
     {
         _authService.Logout();

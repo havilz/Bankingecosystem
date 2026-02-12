@@ -1,0 +1,42 @@
+<UserControl x:Class="BankingEcosystem.Admin.UI.Views.RefillAtmView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:BankingEcosystem.Admin.UI.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:RefillAtmViewModel}">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Border Background="White" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                Padding="30" CornerRadius="8">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.2"/>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="Restock ATM Cash" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                <TextBlock Text="{Binding TargetAtmInfo}" FontWeight="SemiBold" Foreground="#555" Margin="0,0,0,15"/>
+
+                <TextBlock Text="Denomination" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <ComboBox ItemsSource="{Binding Denominations}" SelectedItem="{Binding SelectedDenomination}" 
+                          Padding="5" Margin="0,0,0,15"/>
+
+                <TextBlock Text="Quantity (Lembar)" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Padding="5" Margin="0,0,0,20"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" 
+                            Width="80" Margin="0,0,10,0" Padding="8" Background="#EEE" BorderThickness="0"/>
+                    
+                    <Button Content="Refill" Command="{Binding SubmitRefillCommand}" 
+                            Width="100" Padding="8" Background="#28a745" Foreground="White" BorderThickness="0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

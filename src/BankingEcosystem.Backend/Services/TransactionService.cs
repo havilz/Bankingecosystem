@@ -9,6 +9,11 @@ public class TransactionService(BankingDbContext db)
 {
     public async Task<TransactionDto> WithdrawAsync(WithdrawRequest request)
     {
+        // Check ATM Status
+        var atm = await db.Atms.FindAsync(request.AtmId);
+        if (atm == null) throw new ArgumentException("ATM not found");
+        if (!atm.IsOnline) throw new InvalidOperationException("ATM is currently offline/under maintenance");
+
         var account = await db.Accounts.FindAsync(request.AccountId)
             ?? throw new ArgumentException("Account not found");
 
@@ -21,8 +26,13 @@ public class TransactionService(BankingDbContext db)
         if (request.Amount > account.DailyLimit)
             throw new InvalidOperationException($"Amount exceeds daily limit of Rp {account.DailyLimit:N0}");
 
+        // Check ATM Cash inventory (Simplified: just total cash check for now)
+        if (atm.TotalCash < request.Amount)
+             throw new InvalidOperationException("ATM has insufficient cash");
+
         var balanceBefore = account.Balance;
         account.Balance -= request.Amount;
+        atm.TotalCash -= request.Amount; // Update ATM cash
 
         var tx = new Transaction
         {
@@ -109,6 +119,13 @@ public class TransactionService(BankingDbContext db)
 
     public async Task<TransactionDto> BalanceInquiryAsync(int accountId, int? atmId)
     {
+        if (atmId.HasValue)
+        {
+            var atm = await db.Atms.FindAsync(atmId.Value);
+            if (atm != null && !atm.IsOnline)
+                throw new InvalidOperationException("ATM is currently offline");
+        }
+
         var account = await db.Accounts.FindAsync(accountId)
             ?? throw new ArgumentException("Account not found");
 
