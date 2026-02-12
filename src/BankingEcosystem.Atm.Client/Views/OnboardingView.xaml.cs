@@ -6,16 +6,12 @@ using BankingEcosystem.Atm.AppLayer.Services;
 
 namespace BankingEcosystem.Atm.UI.Views;
 
-public partial class OnboardingView : Page
+public partial class OnboardingView : UserControl
 {
-    private readonly DispatcherTimer _clockTimer;
     private readonly IAuthService _authService;
     private readonly AtmSessionService _sessionService;
+    private readonly DispatcherTimer _clockTimer;
 
-    // Design-time fallback
-    public OnboardingView() : this(null!, null!) { }
-
-    [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
     public OnboardingView(IAuthService authService, AtmSessionService sessionService)
     {
         _authService = authService;
@@ -30,7 +26,7 @@ public partial class OnboardingView : Page
         UpdateClock();
 
         // Focus for keyboard input
-        Loaded += (_, _) => Focus();
+        Loaded += (_, _) => { Keyboard.Focus(this); };
     }
 
     private void UpdateClock()
@@ -67,15 +63,7 @@ public partial class OnboardingView : Page
     private async Task InsertCardAsync()
     {
         // Simulate reading card number from hardware
-        // In production, this would come from HardwareInteropService.ReadCard()
         string simulatedCardNumber = "6221453754749809"; // Test card seeded in DB
-
-        if (_authService == null)
-        {
-            // Fallback: no DI, just navigate
-            NavigateToPinEntry();
-            return;
-        }
 
         // Step 1: Verify card with Backend API
         var cardResult = await _authService.VerifyCardAsync(simulatedCardNumber);

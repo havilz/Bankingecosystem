@@ -149,3 +149,10 @@ Inner Exception: No default constructor found for type 'BankingEcosystem.Atm.UI.
 2/10/2026 4:21:02 PM: MainWindow Initial Navigation done
 2/10/2026 4:21:02 PM: MainWindow Loaded
 2/10/2026 4:21:02 PM: App OnStartup finished
+2/11/2026 2:14:09 PM: App Constructor started
+2/11/2026 2:14:09 PM: App OnStartup started
+2/11/2026 2:14:10 PM: MainWindow Constructor started
+2/11/2026 2:14:10 PM: MainWindow InitializeComponent finished
+2/11/2026 2:14:10 PM: MainWindow Initial Navigation done
+2/11/2026 2:14:10 PM: MainWindow Loaded
+2/11/2026 2:14:10 PM: App OnStartup finished

@@ -48,11 +48,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Atm.AppLayer\\BankingEcosystem.Atm.AppLayer.csproj",
+      "projectUniqueName": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Atm.AppLayer\\BankingEcosystem.Atm.AppLayer.csproj",
       "projectName": "BankingEcosystem.Atm.AppLayer",
-      "projectPath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Atm.AppLayer\\BankingEcosystem.Atm.AppLayer.csproj",
+      "projectPath": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Atm.AppLayer\\BankingEcosystem.Atm.AppLayer.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Atm.AppLayer\\obj\\",
+      "outputPath": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Atm.AppLayer\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",

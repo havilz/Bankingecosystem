@@ -3,10 +3,59 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BankingEcosystem.Admin.UI"
+        xmlns:vm="clr-namespace:BankingEcosystem.Admin.UI.ViewModels"
+        xmlns:views="clr-namespace:BankingEcosystem.Admin.UI.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Banking Ecosystem — Bank Office System" Height="700" Width="1100"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <!-- Step 1 DataTemplates -->
+        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+            <views:LoginView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView/>
+        </DataTemplate>
+    </Window.Resources>
 
+    <Grid Background="{StaticResource LightGrayBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Navigation Bar (visible only when logged in) -->
+        <Border Grid.Row="0" Background="{StaticResource CorporateBlueBrush}" Padding="20,10"
+                Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <TextBlock Text="🏦 BANK OFFICE" Foreground="White" FontWeight="Bold" FontSize="18"
+                               VerticalAlignment="Center" Margin="0,0,40,0"/>
+                    <Button Content="Dashboard" Command="{Binding NavigateToDashboardCommand}" 
+                            Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
+                    <!-- More nav buttons will be added in later steps -->
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Center">
+                    <TextBlock Foreground="#CCFFFFFF" VerticalAlignment="Center" Margin="0,0,16,0" FontSize="13">
+                        <Run Text="👤 "/>
+                        <Run Text="{Binding EmployeeName}"/>
+                    </TextBlock>
+                    <Button Content="Logout" Command="{Binding LogoutCommand}"
+                            Padding="12,6" Background="Transparent" Foreground="White"
+                            BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand" FontSize="13"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
     </Grid>
 </Window>

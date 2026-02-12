@@ -342,6 +342,18 @@ namespace BankingEcosystem.Backend.Migrations
                         .IsUnique();
 
                     b.ToTable("Employees");
+
+                    b.HasData(
+                        new
+                        {
+                            EmployeeId = 1,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EmployeeCode = "ADMIN001",
+                            FullName = "Admin Bank",
+                            IsActive = true,
+                            PasswordHash = "$2a$11$T.0pM6SsKJuQyMKw1xKv7.rXbiboVxcJfhvw5lSMyIuvhVcabBPga",
+                            Role = "Manager"
+                        });
                 });
 
             modelBuilder.Entity("BankingEcosystem.Backend.Models.Transaction", b =>

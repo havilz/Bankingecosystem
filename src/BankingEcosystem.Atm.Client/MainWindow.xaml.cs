@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using BankingEcosystem.Atm.UI.Views;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,20 +25,20 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Navigate to a specific page resolved from DI.
+    /// Navigate to a specific view resolved from DI.
     /// </summary>
-    public void NavigateTo<T>() where T : System.Windows.Controls.Page
+    public void NavigateTo<T>() where T : FrameworkElement
     {
-        var page = _serviceProvider.GetRequiredService<T>();
-        MainFrame.Navigate(page);
+        var view = _serviceProvider.GetRequiredService<T>();
+        MainFrame.Content = view;
     }
 
     /// <summary>
-    /// Navigate to a specific page instance (legacy/manual).
+    /// Navigate to a specific view instance (legacy/manual).
     /// </summary>
-    public void NavigateTo(System.Windows.Controls.Page page)
+    public void NavigateTo(FrameworkElement view)
     {
-        MainFrame.Navigate(page);
+        MainFrame.Content = view;
     }
 
     /// <summary>

@@ -40,26 +40,21 @@
 
 ## 🟡 Phase 3 — Bank Office System (Admin App)
 
-- [ ] WPF Admin UI: Login karyawan, dashboard
-- [ ] Manajemen nasabah (CRUD customer + account)
-- [ ] Manajemen ATM (refill, monitor status, on/offline)
-- [ ] Reporting & audit log viewer
+### Step 1: WPF Admin UI — Login karyawan, Dashboard
 
-## 🟠 Phase 4 — Full ATM Features
-
-- [ ] Transfer antar rekening
-- [ ] Balance inquiry + mini statement
-- [ ] Receipt generation
-- [ ] ATM state machine (C++ FSM)
-
-## 🔴 Phase 5 — Polish & Security
-
-- [ ] PIN encryption + secure communication
-- [ ] Fraud detection (max attempts, daily limit)
-- [ ] Error handling + recovery flows
-- [ ] UI polish (animations, realistic ATM skin)
-- [ ] Comprehensive testing + seeding data
-
-## ⚪ Phase 6 — Mobile Banking (Future)
-
-- [ ] TBD (MAUI / Flutter / React Native)
+- [x] Foundation & Setup
+  - [x] Add NuGet packages (`CommunityToolkit.Mvvm`, `Microsoft.Extensions.DependencyInjection`, `Microsoft.Extensions.Http`)
+  - [x] Fix broken `MainWindow.xaml.cs` (duplicate class)
+  - [x] Create `AdminTheme.xaml` (corporate blue/gray styling)
+  - [x] Trim `App.xaml.cs` DI to Step 1 services only
+  - [x] Trim `MainWindow.xaml` DataTemplates to Step 1 only
+- [x] Employee Login
+  - [x] `AdminAuthService.cs` — call `POST /api/auth/employee-login`, store JWT
+  - [x] `NavigationService.cs` — simple view switching via `CurrentView`
+  - [x] `LoginViewModel.cs` — EmployeeCode, Password, validation, LoginCommand
+  - [x] `LoginView.xaml` — login UI (TextBox, PasswordBox, Button)
+  - [x] `MainViewModel.cs` — CurrentView, IsLoggedIn, navigation commands, Logout
+- [x] Dashboard (Placeholder)
+  - [x] `DashboardViewModel.cs` — placeholder stats
+  - [x] `DashboardView.xaml` — welcome screen with placeholder cards
+- [x] Build & Verify — `dotnet build` passes ✅

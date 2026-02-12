@@ -163,6 +163,18 @@ public class BankingDbContext : DbContext
             entity.Property(e => e.PasswordHash).IsRequired().HasMaxLength(256);
             entity.Property(e => e.Role).IsRequired().HasMaxLength(50);
             entity.HasIndex(e => e.EmployeeCode).IsUnique();
+
+            // Seed: 1 employee (password: admin123)
+            entity.HasData(new Employee
+            {
+                EmployeeId = 1,
+                FullName = "Admin Bank",
+                EmployeeCode = "ADMIN001",
+                PasswordHash = "$2a$11$T.0pM6SsKJuQyMKw1xKv7.rXbiboVxcJfhvw5lSMyIuvhVcabBPga", // admin123
+                Role = "Manager",
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 1, 1)
+            });
         });
 
         // ─── AuditLog ───

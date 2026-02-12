@@ -1,10 +1,15 @@
-<Page x:Class="BankingEcosystem.Atm.UI.Views.OnboardingView"
+<UserControl x:Class="BankingEcosystem.Atm.UI.Views.OnboardingView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Title="Selamat Datang"
-      Background="{StaticResource DarkNavyBrush}"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BankingEcosystem.Atm.UI.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1024"
       Focusable="True"
       KeyDown="OnKeyDown">
+    
+
 
     <Grid>
         <Grid.RowDefinitions>
@@ -88,4 +93,4 @@
             </StackPanel>
         </Border>
     </Grid>
-</Page>
+</UserControl>

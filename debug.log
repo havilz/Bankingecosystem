@@ -45,3 +45,17 @@ Inner Exception: '#FF003D7A' is not a valid value for property 'Foreground'.
 2/11/2026 1:20:41 AM: MainWindow Initial Navigation done
 2/11/2026 1:20:41 AM: MainWindow Loaded
 2/11/2026 1:20:41 AM: App OnStartup finished
+2/12/2026 9:42:19 AM: App Constructor started
+2/12/2026 9:42:19 AM: App OnStartup started
+2/12/2026 9:42:19 AM: MainWindow Constructor started
+2/12/2026 9:42:20 AM: MainWindow InitializeComponent finished
+2/12/2026 9:42:20 AM: MainWindow Initial Navigation done
+2/12/2026 9:42:20 AM: MainWindow Loaded
+2/12/2026 9:42:20 AM: App OnStartup finished
+2/12/2026 9:45:45 AM: App Constructor started
+2/12/2026 9:45:46 AM: App OnStartup started
+2/12/2026 9:45:46 AM: MainWindow Constructor started
+2/12/2026 9:45:46 AM: MainWindow InitializeComponent finished
+2/12/2026 9:45:46 AM: MainWindow Initial Navigation done
+2/12/2026 9:45:46 AM: MainWindow Loaded
+2/12/2026 9:45:46 AM: App OnStartup finished
