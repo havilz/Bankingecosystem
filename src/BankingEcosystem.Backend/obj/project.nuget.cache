@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lnFtLh5h4gY=",
+  "dgSpecHash": "tkZCJC558Ys=",
   "success": true,
-  "projectFilePath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj",
+  "projectFilePath": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",

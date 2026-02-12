@@ -10,12 +10,21 @@
         WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
-        <!-- Step 1 DataTemplates -->
+        <!-- DataTemplates -->
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <views:LoginView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
             <views:DashboardView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CustomerListViewModel}">
+            <views:CustomerListView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CustomerDetailViewModel}">
+            <views:CustomerDetailView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AddCustomerViewModel}">
+            <views:AddCustomerView/>
         </DataTemplate>
     </Window.Resources>
 
@@ -39,6 +48,8 @@
                     <TextBlock Text="🏦 BANK OFFICE" Foreground="White" FontWeight="Bold" FontSize="18"
                                VerticalAlignment="Center" Margin="0,0,40,0"/>
                     <Button Content="Dashboard" Command="{Binding NavigateToDashboardCommand}" 
+                            Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
+                    <Button Content="Nasabah" Command="{Binding NavigateToCustomersCommand}" 
                             Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
                     <!-- More nav buttons will be added in later steps -->
                 </StackPanel>

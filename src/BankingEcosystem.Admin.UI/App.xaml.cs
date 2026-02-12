@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Net.Http;
+using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using BankingEcosystem.Admin.UI.Services;
 using BankingEcosystem.Admin.UI.ViewModels;
@@ -29,6 +30,11 @@ public partial class App : Application
         // Services
         services.AddSingleton<NavigationService>();
         services.AddSingleton<AdminAuthService>();
+        services.AddSingleton<AdminApiService>(sp =>
+        {
+            var factory = sp.GetRequiredService<IHttpClientFactory>();
+            return new AdminApiService(factory.CreateClient("AdminApi"));
+        });
 
         // ViewModels
         services.AddSingleton<MainViewModel>();

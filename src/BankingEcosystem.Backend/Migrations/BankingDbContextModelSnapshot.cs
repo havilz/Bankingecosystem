@@ -145,6 +145,17 @@ namespace BankingEcosystem.Backend.Migrations
                         .IsUnique();
 
                     b.ToTable("Atms");
+
+                    b.HasData(
+                        new
+                        {
+                            AtmId = 1,
+                            AtmCode = "ATM001",
+                            IsOnline = true,
+                            LastRefill = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = "Head Office",
+                            TotalCash = 100000000m
+                        });
                 });
 
             modelBuilder.Entity("BankingEcosystem.Backend.Models.AtmCashInventory", b =>

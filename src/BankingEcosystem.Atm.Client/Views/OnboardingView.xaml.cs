@@ -36,10 +36,17 @@ public partial class OnboardingView : UserControl
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
+        // Ignore global keys if overlay is visible
+        if (CardEntryOverlay.Visibility == Visibility.Visible)
+        {
+            if (e.Key == Key.Escape) OnCancelCardEntry(sender, e);
+            return;
+        }
+
         switch (e.Key)
         {
             case Key.C:
-                _ = InsertCardAsync();
+                ShowCardEntry();
                 e.Handled = true;
                 break;
 
@@ -52,7 +59,37 @@ public partial class OnboardingView : UserControl
 
     private void OnCardInsertClick(object sender, RoutedEventArgs e)
     {
-        _ = InsertCardAsync();
+        ShowCardEntry();
+    }
+
+    private void ShowCardEntry()
+    {
+        CardEntryOverlay.Visibility = Visibility.Visible;
+        CardNumberInput.Text = string.Empty;
+        CardNumberInput.Focus();
+    }
+
+    private void OnCancelCardEntry(object sender, RoutedEventArgs e)
+    {
+        CardEntryOverlay.Visibility = Visibility.Collapsed;
+        Keyboard.Focus(this);
+    }
+
+    private void OnSubmitCardEntry(object sender, RoutedEventArgs e)
+    {
+        var cardNumber = CardNumberInput.Text.Trim();
+        if (string.IsNullOrWhiteSpace(cardNumber)) return;
+
+        CardEntryOverlay.Visibility = Visibility.Collapsed;
+        _ = InsertCardAsync(cardNumber);
+    }
+
+    private void OnCardNumberKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            OnSubmitCardEntry(sender, e);
+        }
     }
 
     private void OnCardlessClick(object sender, RoutedEventArgs e)
@@ -60,13 +97,10 @@ public partial class OnboardingView : UserControl
         NavigateToCardless();
     }
 
-    private async Task InsertCardAsync()
+    private async Task InsertCardAsync(string cardNumber)
     {
-        // Simulate reading card number from hardware
-        string simulatedCardNumber = "6221453754749809"; // Test card seeded in DB
-
         // Step 1: Verify card with Backend API
-        var cardResult = await _authService.VerifyCardAsync(simulatedCardNumber);
+        var cardResult = await _authService.VerifyCardAsync(cardNumber);
 
         if (cardResult == null)
         {
@@ -89,7 +123,7 @@ public partial class OnboardingView : UserControl
         }
 
         // Step 2: Store card info in session
-        _sessionService.StartSession(simulatedCardNumber);
+        _sessionService.StartSession(cardNumber);
         _sessionService.CardId = cardResult.CardId;
 
         // Step 3: Navigate to PIN entry

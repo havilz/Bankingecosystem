@@ -54,6 +54,102 @@ public class AdminService(BankingDbContext db)
         return true;
     }
 
+    // ─── Account Management ───
+    public async Task<List<AccountDto>> GetAccountsByCustomerAsync(int customerId)
+    {
+        return await db.Accounts
+            .Where(a => a.CustomerId == customerId)
+            .Include(a => a.AccountType)
+            .OrderByDescending(a => a.CreatedAt)
+            .Select(a => new AccountDto(a.AccountId, a.AccountNumber, a.AccountType.TypeName, a.Balance, a.DailyLimit, a.IsActive, a.CreatedAt))
+            .ToListAsync();
+    }
+
+    public async Task<AccountDto> CreateAccountAsync(CreateAccountRequest request)
+    {
+        var accountType = await db.AccountTypes.FindAsync(request.AccountTypeId)
+            ?? throw new Exception("Account type not found");
+
+        var accountNumber = GenerateAccountNumber();
+        var account = new Account
+        {
+            CustomerId = request.CustomerId,
+            AccountTypeId = request.AccountTypeId,
+            AccountNumber = accountNumber,
+            Balance = request.InitialDeposit,
+            DailyLimit = accountType.DefaultDailyLimit
+        };
+
+        db.Accounts.Add(account);
+        await db.SaveChangesAsync();
+
+        return new AccountDto(account.AccountId, account.AccountNumber, accountType.TypeName, account.Balance, account.DailyLimit, account.IsActive, account.CreatedAt);
+    }
+
+    // ─── Card Management ───
+    public async Task<List<CardDto>> GetCardsByCustomerAsync(int customerId)
+    {
+        return await db.Cards
+            .Where(c => c.CustomerId == customerId)
+            .Include(c => c.Account)
+            .OrderByDescending(c => c.CreatedAt)
+            .Select(c => new CardDto(c.CardId, c.CardNumber, c.AccountId, c.Account.AccountNumber, c.ExpiryDate, c.IsBlocked, c.FailedAttempts))
+            .ToListAsync();
+    }
+
+    public async Task<CardDto> CreateCardAsync(CreateCardRequest request)
+    {
+        var account = await db.Accounts.FindAsync(request.AccountId)
+            ?? throw new Exception("Account not found");
+
+        var cardNumber = GenerateCardNumber();
+        var card = new Card
+        {
+            CustomerId = request.CustomerId,
+            AccountId = request.AccountId,
+            CardNumber = cardNumber,
+            PinHash = BCrypt.Net.BCrypt.HashPassword(request.Pin),
+            ExpiryDate = DateTime.UtcNow.AddYears(5)
+        };
+
+        db.Cards.Add(card);
+        await db.SaveChangesAsync();
+
+        return new CardDto(card.CardId, card.CardNumber, card.AccountId, account.AccountNumber, card.ExpiryDate, card.IsBlocked, card.FailedAttempts);
+    }
+
+    // ─── Account Types ───
+    public async Task<List<AccountTypeDto>> GetAccountTypesAsync()
+    {
+        return await db.AccountTypes
+            .Select(at => new AccountTypeDto(at.AccountTypeId, at.TypeName, at.MinBalance, at.DefaultDailyLimit))
+            .ToListAsync();
+    }
+
+    // ─── Customer Detail (combined) ───
+    public async Task<CustomerDetailDto?> GetCustomerDetailAsync(int id)
+    {
+        var c = await db.Customers.FindAsync(id);
+        if (c == null) return null;
+
+        var accounts = await GetAccountsByCustomerAsync(id);
+        var cards = await GetCardsByCustomerAsync(id);
+
+        return new CustomerDetailDto(c.CustomerId, c.FullName, c.NIK, c.Phone, c.Email, c.Address, c.DateOfBirth, c.CreatedAt, accounts, cards);
+    }
+
+    private static string GenerateAccountNumber()
+    {
+        var rng = new Random();
+        return "10" + rng.NextInt64(10000000, 99999999).ToString();
+    }
+
+    private static string GenerateCardNumber()
+    {
+        var rng = new Random();
+        return "6221" + rng.NextInt64(100000000000, 999999999999).ToString();
+    }
+
     // ─── ATM Management ───
     public async Task<List<AtmDto>> GetAllAtmsAsync()
     {

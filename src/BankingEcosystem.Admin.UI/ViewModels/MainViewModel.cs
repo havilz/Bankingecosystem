@@ -11,6 +11,7 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly NavigationService _navigationService;
     private readonly AdminAuthService _authService;
+    private readonly AdminApiService _apiService;
     private readonly IServiceProvider _serviceProvider;
 
     [ObservableProperty]
@@ -22,10 +23,11 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string _employeeName = string.Empty;
 
-    public MainViewModel(NavigationService navigationService, AdminAuthService authService, IServiceProvider serviceProvider)
+    public MainViewModel(NavigationService navigationService, AdminAuthService authService, AdminApiService apiService, IServiceProvider serviceProvider)
     {
         _navigationService = navigationService;
         _authService = authService;
+        _apiService = apiService;
         _serviceProvider = serviceProvider;
 
         // Start at Login
@@ -58,9 +60,41 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void NavigateToCustomers()
+    {
+        var vm = new CustomerListViewModel(
+            _apiService,
+            navigateToDetail: id => NavigateToCustomerDetail(id),
+            navigateToAdd: () => NavigateToAddCustomer()
+        );
+        CurrentView = vm;
+    }
+
+    private void NavigateToCustomerDetail(int customerId)
+    {
+        var vm = new CustomerDetailViewModel(
+            _apiService,
+            navigateBack: () => NavigateToCustomers()
+        );
+        CurrentView = vm;
+        _ = vm.LoadAsync(customerId);
+    }
+
+    private void NavigateToAddCustomer()
+    {
+        var vm = new AddCustomerViewModel(
+            _apiService,
+            onSaved: () => NavigateToCustomers(),
+            onCancel: () => NavigateToCustomers()
+        );
+        CurrentView = vm;
+    }
+
+    [RelayCommand]
     private void Logout()
     {
         _authService.Logout();
         NavigateToLogin();
     }
 }
+

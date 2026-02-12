@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj": {}
+    "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj": {}
   },
   "projects": {
-    "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj": {
+    "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj",
+        "projectUniqueName": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj",
         "projectName": "BankingEcosystem.Backend",
-        "projectPath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj",
+        "projectPath": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\obj\\",
+        "outputPath": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,8 +28,8 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\BankingEcosystem.Shared.csproj": {
-                "projectPath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\BankingEcosystem.Shared.csproj"
+              "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\BankingEcosystem.Shared.csproj": {
+                "projectPath": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\BankingEcosystem.Shared.csproj"
               }
             }
           }
@@ -516,14 +516,14 @@
         }
       }
     },
-    "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\BankingEcosystem.Shared.csproj": {
+    "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\BankingEcosystem.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\BankingEcosystem.Shared.csproj",
+        "projectUniqueName": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\BankingEcosystem.Shared.csproj",
         "projectName": "BankingEcosystem.Shared",
-        "projectPath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\BankingEcosystem.Shared.csproj",
+        "projectPath": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\BankingEcosystem.Shared.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\obj\\",
+        "outputPath": "c:\\project\\bank_ecosystem\\src\\BankingEcosystem.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "configFilePaths": [

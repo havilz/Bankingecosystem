@@ -17,6 +17,10 @@ public record CreateAccountRequest(int CustomerId, int AccountTypeId, decimal In
 public record CustomerDto(int CustomerId, string FullName, string NIK, string Phone, string? Email, string? Address, DateTime DateOfBirth, DateTime CreatedAt);
 public record CreateCustomerRequest(string FullName, string NIK, string Phone, string? Email, string? Address, DateTime DateOfBirth);
 public record UpdateCustomerRequest(string FullName, string Phone, string? Email, string? Address);
+public record CustomerDetailDto(int CustomerId, string FullName, string NIK, string Phone, string? Email, string? Address, DateTime DateOfBirth, DateTime CreatedAt, List<AccountDto> Accounts, List<CardDto> Cards);
+
+// ─── AccountType ───
+public record AccountTypeDto(int AccountTypeId, string TypeName, decimal MinBalance, decimal DefaultDailyLimit);
 
 // ─── Card ───
 public record CardDto(int CardId, string CardNumber, int AccountId, string AccountNumber, DateTime ExpiryDate, bool IsBlocked, int FailedAttempts);

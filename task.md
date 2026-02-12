@@ -38,6 +38,14 @@
   - [x] Connection Map (layer-by-layer file reference)
 - [x] Integration & end-to-end testing (46/46 passed ✅)
 
+### Step 2.5: Simulated Card Entry (New Request)
+
+- [x] UI — `OnboardingView.xaml`: Add "Insert Card" overlay (TextBox + Button)
+- [x] Logic — `OnboardingView.xaml.cs`: Handle 'C' key to show overlay
+- [x] Logic — `OnboardingView.xaml.cs`: Call `VerifyCardAsync` with user input
+- [x] Verify: Test with new card created in Admin App
+- [x] Fixed: "Gagal memuat saldo" (Added default ATM seed data ID 1)
+
 ## 🟡 Phase 3 — Bank Office System (Admin App)
 
 ### Step 1: WPF Admin UI — Login karyawan, Dashboard
@@ -58,3 +66,28 @@
   - [x] `DashboardViewModel.cs` — placeholder stats
   - [x] `DashboardView.xaml` — welcome screen with placeholder cards
 - [x] Build & Verify — `dotnet build` passes ✅
+
+### Step 2: Customer & Account Management
+
+- [x] Backend — New Endpoints
+  - [x] `GET /api/admin/customers/{id}/accounts` — accounts by customer
+  - [x] `POST /api/admin/accounts` — create account
+  - [x] `GET /api/admin/customers/{id}/cards` — cards by customer
+  - [x] `POST /api/admin/cards` — issue card
+  - [x] New DTOs: `CustomerDetailDto`, `AccountTypeDto`
+- [x] Admin UI — Service
+  - [x] `AdminApiService.cs` — HTTP client for customer/account/card endpoints
+- [x] Admin UI — ViewModels
+  - [x] `CustomerListViewModel.cs` — list, search, navigate
+  - [x] `CustomerDetailViewModel.cs` — info, accounts, cards, actions
+  - [x] `AddCustomerViewModel.cs` — form + validation + save
+- [x] Admin UI — Views
+  - [x] `CustomerListView.xaml` — search bar + DataGrid + Add button
+  - [x] `CustomerDetailView.xaml` — info panel + accounts/cards grids
+  - [x] `AddCustomerView.xaml` — form with validation
+- [x] Admin UI — Navigation & DI
+  - [x] Add "Nasabah" nav button in `MainWindow.xaml`
+  - [x] Add DataTemplates for new ViewModels
+  - [x] Register services + VMs in `App.xaml.cs`
+  - [x] `NavigateToCustomers` command in `MainViewModel.cs`
+- [x] Build & Verify — Admin UI + Backend build passed ✅

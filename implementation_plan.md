@@ -425,7 +425,7 @@ sequenceDiagram
 
 ### 🟡 Phase 3 — Bank Office System (Admin App)
 
-- [ ] 1. WPF Admin UI: Login karyawan, dashboard
+- [x] 1. WPF Admin UI: Login karyawan, dashboard
 - [ ] 2. Manajemen nasabah (CRUD customer + account)
 - [ ] 3. Manajemen ATM (refill, monitor status, on/offline)
 - [ ] 4. Reporting & audit log viewer

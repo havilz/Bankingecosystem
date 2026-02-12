@@ -141,6 +141,17 @@ public class BankingDbContext : DbContext
             entity.Property(e => e.Location).IsRequired().HasMaxLength(200);
             entity.Property(e => e.TotalCash).HasColumnType("decimal(18,2)");
             entity.HasIndex(e => e.AtmCode).IsUnique();
+
+            // Seed default ATM
+            entity.HasData(new Atm
+            {
+                AtmId = 1,
+                AtmCode = "ATM001",
+                Location = "Head Office",
+                TotalCash = 100_000_000m,
+                IsOnline = true,
+                LastRefill = new DateTime(2026, 1, 1)
+            });
         });
 
         // ─── AtmCashInventory ───

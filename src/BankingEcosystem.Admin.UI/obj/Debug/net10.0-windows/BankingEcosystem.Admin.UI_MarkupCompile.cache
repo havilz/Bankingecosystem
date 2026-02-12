@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\App.xaml
-4-623852102
+7-1836483311
 
-11583553668
-221-1296175466
-MainWindow.xaml;Resources\AdminTheme.xaml;Views\DashboardView.xaml;Views\LoginView.xaml;
+18687968058
+221-1086735164
+MainWindow.xaml;Resources\AdminTheme.xaml;Views\AddCustomerView.xaml;Views\CustomerDetailView.xaml;Views\CustomerListView.xaml;Views\DashboardView.xaml;Views\LoginView.xaml;
 
 False
 

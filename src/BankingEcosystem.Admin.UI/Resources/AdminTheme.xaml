@@ -25,6 +25,15 @@
     <SolidColorBrush x:Key="ErrorBrush"         Color="{StaticResource ErrorColor}"/>
     <SolidColorBrush x:Key="WarningBrush"       Color="{StaticResource WarningColor}"/>
 
+    <!-- Aliases used by Views -->
+    <SolidColorBrush x:Key="BackgroundBrush"    Color="{StaticResource LightGrayColor}"/>
+    <SolidColorBrush x:Key="PrimaryBrush"       Color="{StaticResource CorporateBlueColor}"/>
+    <SolidColorBrush x:Key="AccentBrush"        Color="{StaticResource AccentBlueColor}"/>
+
+    <!-- Converters -->
+    <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
     <!-- ═══ Button Styles ═══ -->
     <Style x:Key="PrimaryButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource AccentBlueBrush}"/>

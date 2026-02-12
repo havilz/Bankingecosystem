@@ -19,9 +19,9 @@ public class AdminController(AdminService adminService, AuditLogService auditLog
     [HttpGet("customers/{id}")]
     public async Task<IActionResult> GetCustomer(int id)
     {
-        var customer = await adminService.GetCustomerByIdAsync(id);
+        var customer = await adminService.GetCustomerDetailAsync(id);
         if (customer == null) return NotFound(new ApiResponse<object>(false, "Customer not found", null));
-        return Ok(new ApiResponse<CustomerDto>(true, "OK", customer));
+        return Ok(new ApiResponse<CustomerDetailDto>(true, "OK", customer));
     }
 
     [HttpPost("customers")]
@@ -46,6 +46,60 @@ public class AdminController(AdminService adminService, AuditLogService auditLog
         if (!result) return NotFound(new ApiResponse<object>(false, "Customer not found", null));
         await auditLogService.LogAsync(null, "UPDATE_CUSTOMER", "Customer", id, $"Updated customer: {request.FullName}");
         return Ok(new ApiResponse<object>(true, "Customer updated", null));
+    }
+
+    // ─── Account ───
+    [HttpGet("customers/{id}/accounts")]
+    public async Task<IActionResult> GetAccountsByCustomer(int id)
+    {
+        var accounts = await adminService.GetAccountsByCustomerAsync(id);
+        return Ok(new ApiResponse<List<AccountDto>>(true, "OK", accounts));
+    }
+
+    [HttpPost("accounts")]
+    public async Task<IActionResult> CreateAccount([FromBody] CreateAccountRequest request)
+    {
+        try
+        {
+            var account = await adminService.CreateAccountAsync(request);
+            await auditLogService.LogAsync(null, "CREATE_ACCOUNT", "Account", account.AccountId, $"Created account: {account.AccountNumber}");
+            return Ok(new ApiResponse<AccountDto>(true, "Account created", account));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new ApiResponse<object>(false, ex.Message, null));
+        }
+    }
+
+    // ─── Card ───
+    [HttpGet("customers/{id}/cards")]
+    public async Task<IActionResult> GetCardsByCustomer(int id)
+    {
+        var cards = await adminService.GetCardsByCustomerAsync(id);
+        return Ok(new ApiResponse<List<CardDto>>(true, "OK", cards));
+    }
+
+    [HttpPost("cards")]
+    public async Task<IActionResult> CreateCard([FromBody] CreateCardRequest request)
+    {
+        try
+        {
+            var card = await adminService.CreateCardAsync(request);
+            await auditLogService.LogAsync(null, "CREATE_CARD", "Card", card.CardId, $"Issued card: {card.CardNumber}");
+            return Ok(new ApiResponse<CardDto>(true, "Card issued", card));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new ApiResponse<object>(false, ex.Message, null));
+        }
+    }
+
+    // ─── Account Types ───
+    [HttpGet("account-types")]
+    public async Task<IActionResult> GetAccountTypes()
+    {
+        var types = await adminService.GetAccountTypesAsync();
+        return Ok(new ApiResponse<List<AccountTypeDto>>(true, "OK", types));
     }
 
     // ─── ATM ───

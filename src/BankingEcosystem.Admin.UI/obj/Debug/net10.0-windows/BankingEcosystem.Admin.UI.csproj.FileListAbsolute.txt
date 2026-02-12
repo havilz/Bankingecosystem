@@ -44,3 +44,9 @@ c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-window
 c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\BankingEcosystem.Admin.UI.pdb
 c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\BankingEcosystem.Admin.UI.genruntimeconfig.cache
 c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\ref\BankingEcosystem.Admin.UI.dll
+c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\CustomerDetailView.baml
+c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\CustomerListView.baml
+c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\CustomerDetailView.g.cs
+c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\CustomerListView.g.cs
+c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AddCustomerView.baml
+c:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AddCustomerView.g.cs
