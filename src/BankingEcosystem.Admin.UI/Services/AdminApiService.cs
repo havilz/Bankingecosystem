@@ -104,4 +104,29 @@ public class AdminApiService(HttpClient httpClient)
              throw new Exception(body?.Message ?? "Failed to toggle ATM status");
         }
     }
+
+    // ─── Reporting ───
+    public async Task<PaginatedResponse<TransactionDto>?> GetTransactionsAsync(int page = 1, int pageSize = 50, string? search = null, string? type = null)
+    {
+        var query = new List<string> { $"page={page}", $"pageSize={pageSize}" };
+        if (!string.IsNullOrEmpty(search)) query.Add($"search={System.Net.WebUtility.UrlEncode(search)}");
+        if (!string.IsNullOrEmpty(type)) query.Add($"type={System.Net.WebUtility.UrlEncode(type)}");
+        
+        var url = $"api/admin/transactions?{string.Join("&", query)}";
+        var resp = await httpClient.GetFromJsonAsync<ApiResponse<PaginatedResponse<TransactionDto>>>(url, JsonOpts);
+        return resp?.Data;
+    }
+
+    public async Task<DashboardStatsDto> GetDashboardStatsAsync()
+    {
+        var resp = await httpClient.GetFromJsonAsync<ApiResponse<DashboardStatsDto>>("api/admin/reports/dashboard", JsonOpts);
+        return resp?.Data ?? new DashboardStatsDto(0, 0, 0, 0);
+    }
+
+    public async Task<List<AuditLogDto>> GetAuditLogsAsync(int page = 1, int pageSize = 50)
+    {
+        var url = $"api/admin/audit-logs?page={page}&pageSize={pageSize}";
+        var resp = await httpClient.GetFromJsonAsync<ApiResponse<List<AuditLogDto>>>(url, JsonOpts);
+        return resp?.Data ?? [];
+    }
 }

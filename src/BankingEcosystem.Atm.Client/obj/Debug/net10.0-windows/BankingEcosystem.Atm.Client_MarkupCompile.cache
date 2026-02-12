@@ -1,20 +1,20 @@
 ﻿BankingEcosystem.Atm.Client
-
+1.0.0.0
 
 winexe
 C#
 .cs
-C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\obj\Debug\net10.0-windows\
+c:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\obj\Debug\net10.0-windows\
 BankingEcosystem.Atm.UI
 none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
-C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\App.xaml
+c:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\App.xaml
 51511256236
 
-762060552
-211281311742
+930939061
+211483098722
 MainWindow.xaml;Resources\AtmTheme.xaml;Views\MainMenuView.xaml;Views\OnboardingView.xaml;Views\PinEntryView.xaml;
 
-False
+True
 

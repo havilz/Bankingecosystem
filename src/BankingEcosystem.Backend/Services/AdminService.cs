@@ -235,4 +235,59 @@ public class AdminService(BankingDbContext db)
 
         return new EmployeeDto(emp.EmployeeId, emp.FullName, emp.EmployeeCode, emp.Role, emp.IsActive, emp.CreatedAt);
     }
+    // ─── Reporting ───
+    public async Task<PaginatedResponse<TransactionDto>> GetTransactionsAsync(int page = 1, int pageSize = 50, string? search = null, string? type = null)
+    {
+        var query = db.Transactions
+            .Include(t => t.TransactionType)
+            .Include(t => t.Atm)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(t => t.ReferenceNumber.Contains(search) || 
+                                     (t.TargetAccountNumber != null && t.TargetAccountNumber.Contains(search)));
+        }
+
+        if (!string.IsNullOrWhiteSpace(type))
+        {
+            query = query.Where(t => t.TransactionType.TypeName == type);
+        }
+
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .OrderByDescending(t => t.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(t => new TransactionDto(
+                t.TransactionId, 
+                t.TransactionType.TypeName, 
+                t.Amount, 
+                t.BalanceBefore, 
+                t.BalanceAfter, 
+                t.ReferenceNumber, 
+                t.TargetAccountNumber, 
+                t.Status, 
+                t.Description, 
+                t.CreatedAt,
+                t.Atm != null ? t.Atm.AtmCode : null,
+                t.Atm != null ? t.Atm.Location : null
+            ))
+            .ToListAsync();
+
+        return new PaginatedResponse<TransactionDto>(items, totalCount, page, pageSize);
+    }
+
+    public async Task<DashboardStatsDto> GetDashboardStatsAsync()
+    {
+        var totalCustomers = await db.Customers.CountAsync();
+        var totalAtms = await db.Atms.CountAsync();
+        
+        var today = DateTime.UtcNow.Date;
+        var totalTransactionsToday = await db.Transactions.CountAsync(t => t.CreatedAt >= today);
+        
+        var totalBalanceStored = await db.Accounts.SumAsync(a => a.Balance);
+
+        return new DashboardStatsDto(totalCustomers, totalAtms, totalTransactionsToday, totalBalanceStored);
+    }
 }

@@ -94,7 +94,7 @@
 
 ### Step 3: ATM Management
 
-- [/] 3. Manajemen ATM (refill, monitor status, on/offline)
+- [x] 3. Manajemen ATM (refill, monitor status, on/offline)
   - [x] Backend: Update `AdminApiService.cs` (add ATM endpoints)
   - [x] ViewModel: `AtmListViewModel.cs` (List, Toggle Status, Nav to Create/Refill)
   - [x] ViewModel: `AddAtmViewModel.cs` (Create form)
@@ -103,4 +103,18 @@
   - [x] View: `AddAtmView.xaml` (Form)
   - [x] View: `RefillAtmView.xaml` (Dialog/Popup)
   - [x] Navigation: Add "ATM" to sidebar & App.xaml DI
-  - [ ] Build & Verify — Admin UI build
+  - [x] Build & Verify — Admin UI build ✅
+
+### Step 4: Reporting & Audit Log Viewer
+
+- [/] 4. Reporting & audit log viewer (Real-time monitoring)
+  - [x] Backend: `GET /transactions` & `GET /reports/dashboard`
+  - [x] Frontend: Real-time Dashboard Stats
+  - [x] Frontend: Transaction List (DataGrid + Filter)
+  - [x] Frontend: Audit Log Viewer
+  - [x] Build Passed (Backend & UI)
+  - [x] Verification (Run & Test)
+
+### Documentation
+
+- [x] Create `src/BankingEcosystem.Admin.UI/doc/README.md` (Project Structure, Architecture, Setup)

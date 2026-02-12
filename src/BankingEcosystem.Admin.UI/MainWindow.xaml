@@ -35,6 +35,12 @@
         <DataTemplate DataType="{x:Type vm:RefillAtmViewModel}">
             <views:RefillAtmView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TransactionListViewModel}">
+            <views:TransactionListView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AuditLogViewModel}">
+            <views:AuditLogView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid Background="{StaticResource LightGrayBrush}">
@@ -61,6 +67,10 @@
                     <Button Content="Nasabah" Command="{Binding NavigateToCustomersCommand}" 
                             Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
                     <Button Content="ATM" Command="{Binding NavigateToAtmsCommand}" 
+                            Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
+                    <Button Content="Transaksi" Command="{Binding NavigateToTransactionsCommand}" 
+                            Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
+                    <Button Content="Audit Log" Command="{Binding NavigateToAuditLogsCommand}" 
                             Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
                     <!-- More nav buttons will be added in later steps -->
                 </StackPanel>

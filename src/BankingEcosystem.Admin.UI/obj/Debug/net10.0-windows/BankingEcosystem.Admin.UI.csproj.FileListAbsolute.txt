@@ -56,3 +56,7 @@ C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-window
 C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AddAtmView.baml
 C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AtmListView.baml
 C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\RefillAtmView.baml
+C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AuditLogView.g.cs
+C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\TransactionListView.g.cs
+C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\AuditLogView.baml
+C:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\obj\Debug\net10.0-windows\Views\TransactionListView.baml

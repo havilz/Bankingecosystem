@@ -1,0 +1,99 @@
+<UserControl x:Class="BankingEcosystem.Admin.UI.Views.TransactionListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:BankingEcosystem.Admin.UI.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1000">
+
+    <Grid Background="{StaticResource LightGrayBrush}" Margin="32">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header -->
+            <RowDefinition Height="Auto"/> <!-- Filters -->
+            <RowDefinition Height="*"/>    <!-- DataGrid -->
+            <RowDefinition Height="Auto"/> <!-- Pagination -->
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="Riwayat Transaksi" FontSize="24" FontWeight="Bold" 
+                   Foreground="{StaticResource DarkTextBrush}" Margin="0,0,0,24"/>
+
+        <!-- Filters -->
+        <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="16" Margin="0,0,0,24">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.05"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Search -->
+                <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                    <TextBlock Text="Cari Transaksi" FontSize="12" Foreground="{StaticResource SubtextBrush}" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource FlatTextBox}" 
+                             Tag="Cari berdasarkan No Referensi..."/>
+                </StackPanel>
+
+                <!-- Type Filter -->
+                <StackPanel Grid.Column="1" Margin="0,0,16,0">
+                    <TextBlock Text="Tipe Transaksi" FontSize="12" Foreground="{StaticResource SubtextBrush}" Margin="0,0,0,4"/>
+                    <ComboBox ItemsSource="{Binding TransactionTypes}" 
+                              SelectedItem="{Binding SelectedType}"
+                              Style="{StaticResource FlatComboBox}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- DataGrid -->
+        <Border Grid.Row="2" Background="White" CornerRadius="8" Padding="0" ClipToBounds="True">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.05"/>
+            </Border.Effect>
+            <DataGrid ItemsSource="{Binding Transactions}" AutoGenerateColumns="False" 
+                      Style="{StaticResource FlatDataGrid}" IsReadOnly="True"
+                      HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Waktu" Binding="{Binding CreatedAt, StringFormat='dd MMM yyyy HH:mm'}" Width="140"/>
+                    <DataGridTextColumn Header="No Referensi" Binding="{Binding ReferenceNumber}" Width="120"/>
+                    <DataGridTextColumn Header="Tipe" Binding="{Binding TransactionType}" Width="100"/>
+                    <DataGridTextColumn Header="Jumlah" Binding="{Binding Amount, StringFormat='{}{0:N0}'}" Width="100">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="ATM" Binding="{Binding AtmCode}" Width="80"/>
+                    <DataGridTextColumn Header="Lokasi" Binding="{Binding Location}" Width="*"/>
+                    <DataGridTextColumn Header="Tujuan" Binding="{Binding TargetAccountNumber}" Width="120"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="80"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Pagination -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Previous" Command="{Binding PreviousPageCommand}" Width="80" Margin="0,0,8,0"
+                    IsEnabled="{Binding CanGoPrevious}"
+                    Style="{StaticResource SecondaryButtonStyle}"/>
+            <TextBlock Text="{Binding Page, StringFormat='Page {0}'}" 
+                       VerticalAlignment="Center" Margin="8,0"/>
+            <TextBlock Text="{Binding TotalPages, StringFormat='/ {0}'}" 
+                       VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <Button Content="Next" Command="{Binding NextPageCommand}" Width="80"
+                    IsEnabled="{Binding CanGoNext}"
+                    Style="{StaticResource SecondaryButtonStyle}"/>
+        </StackPanel>
+        
+        <!-- Loading Overlay -->
+        <Grid Grid.Row="2" Background="#80FFFFFF" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}" 
+              d:Visibility="Collapsed">
+            <TextBlock Text="Loading..." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold" Foreground="#666"/>
+        </Grid>
+    </Grid>
+</UserControl>

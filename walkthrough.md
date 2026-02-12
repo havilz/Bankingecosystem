@@ -229,3 +229,45 @@ Due to build configuration issues with the initial `Atm.UI` project, the working
 
 - If you encounter a `XamlParseException` regarding `MandiriNavyBrush`, ensure you are using the latest code where references were corrected to `NavyBrush`.
 - If the application hangs silently, ensure no lingering `Atm.Client.exe` processes are running (`taskkill /F /IM BankingEcosystem.Atm.Client.exe`).
+
+---
+
+# Phase 3 Step - ADMIN APP (Bank Office System)
+
+## Step 4 Reporting & Audit Log Viewer
+
+**Goal**: Implement visible tracking of system activities (transactions & audit logs) & Real Dashboard Stats.
+
+### Setup Implemented:
+
+1.  **Backend (`BankingEcosystem.Backend`)**:
+    - `GET /api/admin/transactions`: Lists transactions with pagination & filtering.
+    - `GET /api/admin/reports/dashboard`: Returns real-time stats (`TotalCustomers`, `TotalAtms`, `TotalTransactionsToday`, `TotalBalanceStored`).
+    - Updated `TransactionDto` to include `AtmCode` & `Location`.
+    - `AdminService.cs` updated with reporting logic.
+
+2.  **Frontend (`BankingEcosystem.Admin.UI`)**:
+    - **DashboardView**: Now binds to real data via `GetDashboardStatsAsync`. Shows 4 cards:
+      - Total Nasabah
+      - Transaksi Hari Ini
+      - Total ATM
+      - Total Simpanan (Total Customer Balance)
+    - **TransactionListView**: DataGrid showing Date, Ref No, Type, Amount, ATM, Location, Status.
+      - Includes Search Bar (Ref No) & Type Filter.
+      - Includes Pagination (Next/Prev).
+    - **AuditLogView**: DataGrid showing Admin/Employee activities (Time, User, Action, Entity, Details).
+    - **Navigation**: Added "Transaksi" and "Audit Log" buttons to sidebar.
+
+### Verification Steps:
+
+1.  **Run Admin App**:
+    ```powershell
+    dotnet run --project src/BankingEcosystem.Admin.UI
+    ```
+2.  **Login**: Use `admin` / `admin123`.
+3.  **Check Dashboard**: Verify numbers are not placeholders (e.g. Total Nasabah > 0 if seeded).
+4.  **Check Transactions**: Click "Transaksi" sidebar.
+    - Verify list of transactions appears (from Phase 2 testing).
+    - Test "Filter Tipe" (e.g. select Withdrawal).
+5.  **Check Audit Logs**: Click "Audit Log" sidebar.
+    - Verify logs of your recent actions (e.g. "Create Customer", "Refill ATM").

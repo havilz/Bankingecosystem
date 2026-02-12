@@ -26,7 +26,7 @@
             <TextBlock Text="Dashboard Overview" FontSize="18" FontWeight="SemiBold"
                        Foreground="{StaticResource DarkTextBrush}" Margin="0,0,0,16"/>
 
-            <UniformGrid Columns="3" Margin="0,0,0,24">
+            <UniformGrid Columns="4" Margin="0,0,0,24">
 
                 <!-- Card 1: Total Nasabah -->
                 <Border Background="White" CornerRadius="10" Padding="24" Margin="0,0,12,0">
@@ -36,34 +36,44 @@
                     <StackPanel>
                         <TextBlock Text="👥" FontSize="28" Margin="0,0,0,8"/>
                         <TextBlock Text="Total Nasabah" FontSize="13" Foreground="{StaticResource SubtextBrush}"/>
-                        <TextBlock Text="—" FontSize="32" FontWeight="Bold" Foreground="{StaticResource CorporateBlueBrush}" Margin="0,4,0,0"/>
-                        <TextBlock Text="Data akan dimuat di Step 2" FontSize="11" Foreground="{StaticResource SubtextBrush}" Margin="0,4,0,0"/>
+                        <TextBlock Text="{Binding Stats.TotalCustomers}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource CorporateBlueBrush}" Margin="0,4,0,0"/>
                     </StackPanel>
                 </Border>
 
                 <!-- Card 2: Total Transaksi Hari Ini -->
-                <Border Background="White" CornerRadius="10" Padding="24" Margin="6,0,6,0">
+                <Border Background="White" CornerRadius="10" Padding="24" Margin="0,0,12,0">
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.04"/>
                     </Border.Effect>
                     <StackPanel>
                         <TextBlock Text="💳" FontSize="28" Margin="0,0,0,8"/>
                         <TextBlock Text="Transaksi Hari Ini" FontSize="13" Foreground="{StaticResource SubtextBrush}"/>
-                        <TextBlock Text="—" FontSize="32" FontWeight="Bold" Foreground="{StaticResource AccentBlueBrush}" Margin="0,4,0,0"/>
-                        <TextBlock Text="Data akan dimuat di Step 2" FontSize="11" Foreground="{StaticResource SubtextBrush}" Margin="0,4,0,0"/>
+                        <TextBlock Text="{Binding Stats.TotalTransactionsToday}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource AccentBlueBrush}" Margin="0,4,0,0"/>
                     </StackPanel>
                 </Border>
 
-                <!-- Card 3: Status ATM -->
-                <Border Background="White" CornerRadius="10" Padding="24" Margin="12,0,0,0">
+                <!-- Card 3: Total ATM -->
+                <Border Background="White" CornerRadius="10" Padding="24" Margin="0,0,12,0">
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.04"/>
                     </Border.Effect>
                     <StackPanel>
                         <TextBlock Text="🏧" FontSize="28" Margin="0,0,0,8"/>
-                        <TextBlock Text="ATM Online" FontSize="13" Foreground="{StaticResource SubtextBrush}"/>
-                        <TextBlock Text="—" FontSize="32" FontWeight="Bold" Foreground="{StaticResource SuccessBrush}" Margin="0,4,0,0"/>
-                        <TextBlock Text="Data akan dimuat di Step 3" FontSize="11" Foreground="{StaticResource SubtextBrush}" Margin="0,4,0,0"/>
+                        <TextBlock Text="Total ATM" FontSize="13" Foreground="{StaticResource SubtextBrush}"/>
+                        <TextBlock Text="{Binding Stats.TotalAtms}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource SuccessBrush}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Card 4: Total Aset -->
+                <Border Background="White" CornerRadius="10" Padding="24">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.04"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="💰" FontSize="28" Margin="0,0,0,8"/>
+                        <TextBlock Text="Total Simpanan" FontSize="13" Foreground="{StaticResource SubtextBrush}"/>
+                        <!-- StringFormat for Currency (Rp) -->
+                        <TextBlock Text="{Binding Stats.TotalBalanceStored, StringFormat='Rp {0:N0}'}" FontSize="20" FontWeight="Bold" Foreground="#854d0e" Margin="0,10,0,0"/> 
                     </StackPanel>
                 </Border>
             </UniformGrid>

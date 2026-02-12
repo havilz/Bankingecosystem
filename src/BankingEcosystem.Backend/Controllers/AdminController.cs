@@ -136,6 +136,21 @@ public class AdminController(AdminService adminService, AuditLogService auditLog
         return Ok(new ApiResponse<object>(true, "ATM status toggled", null));
     }
 
+    // ─── Reporting ───
+    [HttpGet("reports/dashboard")]
+    public async Task<IActionResult> GetDashboardStats()
+    {
+        var stats = await adminService.GetDashboardStatsAsync();
+        return Ok(new ApiResponse<DashboardStatsDto>(true, "OK", stats));
+    }
+
+    [HttpGet("transactions")]
+    public async Task<IActionResult> GetTransactions([FromQuery] int page = 1, [FromQuery] int pageSize = 50, [FromQuery] string? search = null, [FromQuery] string? type = null)
+    {
+        var result = await adminService.GetTransactionsAsync(page, pageSize, search, type);
+        return Ok(new ApiResponse<PaginatedResponse<TransactionDto>>(true, "OK", result));
+    }
+
     // ─── Employee ───
     [HttpGet("employees")]
     public async Task<IActionResult> GetAllEmployees()

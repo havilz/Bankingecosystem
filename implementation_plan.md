@@ -428,7 +428,7 @@ sequenceDiagram
 - [x] 1. WPF Admin UI: Login karyawan, dashboard
 - [x] 2. Manajemen nasabah (CRUD customer + account)
 - [x] 3. Manajemen ATM (refill, monitor status, on/offline)
-- [ ] 4. Reporting & audit log viewer
+- [x] 4. Reporting & audit log viewer
 
 ### 🟠 Phase 4 — Full ATM Features
 

@@ -3,7 +3,9 @@
 FC:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\MainWindow.xaml;;
 FC:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\Views\AddAtmView.xaml;;
 FC:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\Views\AtmListView.xaml;;
+FC:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\Views\AuditLogView.xaml;;
 FC:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\Views\DashboardView.xaml;;
 FC:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\Views\LoginView.xaml;;
 FC:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\Views\RefillAtmView.xaml;;
+FC:\project\bank_ecosystem\src\BankingEcosystem.Admin.UI\Views\TransactionListView.xaml;;
 

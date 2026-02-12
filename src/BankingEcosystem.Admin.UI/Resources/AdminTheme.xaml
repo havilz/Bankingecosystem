@@ -33,6 +33,7 @@
     <!-- Converters -->
     <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
     <!-- ═══ Button Styles ═══ -->
     <Style x:Key="PrimaryButtonStyle" TargetType="Button">
@@ -141,4 +142,60 @@
         </Setter>
     </Style>
 
+    <!-- ═══ Secondary Button ═══ -->
+    <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="{StaticResource DarkTextBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource MediumGrayBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="12,6"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                             <Setter Property="Background" Value="{StaticResource LightGrayBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══ Flat Styles (Aliases or simple impl) ═══ -->
+    <Style x:Key="FlatTextBox" TargetType="TextBox" BasedOn="{StaticResource InputTextBoxStyle}"/>
+    
+    <Style x:Key="FlatComboBox" TargetType="ComboBox">
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="BorderBrush" Value="{StaticResource MediumGrayBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="White"/>
+    </Style>
+
+    <Style x:Key="FlatDataGrid" TargetType="DataGrid">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="RowHeaderWidth" Value="0"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserDeleteRows" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource LightGrayBrush}"/>
+        <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+        <Setter Property="RowHeight" Value="40"/>
+        <Setter Property="ColumnHeaderHeight" Value="40"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+    </Style>
 </ResourceDictionary>

@@ -27,7 +27,8 @@ public record CardDto(int CardId, string CardNumber, int AccountId, string Accou
 public record CreateCardRequest(int CustomerId, int AccountId, string Pin);
 
 // ─── Transaction ───
-public record TransactionDto(int TransactionId, string TransactionType, decimal Amount, decimal BalanceBefore, decimal BalanceAfter, string ReferenceNumber, string? TargetAccountNumber, string Status, string? Description, DateTime CreatedAt);
+// ─── Transaction ───
+public record TransactionDto(int TransactionId, string TransactionType, decimal Amount, decimal BalanceBefore, decimal BalanceAfter, string ReferenceNumber, string? TargetAccountNumber, string Status, string? Description, DateTime CreatedAt, string? AtmCode, string? Location);
 public record WithdrawRequest(int AccountId, int AtmId, decimal Amount);
 public record DepositRequest(int AccountId, decimal Amount);
 public record TransferRequest(int AccountId, string TargetAccountNumber, decimal Amount, string? Description);
@@ -36,6 +37,7 @@ public record TransferRequest(int AccountId, string TargetAccountNumber, decimal
 public record AtmDto(int AtmId, string AtmCode, string Location, bool IsOnline, decimal TotalCash, DateTime? LastRefill);
 public record CreateAtmRequest(string AtmCode, string Location, decimal InitialCash);
 public record RefillAtmRequest(int AtmId, int Denomination, int Quantity);
+public record DashboardStatsDto(int TotalCustomers, int TotalAtms, int TotalTransactionsToday, decimal TotalBalanceStored);
 
 // ─── Employee ───
 public record EmployeeDto(int EmployeeId, string FullName, string EmployeeCode, string Role, bool IsActive, DateTime CreatedAt);
@@ -46,4 +48,4 @@ public record AuditLogDto(int LogId, int? EmployeeId, string? EmployeeName, stri
 
 // ─── Generic ───
 public record ApiResponse<T>(bool Success, string Message, T? Data);
-public record PaginatedResponse<T>(IEnumerable<T> Items, int TotalCount, int Page, int PageSize);
+public record PaginatedResponse<T>(IEnumerable<T> Items, int TotalCount, int PageNum, int PageSize);

@@ -48,6 +48,8 @@ public partial class App : Application
         services.AddTransient<AtmListViewModel>();
         services.AddTransient<AddAtmViewModel>();
         services.AddTransient<RefillAtmViewModel>();
+        services.AddTransient<TransactionListViewModel>();
+        services.AddTransient<AuditLogViewModel>();
 
         // Views
         services.AddSingleton<MainWindow>();

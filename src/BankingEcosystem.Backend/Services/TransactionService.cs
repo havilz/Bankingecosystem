@@ -150,6 +150,7 @@ public class TransactionService(BankingDbContext db)
     {
         return await db.Transactions
             .Include(t => t.TransactionType)
+            .Include(t => t.Atm)
             .Where(t => t.AccountId == accountId)
             .OrderByDescending(t => t.CreatedAt)
             .Skip((page - 1) * pageSize)
@@ -166,5 +167,6 @@ public class TransactionService(BankingDbContext db)
     private static TransactionDto MapToDto(Transaction t) =>
         new(t.TransactionId, t.TransactionType?.TypeName ?? "Unknown", t.Amount,
             t.BalanceBefore, t.BalanceAfter, t.ReferenceNumber,
-            t.TargetAccountNumber, t.Status, t.Description, t.CreatedAt);
+            t.TargetAccountNumber, t.Status, t.Description, t.CreatedAt,
+            t.Atm?.AtmCode, t.Atm?.Location);
 }

@@ -111,6 +111,20 @@ public partial class MainViewModel : ObservableObject
         CurrentView = vm;
     }
 
+    [RelayCommand]
+    private void NavigateToTransactions()
+    {
+        var vm = (TransactionListViewModel)_serviceProvider.GetService(typeof(TransactionListViewModel))!;
+        CurrentView = vm;
+    }
+
+    [RelayCommand]
+    private void NavigateToAuditLogs()
+    {
+        var vm = (AuditLogViewModel)_serviceProvider.GetService(typeof(AuditLogViewModel))!;
+        CurrentView = vm;
+    }
+
     private void ShowRefillAtm(int atmId, Action onRefillDone)
     {
         var vm = new RefillAtmViewModel(
