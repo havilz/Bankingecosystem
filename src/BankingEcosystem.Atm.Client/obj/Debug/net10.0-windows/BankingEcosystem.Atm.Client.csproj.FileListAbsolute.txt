@@ -39,3 +39,6 @@ C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\obj\Debug\net10.0-wind
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\bin\Debug\net10.0-windows\Microsoft.Extensions.DependencyInjection.dll
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\bin\Debug\net10.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\obj\Debug\net10.0-windows\BankingEcosystem.Atm.Client_MarkupCompile.lref
+C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\bin\Debug\net10.0-windows\CommunityToolkit.Mvvm.dll
+C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\obj\Debug\net10.0-windows\Views\TransferView.g.cs
+C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\obj\Debug\net10.0-windows\Views\TransferView.baml

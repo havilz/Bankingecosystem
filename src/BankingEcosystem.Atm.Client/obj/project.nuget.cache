@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "wdmo3w8zsdw=",
+  "dgSpecHash": "fz5tszVFQV0=",
   "success": true,
   "projectFilePath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Atm.Client\\BankingEcosystem.Atm.Client.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.0\\communitytoolkit.mvvm.8.4.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\10.0.2\\microsoft.extensions.dependencyinjection.10.0.2.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.2\\microsoft.extensions.dependencyinjection.abstractions.10.0.2.nupkg.sha512"
   ],

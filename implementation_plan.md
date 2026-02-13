@@ -432,7 +432,7 @@ sequenceDiagram
 
 ### 🟠 Phase 4 — Full ATM Features
 
-- [ ] 1. Transfer antar rekening
+- [x] 1. Transfer antar rekening
 - [ ] 2. Balance inquiry + mini statement
 - [ ] 3. Receipt generation
 - [ ] 4. ATM state machine (C++ FSM)

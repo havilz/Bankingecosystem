@@ -118,3 +118,15 @@
 ### Documentation
 
 - [x] Create `src/BankingEcosystem.Admin.UI/doc/README.md` (Project Structure, Architecture, Setup)
+
+## 🟠 Phase 4 — Full ATM Features
+
+### Step 1: Transfer Antar Rekening
+
+- [/] 1. Transfer antar rekening
+  - [x] Backend: `POST /api/transaction/transfer` endpoint
+  - [x] AppLayer: `ITransactionService.TransferAsync`
+  - [x] ViewModel: `TransferViewModel.cs`
+  - [x] View: `TransferView.xaml` (Input Account -> Input Amount -> Confirm)
+  - [x] Navigation: Main Menu -> Transfer Feature
+  - [ ] Verification

@@ -7,6 +7,7 @@ public interface ITransactionService
 {
     Task<decimal?> GetBalanceAsync();
     Task<string> WithdrawAsync(decimal amount);
+    Task<string> TransferAsync(decimal amount, string targetAccountNumber);
 }
 
 public class TransactionService : ITransactionService
@@ -85,6 +86,41 @@ public class TransactionService : ITransactionService
             // 4. Print Receipt
             var receipt = $"WITHDRAWAL\nAmount: {amount:C}\nDate: {DateTime.Now}\nRef: {Guid.NewGuid()}";
             _hardwareService.PrintReceipt(receipt);
+
+            return "Success";
+        }
+        catch
+        {
+            return "Network error";
+        }
+    }
+    public async Task<string> TransferAsync(decimal amount, string targetAccountNumber)
+    {
+        if (!_sessionService.IsAuthenticated || _sessionService.AccountId == null) return "User not authenticated";
+        if (amount <= 0) return "Invalid amount";
+        if (string.IsNullOrWhiteSpace(targetAccountNumber)) return "Invalid target account";
+
+        try
+        {
+            var request = new TransferRequest(_sessionService.AccountId.Value, targetAccountNumber, amount, "ATM Transfer");
+            var response = await _httpClient.PostAsJsonAsync("api/transaction/transfer", request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+                return error?.Message ?? "Transfer failed";
+            }
+
+            // Print Receipt
+            var receipt = $"TRANSFER\nTo: {targetAccountNumber}\nAmount: {amount:C}\nDate: {DateTime.Now}\nRef: {Guid.NewGuid()}";
+            try 
+            {
+                _hardwareService.PrintReceipt(receipt);
+            }
+            catch 
+            { 
+                // Ignore printer errors for now
+            }
 
             return "Success";
         }

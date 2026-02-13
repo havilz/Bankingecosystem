@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BankingEcosystem.Interop")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fbf9de28b18663c0e8b0ca224b070277f3d04136")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d34cfe158f9c04638e57b59e0bca44308f961f4f")]
 [assembly: System.Reflection.AssemblyProductAttribute("BankingEcosystem.Interop")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BankingEcosystem.Interop")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

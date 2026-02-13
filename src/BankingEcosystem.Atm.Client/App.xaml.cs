@@ -44,6 +44,10 @@ public partial class App : Application
         services.AddTransient<Views.OnboardingView>();
         services.AddTransient<Views.PinEntryView>();
         services.AddTransient<Views.MainMenuView>();
+        
+        // Transfer Feature
+        services.AddTransient<ViewModels.TransferViewModel>();
+        services.AddTransient<Views.TransferView>();
     }
 
     protected override void OnStartup(StartupEventArgs e)

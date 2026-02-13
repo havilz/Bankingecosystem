@@ -95,7 +95,10 @@ public partial class MainMenuView : Page
     private void OnTransferClick(object sender, RoutedEventArgs e)
     {
         _sessionService?.RefreshSession();
-        ShowComingSoon("Transfer");
+        if (Window.GetWindow(this) is MainWindow mainWindow)
+        {
+            mainWindow.NavigateTo<TransferView>();
+        }
     }
 
     private async void OnBalanceClick(object sender, RoutedEventArgs e)

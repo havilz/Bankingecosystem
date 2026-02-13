@@ -39,7 +39,7 @@
     <FontFamily x:Key="MonoFont">Cascadia Mono, Consolas</FontFamily>
 
     <!-- ATM Button Style -->
-    <Style x:Key="AtmButtonStyle" TargetType="Button">
+    <Style x:Key="AtmPrimaryButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource GoldBrush}" />
         <Setter Property="Foreground" Value="{StaticResource DarkNavyBrush}" />
         <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
