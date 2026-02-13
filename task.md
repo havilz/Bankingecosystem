@@ -178,4 +178,37 @@
     - [x] ViewModel: `ChangePinViewModel` (Old PIN -> New PIN -> Confirm)
     - [x] View: `ChangePinView.xaml`
     - [x] Navigation: Update `MainMenuView`
-  - [ ] Verification (End-to-End for all features)
+  - [x] Verification (End-to-End for all features)
+
+## 🔴 Phase 5 — Polish & Security
+
+### Step 1: Secure PIN Communication (E2EE)
+
+- [ ] 1. Secure PIN Communication
+  - [x] NativeLogic: Add `Encryption_EncryptPin` (Simulated XOR)
+  - [x] Backend: Add Decryption logic in `AuthService` or Middleware
+  - [x] Client: Encrypt PIN in `AuthService` before sending `VerifyPinRequest`
+  - [ ] Verification: Ensure PIN provided in API logs is encrypted
+
+### Step 2: Fraud Detection & Limits
+
+- [ ] 2. Fraud Detection
+  - [ ] Backend: Enforce Daily Withdrawal Limit
+  - [ ] Backend: Enforce Max PIN Attempts
+
+### Step 3: Error Handling & Recovery
+
+- [ ] 3. Error Handling
+  - [ ] Global Exception Handler in Client
+  - [ ] Retry Policy for Network Requests
+
+### Step 4: UI Polish
+
+- [ ] 4. UI Polish
+  - [ ] Animations
+  - [ ] Realistic "Processing" delays
+
+### Step 5: Final Verification
+
+- [ ] 5. Final Verification
+  - [ ] End-to-End Test Run

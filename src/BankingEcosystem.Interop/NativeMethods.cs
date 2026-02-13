@@ -88,5 +88,11 @@ public static class NativeLogicInterop
     [DllImport(LogicDll, CallingConvention = CallingConvention.Cdecl)]
     public static extern int Encryption_VerifyPin(
         [MarshalAs(UnmanagedType.LPStr)] string pin,
-        [MarshalAs(UnmanagedType.LPStr)] string hash);
+        [MarshalAs(UnmanagedType.LPStr)] string expectedHash);
+
+    [DllImport(LogicDll, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int Encryption_EncryptPin(
+        [MarshalAs(UnmanagedType.LPStr)] string rawPin,
+        [MarshalAs(UnmanagedType.LPStr)] System.Text.StringBuilder encryptedOutput,
+        int maxLen);
 }

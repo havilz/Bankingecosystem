@@ -41,7 +41,11 @@ public class AuthService : IAuthService
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync("api/auth/verify-pin", new VerifyPinRequest(cardId, pin));
+            // Encrypt PIN before sending
+            var encryptedPin = new System.Text.StringBuilder(64);
+            BankingEcosystem.Interop.NativeLogicInterop.Encryption_EncryptPin(pin, encryptedPin, encryptedPin.Capacity);
+
+            var response = await _httpClient.PostAsJsonAsync("api/auth/verify-pin", new VerifyPinRequest(cardId, encryptedPin.ToString()));
             if (!response.IsSuccessStatusCode) return false;
 
             var result = await response.Content.ReadFromJsonAsync<ApiResponse<AuthResponse>>();
@@ -53,8 +57,9 @@ public class AuthService : IAuthService
             
             return false;
         }
-        catch
+        catch (Exception ex)
         {
+            try { File.AppendAllText("client_errors.log", $"[{DateTime.Now}] VerifyPinAsync Error: {ex}\n"); } catch { }
             return false;
         }
     }
@@ -63,14 +68,22 @@ public class AuthService : IAuthService
     {
         try
         {
-             var response = await _httpClient.PostAsJsonAsync("api/auth/change-pin", new ChangePinRequest(cardId, oldPin, newPin));
+            // Encrypt PINs before sending
+            var encryptedOld = new System.Text.StringBuilder(64);
+            BankingEcosystem.Interop.NativeLogicInterop.Encryption_EncryptPin(oldPin, encryptedOld, encryptedOld.Capacity);
+
+            var encryptedNew = new System.Text.StringBuilder(64);
+            BankingEcosystem.Interop.NativeLogicInterop.Encryption_EncryptPin(newPin, encryptedNew, encryptedNew.Capacity);
+
+             var response = await _httpClient.PostAsJsonAsync("api/auth/change-pin", new ChangePinRequest(cardId, encryptedOld.ToString(), encryptedNew.ToString()));
              if (!response.IsSuccessStatusCode) return false;
 
              var result = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
              return result?.Success ?? false;
         }
-        catch
+        catch (Exception ex)
         {
+            try { File.AppendAllText("client_errors.log", $"[{DateTime.Now}] ChangePinAsync Error: {ex}\n"); } catch { }
             return false;
         }
     }

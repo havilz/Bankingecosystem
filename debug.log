@@ -426,3 +426,45 @@ Inner Exception: Cannot find resource named 'BoolToVis'. Resource names are case
 2/13/2026 11:21:27 PM: MainWindow Initial Navigation done
 2/13/2026 11:21:27 PM: MainWindow Loaded
 2/13/2026 11:21:27 PM: App OnStartup finished
+2/13/2026 11:41:48 PM: App Constructor started
+2/13/2026 11:41:49 PM: App OnStartup started
+2/13/2026 11:41:49 PM: MainWindow Constructor started
+2/13/2026 11:41:49 PM: MainWindow InitializeComponent finished
+2/13/2026 11:41:50 PM: MainWindow Initial Navigation done
+2/13/2026 11:41:51 PM: MainWindow Loaded
+2/13/2026 11:41:51 PM: App OnStartup finished
+2/13/2026 11:48:12 PM: App Constructor started
+2/13/2026 11:48:12 PM: App OnStartup started
+2/13/2026 11:48:13 PM: MainWindow Constructor started
+2/13/2026 11:48:13 PM: MainWindow InitializeComponent finished
+2/13/2026 11:48:13 PM: MainWindow Initial Navigation done
+2/13/2026 11:48:13 PM: MainWindow Loaded
+2/13/2026 11:48:13 PM: App OnStartup finished
+2/13/2026 11:49:11 PM: App Constructor started
+2/13/2026 11:49:12 PM: App OnStartup started
+2/13/2026 11:49:12 PM: MainWindow Constructor started
+2/13/2026 11:49:12 PM: MainWindow InitializeComponent finished
+2/13/2026 11:49:12 PM: MainWindow Initial Navigation done
+2/13/2026 11:49:12 PM: MainWindow Loaded
+2/13/2026 11:49:12 PM: App OnStartup finished
+2/13/2026 11:51:19 PM: App Constructor started
+2/13/2026 11:51:20 PM: App OnStartup started
+2/13/2026 11:51:20 PM: MainWindow Constructor started
+2/13/2026 11:51:20 PM: MainWindow InitializeComponent finished
+2/13/2026 11:51:20 PM: MainWindow Initial Navigation done
+2/13/2026 11:51:20 PM: MainWindow Loaded
+2/13/2026 11:51:20 PM: App OnStartup finished
+2/13/2026 11:55:32 PM: App Constructor started
+2/13/2026 11:55:33 PM: App OnStartup started
+2/13/2026 11:55:33 PM: MainWindow Constructor started
+2/13/2026 11:55:33 PM: MainWindow InitializeComponent finished
+2/13/2026 11:55:34 PM: MainWindow Initial Navigation done
+2/13/2026 11:55:34 PM: MainWindow Loaded
+2/13/2026 11:55:34 PM: App OnStartup finished
+2/14/2026 12:02:03 AM: App Constructor started
+2/14/2026 12:02:03 AM: App OnStartup started
+2/14/2026 12:02:03 AM: MainWindow Constructor started
+2/14/2026 12:02:03 AM: MainWindow InitializeComponent finished
+2/14/2026 12:02:04 AM: MainWindow Initial Navigation done
+2/14/2026 12:02:05 AM: MainWindow Loaded
+2/14/2026 12:02:05 AM: App OnStartup finished

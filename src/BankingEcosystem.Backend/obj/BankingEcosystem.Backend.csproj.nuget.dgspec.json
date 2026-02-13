@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\project\\bank_ecosystem\\src\\Bankingecosystem.Backend\\BankingEcosystem.Backend.csproj": {}
+    "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj": {}
   },
   "projects": {
-    "C:\\project\\bank_ecosystem\\src\\Bankingecosystem.Backend\\BankingEcosystem.Backend.csproj": {
+    "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\project\\bank_ecosystem\\src\\Bankingecosystem.Backend\\BankingEcosystem.Backend.csproj",
+        "projectUniqueName": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj",
         "projectName": "BankingEcosystem.Backend",
-        "projectPath": "C:\\project\\bank_ecosystem\\src\\Bankingecosystem.Backend\\BankingEcosystem.Backend.csproj",
+        "projectPath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\BankingEcosystem.Backend.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\project\\bank_ecosystem\\src\\Bankingecosystem.Backend\\obj\\",
+        "outputPath": "C:\\project\\bank_ecosystem\\src\\BankingEcosystem.Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",

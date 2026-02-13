@@ -24,23 +24,34 @@ public class AuthService(BankingDbContext db, IConfiguration config)
             card.Customer.FullName, card.IsBlocked);
     }
 
-    public async Task<AuthResponse?> VerifyPinAsync(int cardId, string pin)
+    public async Task<AuthResponse?> VerifyPinAsync(int cardId, string encryptedPin)
     {
+        Console.WriteLine($"[AuthService] VerifyPinAsync received: {encryptedPin}");
+
         var card = await db.Cards
             .Include(c => c.Customer)
             .Include(c => c.Account)
             .FirstOrDefaultAsync(c => c.CardId == cardId);
 
-        if (card == null || card.IsBlocked) return null;
-
-        if (!BCrypt.Net.BCrypt.Verify(pin, card.PinHash))
+        if (card == null || card.IsBlocked) 
         {
+            Console.WriteLine($"[AuthService] Card not found or blocked: {cardId}");
+            return null;
+        }
+
+        string decryptedPin = DecryptPin(encryptedPin);
+        Console.WriteLine($"[AuthService] Decrypted PIN: {decryptedPin}");
+
+        if (!BCrypt.Net.BCrypt.Verify(decryptedPin, card.PinHash))
+        {
+            Console.WriteLine("[AuthService] Hash verification FAILED");
             card.FailedAttempts++;
             if (card.FailedAttempts >= 3) card.IsBlocked = true;
             await db.SaveChangesAsync();
             return null;
         }
 
+        Console.WriteLine("[AuthService] Hash verification SUCCESS");
         card.FailedAttempts = 0;
         await db.SaveChangesAsync();
 
@@ -48,19 +59,45 @@ public class AuthService(BankingDbContext db, IConfiguration config)
         return new AuthResponse(token, card.Account.AccountNumber, card.Customer.FullName, card.Account.Balance, card.AccountId);
     }
 
-    public async Task<bool> ChangePinAsync(int cardId, string oldPin, string newPin)
+    public async Task<bool> ChangePinAsync(int cardId, string encryptedOldPin, string encryptedNewPin)
     {
         var card = await db.Cards.FindAsync(cardId);
         if (card == null || card.IsBlocked) return false;
 
-        if (!BCrypt.Net.BCrypt.Verify(oldPin, card.PinHash))
+        string decryptedOld = DecryptPin(encryptedOldPin);
+        string decryptedNew = DecryptPin(encryptedNewPin);
+
+        if (!BCrypt.Net.BCrypt.Verify(decryptedOld, card.PinHash))
         {
             return false;
         }
 
-        card.PinHash = BCrypt.Net.BCrypt.HashPassword(newPin);
+        card.PinHash = BCrypt.Net.BCrypt.HashPassword(decryptedNew);
         await db.SaveChangesAsync();
         return true;
+    }
+
+    private string DecryptPin(string encryptedPinHex)
+    {
+        try
+        {
+            const string Key = "BANK_ECO_SECURE_2026";
+            var sb = new StringBuilder();
+            
+            for (int i = 0; i < encryptedPinHex.Length; i += 2)
+            {
+                string hexByte = encryptedPinHex.Substring(i, 2);
+                byte b = Convert.ToByte(hexByte, 16);
+                char decryptedChar = (char)(b ^ Key[(i / 2) % Key.Length]);
+                sb.Append(decryptedChar);
+            }
+            
+            return sb.ToString();
+        }
+        catch
+        {
+            return string.Empty; // Fail safe
+        }
     }
 
     public async Task<EmployeeLoginResponse?> EmployeeLoginAsync(string employeeCode, string password)
