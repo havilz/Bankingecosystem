@@ -11,6 +11,7 @@ public interface IHardwareInteropService
     bool IsCardInserted();
     bool DispenseCash(int amount);
     int GetRemainingCash();
+    bool AcceptCash(); // Simulation for Deposit
     bool PrintReceipt(string receiptData);
 }
 
@@ -77,6 +78,13 @@ public class HardwareInteropService : IHardwareInteropService
         {
             return -1;
         }
+    }
+
+    public bool AcceptCash()
+    {
+        // Simulation: Always accept cash for now
+        // In real hardware, we would check sensors, validate bills, etc.
+        return true;
     }
 
     public bool PrintReceipt(string receiptData)

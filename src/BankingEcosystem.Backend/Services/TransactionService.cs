@@ -53,6 +53,11 @@ public class TransactionService(BankingDbContext db)
 
     public async Task<TransactionDto> DepositAsync(DepositRequest request)
     {
+        // Check ATM Status
+        var atm = await db.Atms.FindAsync(request.AtmId);
+        if (atm == null) throw new ArgumentException("ATM not found");
+        if (!atm.IsOnline) throw new InvalidOperationException("ATM is currently offline/under maintenance");
+
         var account = await db.Accounts.FindAsync(request.AccountId)
             ?? throw new ArgumentException("Account not found");
 
@@ -61,10 +66,12 @@ public class TransactionService(BankingDbContext db)
 
         var balanceBefore = account.Balance;
         account.Balance += request.Amount;
+        atm.TotalCash += request.Amount; // Update ATM cash (Money IN)
 
         var tx = new Transaction
         {
             AccountId = request.AccountId,
+            AtmId = request.AtmId,
             TransactionTypeId = 2, // Deposit
             Amount = request.Amount,
             BalanceBefore = balanceBefore,

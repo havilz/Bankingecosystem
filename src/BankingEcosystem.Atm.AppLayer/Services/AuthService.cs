@@ -7,6 +7,7 @@ public interface IAuthService
 {
     Task<VerifyCardResponse?> VerifyCardAsync(string cardNumber);
     Task<bool> VerifyPinAsync(int cardId, string pin);
+    Task<bool> ChangePinAsync(int cardId, string oldPin, string newPin);
 }
 
 public class AuthService : IAuthService
@@ -51,6 +52,22 @@ public class AuthService : IAuthService
             }
             
             return false;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> ChangePinAsync(int cardId, string oldPin, string newPin)
+    {
+        try
+        {
+             var response = await _httpClient.PostAsJsonAsync("api/auth/change-pin", new ChangePinRequest(cardId, oldPin, newPin));
+             if (!response.IsSuccessStatusCode) return false;
+
+             var result = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+             return result?.Success ?? false;
         }
         catch
         {

@@ -1,4 +1,4 @@
-#include "atm_state_machine.h"
+#include "../include/atm_state_machine.h"
 
 static int g_currentState = ATM_STATE_IDLE;
 
@@ -11,8 +11,8 @@ static bool isValidTransition(int from, int to) {
         case ATM_STATE_AUTHENTICATED: return to == ATM_STATE_TRANSACTION || to == ATM_STATE_IDLE;
         case ATM_STATE_TRANSACTION:   return to == ATM_STATE_DISPENSING || to == ATM_STATE_COMPLETED || to == ATM_STATE_ERROR;
         case ATM_STATE_DISPENSING:    return to == ATM_STATE_COMPLETED || to == ATM_STATE_ERROR;
-        case ATM_STATE_COMPLETED:     return to == ATM_STATE_IDLE;
-        case ATM_STATE_ERROR:         return to == ATM_STATE_IDLE;
+        case ATM_STATE_COMPLETED:     return to == ATM_STATE_IDLE || to == ATM_STATE_AUTHENTICATED;
+        case ATM_STATE_ERROR:         return to == ATM_STATE_IDLE || to == ATM_STATE_AUTHENTICATED;
         default: return false;
     }
 }

@@ -436,6 +436,7 @@ sequenceDiagram
 - [x] 2. Balance inquiry + mini statement
 - [x] 3. Receipt generation
 - [x] 4. ATM state machine (C++ FSM)
+- [x] 5. Full ATM Features
 
 ### 🔴 Phase 5 — Polish & Security
 

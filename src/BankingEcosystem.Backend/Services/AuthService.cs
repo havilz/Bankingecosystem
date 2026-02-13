@@ -48,6 +48,21 @@ public class AuthService(BankingDbContext db, IConfiguration config)
         return new AuthResponse(token, card.Account.AccountNumber, card.Customer.FullName, card.Account.Balance, card.AccountId);
     }
 
+    public async Task<bool> ChangePinAsync(int cardId, string oldPin, string newPin)
+    {
+        var card = await db.Cards.FindAsync(cardId);
+        if (card == null || card.IsBlocked) return false;
+
+        if (!BCrypt.Net.BCrypt.Verify(oldPin, card.PinHash))
+        {
+            return false;
+        }
+
+        card.PinHash = BCrypt.Net.BCrypt.HashPassword(newPin);
+        await db.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<EmployeeLoginResponse?> EmployeeLoginAsync(string employeeCode, string password)
     {
         var emp = await db.Employees

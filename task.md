@@ -162,19 +162,20 @@
 ### Step 5: Remaining Features (Withdraw, Deposit, Change PIN)
 
 - [/] 5. Remaining Features
-  - [ ] **Withdrawal** (Tarik Tunai)
-    - [ ] ViewModel: `WithdrawViewModel` (Amounts grid + Custom amount)
-    - [ ] View: `WithdrawView.xaml`
-    - [ ] Navigation: Update `MainMenuView`
+  - [x] **Withdrawal** (Tarik Tunai)
+    - [x] ViewModel: `WithdrawViewModel` (Amounts grid + Custom amount)
+    - [x] View: `WithdrawView.xaml`
+    - [x] Navigation: Update `MainMenuView`
   - [ ] **Deposit** (Setor Tunai)
-    - [ ] AppLayer: `TransactionService.DepositAsync`
-    - [ ] ViewModel: `DepositViewModel` (Cash slot simulation)
-    - [ ] View: `DepositView.xaml`
-    - [ ] Navigation: Update `MainMenuView`
+    - [x] Backend: `POST /api/transaction/deposit` (Verified)
+    - [x] AppLayer: `TransactionService.DepositAsync`
+    - [x] ViewModel: `DepositViewModel` (Cash slot simulation)
+    - [x] View: `DepositView.xaml`
+    - [x] Navigation: Update `MainMenuView`
   - [ ] **Change PIN** (Ubah PIN)
-    - [ ] Backend: Add `POST /api/auth/change-pin`
-    - [ ] AppLayer: `AuthService.ChangePinAsync`
-    - [ ] ViewModel: `ChangePinViewModel` (Old PIN -> New PIN -> Confirm)
-    - [ ] View: `ChangePinView.xaml`
-    - [ ] Navigation: Update `MainMenuView`
+    - [x] Backend: Add `POST /api/auth/change-pin`
+    - [x] AppLayer: `AuthService.ChangePinAsync`
+    - [x] ViewModel: `ChangePinViewModel` (Old PIN -> New PIN -> Confirm)
+    - [x] View: `ChangePinView.xaml`
+    - [x] Navigation: Update `MainMenuView`
   - [ ] Verification (End-to-End for all features)

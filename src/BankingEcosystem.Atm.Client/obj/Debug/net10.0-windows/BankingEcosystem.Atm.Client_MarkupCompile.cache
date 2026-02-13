@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\App.xaml
-71291109106
+10-2063888611
 
-11-1387110573
+172071200132
 212128026991
-MainWindow.xaml;Resources\AtmTheme.xaml;Views\HistoryView.xaml;Views\MainMenuView.xaml;Views\OnboardingView.xaml;Views\PinEntryView.xaml;Views\TransferView.xaml;
+MainWindow.xaml;Resources\AtmTheme.xaml;Views\ChangePinView.xaml;Views\DepositView.xaml;Views\HistoryView.xaml;Views\MainMenuView.xaml;Views\OnboardingView.xaml;Views\PinEntryView.xaml;Views\TransferView.xaml;Views\WithdrawView.xaml;
 
 False
 

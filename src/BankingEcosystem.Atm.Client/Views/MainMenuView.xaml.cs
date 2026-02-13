@@ -82,14 +82,19 @@ public partial class MainMenuView : Page
     private void OnWithdrawClick(object sender, RoutedEventArgs e)
     {
         _sessionService?.RefreshSession();
-        // TODO: Navigate to WithdrawalView (Phase 3)
-        ShowComingSoon("Tarik Tunai");
+        if (Window.GetWindow(this) is MainWindow mainWindow)
+        {
+            mainWindow.NavigateTo<WithdrawView>();
+        }
     }
 
     private void OnDepositClick(object sender, RoutedEventArgs e)
     {
         _sessionService?.RefreshSession();
-        ShowComingSoon("Setor Tunai");
+        if (Window.GetWindow(this) is MainWindow mainWindow)
+        {
+            mainWindow.NavigateTo<DepositView>();
+        }
     }
 
     private void OnTransferClick(object sender, RoutedEventArgs e)
@@ -141,7 +146,10 @@ public partial class MainMenuView : Page
     private void OnChangePinClick(object sender, RoutedEventArgs e)
     {
         _sessionService?.RefreshSession();
-        ShowComingSoon("Ubah PIN");
+        if (Window.GetWindow(this) is MainWindow mainWindow)
+        {
+            mainWindow.NavigateTo<ChangePinView>();
+        }
     }
 
     private void OnExitClick(object sender, RoutedEventArgs e)

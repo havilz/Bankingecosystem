@@ -15,7 +15,10 @@ public partial class HistoryViewModel : ObservableObject
     private bool _isBusy;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasError))]
     private string _errorMessage = string.Empty;
+
+    public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
 
     public ObservableCollection<TransactionDto> Transactions { get; } = new();
 

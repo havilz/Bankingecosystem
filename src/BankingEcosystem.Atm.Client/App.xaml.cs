@@ -53,6 +53,18 @@ public partial class App : Application
         // History Feature
         services.AddTransient<ViewModels.HistoryViewModel>();
         services.AddTransient<Views.HistoryView>();
+
+        // Change PIN Feature
+        services.AddTransient<ViewModels.ChangePinViewModel>();
+        services.AddTransient<Views.ChangePinView>();
+
+        // Deposit Feature
+        services.AddTransient<ViewModels.DepositViewModel>();
+        services.AddTransient<Views.DepositView>();
+
+        // Withdraw Feature
+        services.AddTransient<ViewModels.WithdrawViewModel>();
+        services.AddTransient<Views.WithdrawView>();
     }
 
     protected override void OnStartup(StartupEventArgs e)

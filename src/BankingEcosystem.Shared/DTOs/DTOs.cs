@@ -4,6 +4,7 @@ namespace BankingEcosystem.Shared.DTOs;
 public record VerifyCardRequest(string CardNumber);
 public record VerifyCardResponse(int CardId, int AccountId, string AccountNumber, string CustomerName, bool IsBlocked);
 public record VerifyPinRequest(int CardId, string Pin);
+public record ChangePinRequest(int CardId, string OldPin, string NewPin);
 public record AuthResponse(string Token, string AccountNumber, string CustomerName, decimal Balance, int AccountId);
 
 public record EmployeeLoginRequest(string EmployeeCode, string Password);
@@ -30,7 +31,7 @@ public record CreateCardRequest(int CustomerId, int AccountId, string Pin);
 // ─── Transaction ───
 public record TransactionDto(int TransactionId, string TransactionType, decimal Amount, decimal BalanceBefore, decimal BalanceAfter, string ReferenceNumber, string? TargetAccountNumber, string Status, string? Description, DateTime CreatedAt, string? AtmCode, string? Location);
 public record WithdrawRequest(int AccountId, int AtmId, decimal Amount);
-public record DepositRequest(int AccountId, decimal Amount);
+public record DepositRequest(int AccountId, int AtmId, decimal Amount);
 public record TransferRequest(int AccountId, string TargetAccountNumber, decimal Amount, string? Description);
 
 // ─── ATM ───

@@ -1,0 +1,98 @@
+<Page x:Class="BankingEcosystem.Atm.UI.Views.ChangePinView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Title="Ubah PIN"
+      Focusable="True"
+      KeyDown="OnKeyDown"
+      Background="{StaticResource DarkNavyBrush}">
+
+    <Page.Resources>
+        <Style x:Key="PinDotStyle" TargetType="Ellipse">
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="Fill" Value="#30FFFFFF"/>
+            <Setter Property="Margin" Value="8"/>
+        </Style>
+        <Style x:Key="FilledPinDotStyle" TargetType="Ellipse" BasedOn="{StaticResource PinDotStyle}">
+            <Setter Property="Fill" Value="{StaticResource GoldBrush}"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Padding="32,24">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="BANK ECOSYSTEM" 
+                           FontSize="24" FontWeight="Bold" 
+                           Foreground="{StaticResource WhiteBrush}"
+                           FontFamily="{StaticResource PrimaryFont}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content -->
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            
+            <TextBlock x:Name="TitleText" 
+                       Text="{Binding Title}"
+                       FontSize="28" FontWeight="Bold"
+                       Foreground="{StaticResource GoldBrush}"
+                       HorizontalAlignment="Center" Margin="0,0,0,16"
+                       FontFamily="{StaticResource PrimaryFont}"/>
+
+            <TextBlock x:Name="InstructionText" 
+                       Text="{Binding Instruction}"
+                       FontSize="18" Foreground="#B0FFFFFF"
+                       HorizontalAlignment="Center" Margin="0,0,0,32"
+                       FontFamily="{StaticResource PrimaryFont}"/>
+
+            <!-- PIN Dots -->
+            <StackPanel x:Name="PinDotsPanel" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,48">
+                <Ellipse Style="{StaticResource PinDotStyle}"/>
+                <Ellipse Style="{StaticResource PinDotStyle}"/>
+                <Ellipse Style="{StaticResource PinDotStyle}"/>
+                <Ellipse Style="{StaticResource PinDotStyle}"/>
+                <Ellipse Style="{StaticResource PinDotStyle}"/>
+                <Ellipse Style="{StaticResource PinDotStyle}"/>
+            </StackPanel>
+
+            <TextBlock x:Name="ErrorText" 
+                       Text="{Binding StatusMessage}"
+                       FontSize="16" Foreground="#FF4444"
+                       HorizontalAlignment="Center" Margin="0,0,0,24"
+                       FontFamily="{StaticResource MonoFont}"/>
+
+            <!-- Loading Indicator -->
+            <ProgressBar IsIndeterminate="{Binding IsBusy}"
+                         Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}"
+                         Width="200" Height="4"
+                         Foreground="{StaticResource GoldBrush}"
+                         Background="#20FFFFFF"
+                         BorderThickness="0"/>
+
+        </StackPanel>
+
+        <!-- Footer / Keypad Hint -->
+        <Border Grid.Row="2" Padding="32">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="Gunakan Keypad Angka untuk Memasukkan PIN" 
+                           FontSize="14" Foreground="#60FFFFFF"
+                           HorizontalAlignment="Center" Margin="0,0,0,8"
+                           FontFamily="{StaticResource PrimaryFont}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="[Enter] Konfirmasi" Foreground="{StaticResource GoldBrush}" Margin="8,0"/>
+                    <TextBlock Text="[Backspace] Hapus" Foreground="#80FFFFFF" Margin="8,0"/>
+                    <TextBlock Text="[Esc] Batal" Foreground="#80FFFFFF" Margin="8,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

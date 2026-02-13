@@ -37,7 +37,7 @@
                        FontSize="20" Foreground="#80FFFFFF" 
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-            <TextBlock Visibility="{Binding ErrorMessage, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}" 
+            <TextBlock Visibility="{Binding HasError, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}" 
                        Text="{Binding ErrorMessage}" 
                        FontSize="20" Foreground="#FF5555" 
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>

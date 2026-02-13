@@ -31,6 +31,16 @@ public class AuthController(AuthService authService) : ControllerBase
         return Ok(new ApiResponse<AuthResponse>(true, "Authenticated", result));
     }
 
+    [HttpPost("change-pin")]
+    public async Task<IActionResult> ChangePin([FromBody] ChangePinRequest request)
+    {
+        var success = await authService.ChangePinAsync(request.CardId, request.OldPin, request.NewPin);
+        if (!success)
+            return BadRequest(new ApiResponse<object>(false, "Failed to change PIN. Invalid Old PIN or Card Blocked.", null));
+
+        return Ok(new ApiResponse<object>(true, "PIN changed successfully", null));
+    }
+
     [HttpPost("employee-login")]
     public async Task<IActionResult> EmployeeLogin([FromBody] EmployeeLoginRequest request)
     {
