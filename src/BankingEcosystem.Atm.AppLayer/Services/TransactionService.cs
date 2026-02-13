@@ -8,6 +8,7 @@ public interface ITransactionService
     Task<decimal?> GetBalanceAsync();
     Task<string> WithdrawAsync(decimal amount);
     Task<string> TransferAsync(decimal amount, string targetAccountNumber);
+    Task<List<TransactionDto>> GetHistoryAsync(int limit = 10);
 }
 
 public class TransactionService : ITransactionService
@@ -127,6 +128,24 @@ public class TransactionService : ITransactionService
         catch
         {
             return "Network error";
+        }
+    }
+
+    public async Task<List<TransactionDto>> GetHistoryAsync(int limit = 10)
+    {
+        if (!_sessionService.IsAuthenticated || _sessionService.AccountId == null) return new List<TransactionDto>();
+
+        try
+        {
+            var response = await _httpClient.GetAsync($"api/transaction/history/{_sessionService.AccountId}?pageSize={limit}");
+            if (!response.IsSuccessStatusCode) return new List<TransactionDto>();
+
+            var result = await response.Content.ReadFromJsonAsync<ApiResponse<List<TransactionDto>>>();
+            return result?.Data ?? new List<TransactionDto>();
+        }
+        catch
+        {
+            return new List<TransactionDto>();
         }
     }
 }

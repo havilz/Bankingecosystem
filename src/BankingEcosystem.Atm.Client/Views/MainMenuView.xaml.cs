@@ -132,7 +132,10 @@ public partial class MainMenuView : Page
     private void OnHistoryClick(object sender, RoutedEventArgs e)
     {
         _sessionService?.RefreshSession();
-        ShowComingSoon("Riwayat Transaksi");
+        if (Window.GetWindow(this) is MainWindow mainWindow)
+        {
+            mainWindow.NavigateTo<HistoryView>();
+        }
     }
 
     private void OnChangePinClick(object sender, RoutedEventArgs e)

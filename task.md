@@ -129,4 +129,14 @@
   - [x] ViewModel: `TransferViewModel.cs`
   - [x] View: `TransferView.xaml` (Input Account -> Input Amount -> Confirm)
   - [x] Navigation: Main Menu -> Transfer Feature
+  - [x] Verification
+
+### Step 2: Balance Inquiry & Mini Statement
+
+- [/] 2. Balance inquiry + mini statement
+  - [x] Backend: `GET /api/transaction/balance` & `/history`
+  - [x] AppLayer: `ITransactionService.GetHistoryAsync`
+  - [x] ViewModel: `HistoryViewModel.cs`
+  - [x] View: `HistoryView.xaml` (DataGrid/ListView of transactions)
+  - [x] Balance Inquiry: Enhance `MainMenuView` integration
   - [ ] Verification

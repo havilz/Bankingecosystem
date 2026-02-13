@@ -48,6 +48,10 @@ public partial class App : Application
         // Transfer Feature
         services.AddTransient<ViewModels.TransferViewModel>();
         services.AddTransient<Views.TransferView>();
+
+        // History Feature
+        services.AddTransient<ViewModels.HistoryViewModel>();
+        services.AddTransient<Views.HistoryView>();
     }
 
     protected override void OnStartup(StartupEventArgs e)
