@@ -143,8 +143,38 @@
 
 ### Step 3: Receipt Generation
 
-- [/] 3. Receipt generation
+- [x] 3. Receipt generation
   - [x] Helper: `ReceiptBuilder` (Header, Body, Footer formatter)
   - [x] AppLayer: Update `TransactionService` to use Builder
   - [x] Hardware: Update `HardwareInteropService` to save receipt to file (`receipts/`)
-  - [ ] Verification (Check generated files)
+  - [x] Verification (Check generated files)
+
+### Step 4: ATM State Machine (C++ FSM)
+
+- [/] 4. ATM state machine (C++ FSM)
+  - [x] Interop: Add `AtmFsm_*` P/Invoke declarations
+  - [x] AppLayer: Create `AtmStateService`
+  - [x] Integration: `OnboardingViewModel` (Idle -> CardInserted)
+  - [x] Integration: `PinEntryViewModel` (CardInserted -> PinEntry -> Authenticated)
+  - [x] Integration: `TransactionService` (Authenticated -> Transaction -> Dispensing -> Completed)
+  - [x] Verification (Test flow enforcement)
+
+### Step 5: Remaining Features (Withdraw, Deposit, Change PIN)
+
+- [/] 5. Remaining Features
+  - [ ] **Withdrawal** (Tarik Tunai)
+    - [ ] ViewModel: `WithdrawViewModel` (Amounts grid + Custom amount)
+    - [ ] View: `WithdrawView.xaml`
+    - [ ] Navigation: Update `MainMenuView`
+  - [ ] **Deposit** (Setor Tunai)
+    - [ ] AppLayer: `TransactionService.DepositAsync`
+    - [ ] ViewModel: `DepositViewModel` (Cash slot simulation)
+    - [ ] View: `DepositView.xaml`
+    - [ ] Navigation: Update `MainMenuView`
+  - [ ] **Change PIN** (Ubah PIN)
+    - [ ] Backend: Add `POST /api/auth/change-pin`
+    - [ ] AppLayer: `AuthService.ChangePinAsync`
+    - [ ] ViewModel: `ChangePinViewModel` (Old PIN -> New PIN -> Confirm)
+    - [ ] View: `ChangePinView.xaml`
+    - [ ] Navigation: Update `MainMenuView`
+  - [ ] Verification (End-to-End for all features)

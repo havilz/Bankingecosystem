@@ -16,16 +16,19 @@ public partial class PinEntryView : Page
 
     private readonly BankingEcosystem.Atm.AppLayer.Services.IAuthService _authService;
     private readonly BankingEcosystem.Atm.AppLayer.Services.AtmSessionService _sessionService;
+    private readonly BankingEcosystem.Atm.AppLayer.Services.IAtmStateService _atmStateService;
 
     // Default constructor for design-time support or fallback
-    public PinEntryView() : this(null!, null!) { }
+    public PinEntryView() : this(null!, null!, null!) { }
 
     [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
     public PinEntryView(BankingEcosystem.Atm.AppLayer.Services.IAuthService authService, 
-                        BankingEcosystem.Atm.AppLayer.Services.AtmSessionService sessionService)
+                        BankingEcosystem.Atm.AppLayer.Services.AtmSessionService sessionService,
+                        BankingEcosystem.Atm.AppLayer.Services.IAtmStateService atmStateService)
     {
         _authService = authService;
         _sessionService = sessionService;
+        _atmStateService = atmStateService;
 
         InitializeComponent();
 
@@ -43,6 +46,19 @@ public partial class PinEntryView : Page
             Focus();
             UpdateClock();
             _timer.Start();
+            
+            // FSM: Transition to PIN Entry
+            try
+            {
+                 // If we are coming from Idle (dev mode) or CardInserted (normal), this should work.
+                 // If C++ logic is strict, it requires CardInserted first.
+                 // We assume previous step set it to CardInserted.
+                _atmStateService.TransitionTo(BankingEcosystem.Atm.AppLayer.Models.AtmState.PinEntry);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"FSM Error: {ex.Message}");
+            }
         };
 
         Unloaded += (_, _) => _timer.Stop();
@@ -226,6 +242,10 @@ public partial class PinEntryView : Page
         {
             StatusText.Text = "PIN Diterima ✓";
             StatusText.Foreground = new SolidColorBrush(Colors.LightGreen);
+            
+            // FSM: Transition to Authenticated
+            try { _atmStateService.TransitionTo(BankingEcosystem.Atm.AppLayer.Models.AtmState.Authenticated); } catch {}
+
             await Task.Delay(500); 
 
             if (Window.GetWindow(this) is MainWindow mainWindow)
@@ -243,6 +263,9 @@ public partial class PinEntryView : Page
 
     private void GoBack()
     {
+        // FSM: Return to Idle (Eject Card)
+        try { _atmStateService.TransitionTo(BankingEcosystem.Atm.AppLayer.Models.AtmState.Idle); } catch {}
+
         if (Window.GetWindow(this) is MainWindow mainWindow)
         {
             mainWindow.NavigateToOnboarding();

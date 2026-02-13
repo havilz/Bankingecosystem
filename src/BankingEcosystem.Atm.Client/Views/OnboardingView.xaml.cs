@@ -10,14 +10,19 @@ public partial class OnboardingView : UserControl
 {
     private readonly IAuthService _authService;
     private readonly AtmSessionService _sessionService;
+    private readonly IAtmStateService _atmStateService;
     private readonly DispatcherTimer _clockTimer;
 
-    public OnboardingView(IAuthService authService, AtmSessionService sessionService)
+    public OnboardingView(IAuthService authService, AtmSessionService sessionService, IAtmStateService atmStateService)
     {
         _authService = authService;
         _sessionService = sessionService;
+        _atmStateService = atmStateService;
 
         InitializeComponent();
+
+        // Ensure ATM is in Idle state
+        _atmStateService.Reset();
 
         // Clock timer — update every second
         _clockTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
@@ -125,6 +130,17 @@ public partial class OnboardingView : UserControl
         // Step 2: Store card info in session
         _sessionService.StartSession(cardNumber);
         _sessionService.CardId = cardResult.CardId;
+
+        // Step 2.5: C++ FSM Transition
+        try
+        {
+            _atmStateService.TransitionTo(BankingEcosystem.Atm.AppLayer.Models.AtmState.CardInserted);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Hardware Error: {ex.Message}", "System Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
 
         // Step 3: Navigate to PIN entry
         NavigateToPinEntry();

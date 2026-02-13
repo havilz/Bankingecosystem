@@ -27,6 +27,7 @@ public partial class App : Application
     {
         // Core Services
         services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.AtmSessionService>();
+        services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.IAtmStateService, BankingEcosystem.Atm.AppLayer.Services.AtmStateService>();
         
         // Register HttpClient
         services.AddSingleton(new HttpClient 

@@ -435,7 +435,7 @@ sequenceDiagram
 - [x] 1. Transfer antar rekening
 - [x] 2. Balance inquiry + mini statement
 - [x] 3. Receipt generation
-- [ ] 4. ATM state machine (C++ FSM)
+- [x] 4. ATM state machine (C++ FSM)
 
 ### 🔴 Phase 5 — Polish & Security
 

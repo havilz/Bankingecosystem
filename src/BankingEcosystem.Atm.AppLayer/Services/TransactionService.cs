@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using BankingEcosystem.Shared.DTOs;
+using BankingEcosystem.Atm.AppLayer.Models;
 
 namespace BankingEcosystem.Atm.AppLayer.Services;
 
@@ -16,12 +17,14 @@ public class TransactionService : ITransactionService
     private readonly HttpClient _httpClient;
     private readonly AtmSessionService _sessionService;
     private readonly IHardwareInteropService _hardwareService;
+    private readonly IAtmStateService _atmStateService;
 
-    public TransactionService(HttpClient httpClient, AtmSessionService sessionService, IHardwareInteropService hardwareService)
+    public TransactionService(HttpClient httpClient, AtmSessionService sessionService, IHardwareInteropService hardwareService, IAtmStateService atmStateService)
     {
         _httpClient = httpClient;
         _sessionService = sessionService;
         _hardwareService = hardwareService;
+        _atmStateService = atmStateService;
     }
 
     public async Task<decimal?> GetBalanceAsync()
@@ -34,12 +37,6 @@ public class TransactionService : ITransactionService
             if (!response.IsSuccessStatusCode) return null;
 
             var result = await response.Content.ReadFromJsonAsync<ApiResponse<TransactionDto>>();
-            // BalanceInquiry returns a TransactionDto where BalanceAfter is the current balance?
-            // Or maybe we should check AccountController for simpler balance?
-            // "api/account/{id}" returns AccountDto with Balance.
-            // But checking transaction history/balance inquiry usually logs a transaction.
-            // Let's use the one we called.
-            
             return result?.Data?.BalanceAfter;
         }
         catch
@@ -54,11 +51,15 @@ public class TransactionService : ITransactionService
         if (amount <= 0) return "Invalid amount";
         if (amount % 50000 != 0 && amount % 100000 != 0) return "Invalid denomination"; // Basic check
 
+        // FSM: Start Transaction
+        try { _atmStateService.TransitionTo(AtmState.Transaction); } catch { return "Hardware state error"; }
+
         // 1. Check Hardware Cash
         int amountInt = (int)amount;
         int remainingCash = _hardwareService.GetRemainingCash();
         if (remainingCash != -1 && remainingCash < amountInt)
         {
+            try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
             return "ATM insufficient cash";
         }
 
@@ -71,16 +72,20 @@ public class TransactionService : ITransactionService
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+                try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
                 return error?.Message ?? "Transaction failed";
             }
+
+            // FSM: Dispensing
+            try { _atmStateService.TransitionTo(AtmState.Dispensing); } catch {}
 
             // 3. Dispense Cash
             bool dispensed = _hardwareService.DispenseCash(amountInt);
             if (!dispensed)
             {
                 // CRITICAL: Money deducted but not dispensed!
-                // In real world, we would call a Reversal API here.
-                // For this simulation, we'll just return a specific error.
+                // FSM: Error
+                try { _atmStateService.TransitionTo(AtmState.Error); } catch {}
                 return "Hardware error: Cash not dispensed. Please contact bank.";
             }
 
@@ -97,18 +102,32 @@ public class TransactionService : ITransactionService
                 .ToString();
             _hardwareService.PrintReceipt(receipt);
 
+            // FSM: Completion -> Authenticated (Ready for next)
+            try 
+            { 
+                _atmStateService.TransitionTo(AtmState.Completed); 
+                // Simulate user taking cash/receipt time?
+                _atmStateService.TransitionTo(AtmState.Authenticated);
+            } 
+            catch {}
+
             return "Success";
         }
         catch
         {
+            try { _atmStateService.TransitionTo(AtmState.Error); } catch {}
             return "Network error";
         }
     }
+
     public async Task<string> TransferAsync(decimal amount, string targetAccountNumber)
     {
         if (!_sessionService.IsAuthenticated || _sessionService.AccountId == null) return "User not authenticated";
         if (amount <= 0) return "Invalid amount";
         if (string.IsNullOrWhiteSpace(targetAccountNumber)) return "Invalid target account";
+
+        // FSM: Start Transaction
+        try { _atmStateService.TransitionTo(AtmState.Transaction); } catch { return "Hardware state error"; }
 
         try
         {
@@ -118,6 +137,7 @@ public class TransactionService : ITransactionService
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+                try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
                 return error?.Message ?? "Transfer failed";
             }
 
@@ -142,10 +162,19 @@ public class TransactionService : ITransactionService
                 // Ignore printer errors for now
             }
 
+            // FSM: Completion -> Authenticated
+            try 
+            { 
+                _atmStateService.TransitionTo(AtmState.Completed); 
+                _atmStateService.TransitionTo(AtmState.Authenticated);
+            } 
+            catch {}
+
             return "Success";
         }
         catch
         {
+            try { _atmStateService.TransitionTo(AtmState.Error); } catch {}
             return "Network error";
         }
     }

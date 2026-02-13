@@ -319,3 +319,10 @@ Inner Exception: Cannot find resource named 'BoolToVis'. Resource names are case
 2/13/2026 11:57:14 AM: MainWindow Initial Navigation done
 2/13/2026 11:57:14 AM: MainWindow Loaded
 2/13/2026 11:57:14 AM: App OnStartup finished
+2/13/2026 12:30:30 PM: App Constructor started
+2/13/2026 12:30:31 PM: App OnStartup started
+2/13/2026 12:30:31 PM: MainWindow Constructor started
+2/13/2026 12:30:31 PM: MainWindow InitializeComponent finished
+2/13/2026 12:30:33 PM: MainWindow Initial Navigation done
+2/13/2026 12:30:33 PM: MainWindow Loaded
+2/13/2026 12:30:33 PM: App OnStartup finished
