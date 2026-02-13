@@ -107,7 +107,7 @@
 
 ### Step 4: Reporting & Audit Log Viewer
 
-- [/] 4. Reporting & audit log viewer (Real-time monitoring)
+- [x] 4. Reporting & audit log viewer (Real-time monitoring)
   - [x] Backend: `GET /transactions` & `GET /reports/dashboard`
   - [x] Frontend: Real-time Dashboard Stats
   - [x] Frontend: Transaction List (DataGrid + Filter)
@@ -123,7 +123,7 @@
 
 ### Step 1: Transfer Antar Rekening
 
-- [/] 1. Transfer antar rekening
+- [x] 1. Transfer antar rekening
   - [x] Backend: `POST /api/transaction/transfer` endpoint
   - [x] AppLayer: `ITransactionService.TransferAsync`
   - [x] ViewModel: `TransferViewModel.cs`
@@ -133,10 +133,18 @@
 
 ### Step 2: Balance Inquiry & Mini Statement
 
-- [/] 2. Balance inquiry + mini statement
+- [x] 2. Balance inquiry + mini statement
   - [x] Backend: `GET /api/transaction/balance` & `/history`
   - [x] AppLayer: `ITransactionService.GetHistoryAsync`
   - [x] ViewModel: `HistoryViewModel.cs`
   - [x] View: `HistoryView.xaml` (DataGrid/ListView of transactions)
   - [x] Balance Inquiry: Enhance `MainMenuView` integration
-  - [ ] Verification
+  - [x] Verification
+
+### Step 3: Receipt Generation
+
+- [/] 3. Receipt generation
+  - [x] Helper: `ReceiptBuilder` (Header, Body, Footer formatter)
+  - [x] AppLayer: Update `TransactionService` to use Builder
+  - [x] Hardware: Update `HardwareInteropService` to save receipt to file (`receipts/`)
+  - [ ] Verification (Check generated files)

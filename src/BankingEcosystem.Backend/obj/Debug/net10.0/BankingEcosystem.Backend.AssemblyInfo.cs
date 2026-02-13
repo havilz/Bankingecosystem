@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BankingEcosystem.Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dbbd7b588e602b0ec8bef0cfaeae3b8bbd33534f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c2698ba0d1460ec77a5451e1c3050db4784f3e7")]
 [assembly: System.Reflection.AssemblyProductAttribute("BankingEcosystem.Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BankingEcosystem.Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

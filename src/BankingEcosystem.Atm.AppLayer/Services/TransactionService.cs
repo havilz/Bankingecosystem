@@ -85,7 +85,16 @@ public class TransactionService : ITransactionService
             }
 
             // 4. Print Receipt
-            var receipt = $"WITHDRAWAL\nAmount: {amount:C}\nDate: {DateTime.Now}\nRef: {Guid.NewGuid()}";
+            var receipt = new Helpers.ReceiptBuilder()
+                .AddHeader("BANK ECOSYSTEM", _sessionService.AtmId.ToString())
+                .AddBody("TRANSACTION", "WITHDRAWAL")
+                .AddBody("DATE", DateTime.Now.ToString("dd/MM/yyyy"))
+                .AddBody("TIME", DateTime.Now.ToString("HH:mm:ss"))
+                .AddSeparator()
+                .AddBody("AMOUNT", amount.ToString("C", new System.Globalization.CultureInfo("id-ID")))
+                .AddBody("REF NO", Guid.NewGuid().ToString().Substring(0, 8).ToUpper())
+                .AddFooter("Keep your receipt safe.")
+                .ToString();
             _hardwareService.PrintReceipt(receipt);
 
             return "Success";
@@ -113,7 +122,17 @@ public class TransactionService : ITransactionService
             }
 
             // Print Receipt
-            var receipt = $"TRANSFER\nTo: {targetAccountNumber}\nAmount: {amount:C}\nDate: {DateTime.Now}\nRef: {Guid.NewGuid()}";
+            var receipt = new Helpers.ReceiptBuilder()
+                .AddHeader("BANK ECOSYSTEM", _sessionService.AtmId.ToString())
+                .AddBody("TRANSACTION", "TRANSFER")
+                .AddBody("DATE", DateTime.Now.ToString("dd/MM/yyyy"))
+                .AddBody("TIME", DateTime.Now.ToString("HH:mm:ss"))
+                .AddSeparator()
+                .AddBody("DEST ACCOUNT", targetAccountNumber)
+                .AddBody("AMOUNT", amount.ToString("C", new System.Globalization.CultureInfo("id-ID")))
+                .AddBody("REF NO", Guid.NewGuid().ToString().Substring(0, 8).ToUpper())
+                .AddFooter("Transfer Successful.")
+                .ToString();
             try 
             {
                 _hardwareService.PrintReceipt(receipt);
