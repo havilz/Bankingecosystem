@@ -1,3 +1,0 @@
-[2/13/2026 11:55:52 PM] VerifyPinAsync Error: System.EntryPointNotFoundException: Unable to find an entry point named 'Encryption_EncryptPin' in DLL 'BankingEcosystem.NativeLogic.dll'.
-   at BankingEcosystem.Interop.NativeLogicInterop.Encryption_EncryptPin(String rawPin, StringBuilder encryptedOutput, Int32 maxLen)
-   at BankingEcosystem.Atm.AppLayer.Services.AuthService.VerifyPinAsync(Int32 cardId, String pin) in C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\Services\AuthService.cs:line 46

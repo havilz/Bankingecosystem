@@ -1,7 +1,0 @@
-﻿C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\Services\TransactionService.cs(202,31): error CS1729: 'DepositRequest' does not contain a constructor that takes 3 arguments [C:\project\bank_ecosystem\src\BankingEcosystem.Atm.AppLayer\BankingEcosystem.Atm.AppLayer.csproj]
-
-Build FAILED.
-    0 Warning(s)
-    1 Error(s)
-
-Time Elapsed 00:00:11.48
