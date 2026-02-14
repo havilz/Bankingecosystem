@@ -59,11 +59,13 @@ public class DtoTests
     }
 
     [Fact]
-    public void DepositRequest_CreatesCorrectly()
+    public void DepositRequest_Properties_AreSetCorrectly()
     {
-        var request = new DepositRequest(1, 1000000m);
-        Assert.Equal(1, request.AccountId);
-        Assert.Equal(1000000m, request.Amount);
+        var dto = new DepositRequest(1, 1, 500000m);
+
+        Assert.Equal(1, dto.AccountId);
+        Assert.Equal(1, dto.AtmId);
+        Assert.Equal(500000m, dto.Amount);
     }
 
     [Fact]

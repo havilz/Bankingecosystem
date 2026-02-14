@@ -104,7 +104,7 @@ public class BackendServiceTests : IDisposable
     public async Task VerifyPin_ReturnsAuthResponse_WhenCorrectPin()
     {
         var authService = CreateAuthService();
-        var result = await authService.VerifyPinAsync(1, "123456");
+        var result = await authService.VerifyPinAsync(1, EncryptPin("123456"));
 
         Assert.NotNull(result);
         Assert.NotEmpty(result!.Token);
@@ -118,7 +118,7 @@ public class BackendServiceTests : IDisposable
     public async Task VerifyPin_ReturnsNull_WhenWrongPin()
     {
         var authService = CreateAuthService();
-        var result = await authService.VerifyPinAsync(1, "000000");
+        var result = await authService.VerifyPinAsync(1, EncryptPin("000000"));
         Assert.Null(result);
     }
 
@@ -126,7 +126,7 @@ public class BackendServiceTests : IDisposable
     public async Task VerifyPin_IncrementsFailedAttempts_WhenWrongPin()
     {
         var authService = CreateAuthService();
-        await authService.VerifyPinAsync(1, "000000");
+        await authService.VerifyPinAsync(1, EncryptPin("000000"));
 
         var card = await _db.Cards.FindAsync(1);
         Assert.Equal(1, card!.FailedAttempts);
@@ -137,9 +137,9 @@ public class BackendServiceTests : IDisposable
     {
         var authService = CreateAuthService();
 
-        await authService.VerifyPinAsync(1, "000000"); // Attempt 1
-        await authService.VerifyPinAsync(1, "111111"); // Attempt 2
-        await authService.VerifyPinAsync(1, "222222"); // Attempt 3 → blocked
+        await authService.VerifyPinAsync(1, EncryptPin("000000")); // Attempt 1
+        await authService.VerifyPinAsync(1, EncryptPin("111111")); // Attempt 2
+        await authService.VerifyPinAsync(1, EncryptPin("222222")); // Attempt 3 → blocked
 
         var card = await _db.Cards.FindAsync(1);
         Assert.True(card!.IsBlocked);
@@ -152,12 +152,12 @@ public class BackendServiceTests : IDisposable
         var authService = CreateAuthService();
 
         // Fail once
-        await authService.VerifyPinAsync(1, "000000");
+        await authService.VerifyPinAsync(1, EncryptPin("000000"));
         var card = await _db.Cards.FindAsync(1);
         Assert.Equal(1, card!.FailedAttempts);
 
         // Then succeed
-        await authService.VerifyPinAsync(1, "123456");
+        await authService.VerifyPinAsync(1, EncryptPin("123456"));
         await _db.Entry(card).ReloadAsync();
         Assert.Equal(0, card.FailedAttempts);
     }
@@ -172,8 +172,22 @@ public class BackendServiceTests : IDisposable
         card!.IsBlocked = true;
         await _db.SaveChangesAsync();
 
-        var result = await authService.VerifyPinAsync(1, "123456"); // Correct PIN but blocked
+        var result = await authService.VerifyPinAsync(1, EncryptPin("123456")); // Correct PIN but blocked
         Assert.Null(result);
+    }
+
+    private string EncryptPin(string plainPin)
+    {
+        const string Key = "BANK_ECO_SECURE_2026";
+        var sb = new System.Text.StringBuilder();
+        for (int i = 0; i < plainPin.Length; i++)
+        {
+            char c = plainPin[i];
+            char keyChar = Key[i % Key.Length];
+            byte b = (byte)(c ^ keyChar);
+            sb.Append(b.ToString("X2"));
+        }
+        return sb.ToString();
     }
 
     // ═══════════════════════════════════
@@ -243,7 +257,7 @@ public class BackendServiceTests : IDisposable
     public async Task Deposit_IncreasesBalance()
     {
         var txService = new TransactionService(_db);
-        var request = new DepositRequest(1, 1000000m);
+        var request = new DepositRequest(1, 1, 1000000m);
         var result = await txService.DepositAsync(request);
 
         Assert.NotNull(result);
@@ -259,7 +273,7 @@ public class BackendServiceTests : IDisposable
     public async Task Deposit_ThrowsException_WhenAmountNegative()
     {
         var txService = new TransactionService(_db);
-        var request = new DepositRequest(1, -500000m);
+        var request = new DepositRequest(1, 1, -500000m);
 
         await Assert.ThrowsAsync<ArgumentException>(
             () => txService.DepositAsync(request));

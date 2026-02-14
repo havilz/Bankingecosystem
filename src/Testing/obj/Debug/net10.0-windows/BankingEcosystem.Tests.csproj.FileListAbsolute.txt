@@ -1,11 +1,5 @@
 C:\project\bank_ecosystem\src\Testing\bin\Debug\net10.0-windows\.msCoverageSourceRootsMapping_BankingEcosystem.Tests
 C:\project\bank_ecosystem\src\Testing\bin\Debug\net10.0-windows\CoverletSourceRootsMapping_BankingEcosystem.Tests
-C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.csproj.AssemblyReference.cache
-C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.GeneratedMSBuildEditorConfig.editorconfig
-C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.AssemblyInfoInputs.cache
-C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.AssemblyInfo.cs
-C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.csproj.CoreCompileInputs.cache
-C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.sourcelink.json
 C:\project\bank_ecosystem\src\Testing\bin\Debug\net10.0-windows\testhost.dll
 C:\project\bank_ecosystem\src\Testing\bin\Debug\net10.0-windows\xunit.abstractions.dll
 C:\project\bank_ecosystem\src\Testing\bin\Debug\net10.0-windows\BankingEcosystem.Backend.deps.json
@@ -159,6 +153,12 @@ C:\project\bank_ecosystem\src\Testing\bin\Debug\net10.0-windows\BankingEcosystem
 C:\project\bank_ecosystem\src\Testing\bin\Debug\net10.0-windows\BankingEcosystem.Backend.pdb
 C:\project\bank_ecosystem\src\Testing\bin\Debug\net10.0-windows\BankingEcosystem.Interop.pdb
 C:\project\bank_ecosystem\src\Testing\bin\Debug\net10.0-windows\BankingEcosystem.Shared.pdb
+C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.csproj.AssemblyReference.cache
+C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.AssemblyInfoInputs.cache
+C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.AssemblyInfo.cs
+C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.csproj.CoreCompileInputs.cache
+C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.sourcelink.json
 C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingE.A0A6F020.Up2Date
 C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\BankingEcosystem.Tests.dll
 C:\project\bank_ecosystem\src\Testing\obj\Debug\net10.0-windows\refint\BankingEcosystem.Tests.dll

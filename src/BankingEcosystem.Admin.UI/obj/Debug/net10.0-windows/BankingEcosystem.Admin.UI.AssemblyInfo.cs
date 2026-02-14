@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BankingEcosystem.Admin.UI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7b99a44fbf270f1bcbf12db45cc87d7d271bb416")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d1d0a732cf87908826c6aabf79564a8edddb99f6")]
 [assembly: System.Reflection.AssemblyProductAttribute("BankingEcosystem.Admin.UI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BankingEcosystem.Admin.UI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,4 +1,5 @@
 using BankingEcosystem.Atm.AppLayer.Services;
+using BankingEcosystem.Atm.AppLayer.Models;
 
 namespace BankingEcosystem.Tests;
 
@@ -30,7 +31,7 @@ public class TransactionServiceTests
         var session = CreateUnauthenticatedSession();
         var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:1/") }; // Dummy
         var hardware = new TestHardwareService();
-        var service = new TransactionService(httpClient, session, hardware);
+        var service = new TransactionService(httpClient, session, hardware, new TestAtmStateService(), new TestUiService());
 
         var result = await service.GetBalanceAsync();
         Assert.Null(result); // Should fail fast without calling API
@@ -46,7 +47,7 @@ public class TransactionServiceTests
 
         var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:1/") };
         var hardware = new TestHardwareService();
-        var service = new TransactionService(httpClient, session, hardware);
+        var service = new TransactionService(httpClient, session, hardware, new TestAtmStateService(), new TestUiService());
 
         var result = await service.GetBalanceAsync();
         Assert.Null(result);
@@ -60,7 +61,7 @@ public class TransactionServiceTests
         var session = CreateUnauthenticatedSession();
         var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:1/") };
         var hardware = new TestHardwareService();
-        var service = new TransactionService(httpClient, session, hardware);
+        var service = new TransactionService(httpClient, session, hardware, new TestAtmStateService(), new TestUiService());
 
         var result = await service.WithdrawAsync(100000);
         Assert.Equal("User not authenticated", result);
@@ -72,7 +73,7 @@ public class TransactionServiceTests
         var session = CreateAuthenticatedSession();
         var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:1/") };
         var hardware = new TestHardwareService();
-        var service = new TransactionService(httpClient, session, hardware);
+        var service = new TransactionService(httpClient, session, hardware, new TestAtmStateService(), new TestUiService());
 
         var result = await service.WithdrawAsync(0);
         Assert.Equal("Invalid amount", result);
@@ -84,7 +85,7 @@ public class TransactionServiceTests
         var session = CreateAuthenticatedSession();
         var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:1/") };
         var hardware = new TestHardwareService();
-        var service = new TransactionService(httpClient, session, hardware);
+        var service = new TransactionService(httpClient, session, hardware, new TestAtmStateService(), new TestUiService());
 
         var result = await service.WithdrawAsync(-50000);
         Assert.Equal("Invalid amount", result);
@@ -96,7 +97,7 @@ public class TransactionServiceTests
         var session = CreateAuthenticatedSession();
         var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:1/") };
         var hardware = new TestHardwareService(remainingCash: 50000); // Only 50k left
-        var service = new TransactionService(httpClient, session, hardware);
+        var service = new TransactionService(httpClient, session, hardware, new TestAtmStateService(), new TestUiService());
 
         var result = await service.WithdrawAsync(100000); // Requesting 100k
         Assert.Equal("ATM insufficient cash", result);
@@ -109,13 +110,29 @@ public class TransactionServiceTests
         // Invalid URL will cause connection refused
         var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:1/") };
         var hardware = new TestHardwareService(remainingCash: 10000000);
-        var service = new TransactionService(httpClient, session, hardware);
+        var service = new TransactionService(httpClient, session, hardware, new TestAtmStateService(), new TestUiService());
 
         var result = await service.WithdrawAsync(100000);
         Assert.Equal("Network error", result);
     }
 
     // ─── Test Helpers ───
+
+    private class TestUiService : IUiService
+    {
+        public bool IsBusy { get; private set; }
+        public event Action<bool>? IsBusyChanged;
+        public void SetBusy(bool isBusy) { IsBusy = isBusy; IsBusyChanged?.Invoke(isBusy); }
+    }
+
+    private class TestAtmStateService : IAtmStateService
+    {
+        public AtmState CurrentState => AtmState.Authenticated;
+        public event Action<AtmState>? StateChanged;
+        public void TransitionTo(AtmState newState) { StateChanged?.Invoke(newState); }
+        public void RecoverToAuthenticated() { }
+        public void Reset() { }
+    }
 
     /// <summary>
     /// Simple test implementation of IHardwareInteropService.
@@ -138,5 +155,6 @@ public class TransactionServiceTests
         public bool DispenseCash(int amount) => _dispenseResult;
         public bool PrintReceipt(string content) => true;
         public int GetRemainingCash() => _remainingCash;
+        public bool AcceptCash() => true;
     }
 }

@@ -52,7 +52,7 @@ namespace BankingEcosystem.Admin.UI.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/BankingEcosystem.Admin.UI;component/views/atmlistview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/BankingEcosystem.Admin.UI;V1.0.0.0;component/views/atmlistview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\AtmListView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
