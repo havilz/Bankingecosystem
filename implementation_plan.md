@@ -441,7 +441,7 @@ sequenceDiagram
 ### 🔴 Phase 5 — Polish & Security
 
 - [x] 1. PIN encryption + secure communication
-- [ ] 2. Fraud detection (max attempts, daily limit)
+- [x] 2. Fraud detection (max attempts, daily limit)
 - [ ] 3. Error handling + recovery flows
 - [ ] 4. UI polish (animations, realistic ATM skin)
 - [ ] 5. Comprehensive testing + seeding data

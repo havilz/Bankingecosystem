@@ -29,11 +29,12 @@ public partial class App : Application
         services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.AtmSessionService>();
         services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.IAtmStateService, BankingEcosystem.Atm.AppLayer.Services.AtmStateService>();
         
-        // Register HttpClient
-        services.AddSingleton(new HttpClient 
-        { 
-            BaseAddress = new Uri("http://localhost:5046/") 
-        });
+        // Register HttpClient with Polly Retry Policy
+        services.AddHttpClient("", client => 
+        {
+            client.BaseAddress = new Uri("http://localhost:5046/");
+        })
+        .AddStandardResilienceHandler(); // Uses default exponential backoff
 
         // App Layer Services
         services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.IAuthService, BankingEcosystem.Atm.AppLayer.Services.AuthService>();
@@ -65,6 +66,9 @@ public partial class App : Application
         // Withdraw Feature
         services.AddTransient<ViewModels.WithdrawViewModel>();
         services.AddTransient<Views.WithdrawView>();
+        
+        // Error Feature
+        services.AddTransient<ViewModels.ErrorViewModel>();
     }
 
     protected override void OnStartup(StartupEventArgs e)
@@ -80,22 +84,33 @@ public partial class App : Application
 
     private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
     {
-        string errorMessage = $"Unhandled Exception: {e.Exception.Message}";
+        string errorMessage = $"Critial Error: {e.Exception.Message}";
         if (e.Exception.InnerException != null)
         {
-            errorMessage += $"\nInner Exception: {e.Exception.InnerException.Message}";
+            errorMessage += $"\n{e.Exception.InnerException.Message}";
         }
         
         Log("CRITICAL ERROR: " + errorMessage + "\n" + e.Exception.StackTrace);
-        MessageBox.Show(errorMessage, "Critical Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+        // Show friendly Error View
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            var errorView = new Views.ErrorView();
+            var vm = new ViewModels.ErrorViewModel();
+            vm.ErrorMessage = errorMessage; // Set specific message
+            errorView.DataContext = vm;
+            errorView.ShowDialog();
+        });
+
         e.Handled = true;
+        Application.Current.Shutdown();
     }
 
     public static void Log(string message)
     {
         try
         {
-            System.IO.File.AppendAllText("debug.log", $"{DateTime.Now}: {message}\n");
+            System.IO.File.AppendAllText("client_errors.log", $"{DateTime.Now}: {message}\n");
         }
         catch { }
     }

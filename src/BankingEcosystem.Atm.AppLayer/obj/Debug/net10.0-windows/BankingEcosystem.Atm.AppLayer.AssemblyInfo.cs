@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BankingEcosystem.Atm.AppLayer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d1b52e0884a2d63dcf4474dd1d0a2ac6587af4b6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+500a83eae04f1bcdfc8ae4a6aa1427e72bfb2110")]
 [assembly: System.Reflection.AssemblyProductAttribute("BankingEcosystem.Atm.AppLayer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BankingEcosystem.Atm.AppLayer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

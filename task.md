@@ -184,23 +184,24 @@
 
 ### Step 1: Secure PIN Communication (E2EE)
 
-- [ ] 1. Secure PIN Communication
+- [/] 1. Secure PIN Communication
   - [x] NativeLogic: Add `Encryption_EncryptPin` (Simulated XOR)
   - [x] Backend: Add Decryption logic in `AuthService` or Middleware
   - [x] Client: Encrypt PIN in `AuthService` before sending `VerifyPinRequest`
-  - [ ] Verification: Ensure PIN provided in API logs is encrypted
+  - [x] Verification: Ensure PIN provided in API logs is encrypted
 
 ### Step 2: Fraud Detection & Limits
 
-- [ ] 2. Fraud Detection
-  - [ ] Backend: Enforce Daily Withdrawal Limit
-  - [ ] Backend: Enforce Max PIN Attempts
+- [x] 2. Fraud Detection
+  - [x] Backend: Enforce Max PIN Attempts (Block >3 fails) - _Verified in AuthService_
+  - [x] Backend: Enforce Daily Withdrawal Limit (Cumulative Check)
+  - [x] Backend: Enforce Daily Transfer Limit (Cumulative Check)
 
 ### Step 3: Error Handling & Recovery
 
-- [ ] 3. Error Handling
-  - [ ] Global Exception Handler in Client
-  - [ ] Retry Policy for Network Requests
+- [x] 3. Error Handling
+  - [x] Global Exception Handler in Client
+  - [x] Retry Policy for Network Requests (Polly)
 
 ### Step 4: UI Polish
 

@@ -23,8 +23,16 @@ public class TransactionService(BankingDbContext db)
         if (request.Amount > account.Balance - 50_000m)
             throw new InvalidOperationException("Insufficient balance (minimum Rp 50.000 must remain)");
 
-        if (request.Amount > account.DailyLimit)
-            throw new InvalidOperationException($"Amount exceeds daily limit of Rp {account.DailyLimit:N0}");
+        var today = DateTime.UtcNow.Date;
+        var totalWithdrawnToday = await db.Transactions
+            .Where(t => t.AccountId == request.AccountId 
+                     && t.TransactionTypeId == 1 // Withdrawal
+                     && t.CreatedAt >= today 
+                     && t.Status == "Success")
+            .SumAsync(t => t.Amount);
+
+        if (totalWithdrawnToday + request.Amount > account.DailyLimit)
+            throw new InvalidOperationException($"Daily withdrawal limit exceeded. Used: {totalWithdrawnToday:N0}, Limit: {account.DailyLimit:N0}");
 
         // Check ATM Cash inventory (Simplified: just total cash check for now)
         if (atm.TotalCash < request.Amount)
@@ -99,8 +107,17 @@ public class TransactionService(BankingDbContext db)
         if (request.Amount > source.Balance - 50_000m)
             throw new InvalidOperationException("Insufficient balance");
 
-        if (request.Amount > 100_000_000m)
-            throw new InvalidOperationException("Transfer exceeds maximum limit of Rp 100.000.000");
+        var today = DateTime.UtcNow.Date;
+        var totalTransferredToday = await db.Transactions
+            .Where(t => t.AccountId == request.AccountId 
+                     && t.TransactionTypeId == 3 // Transfer
+                     && t.CreatedAt >= today 
+                     && t.Status == "Success")
+            .SumAsync(t => t.Amount);
+
+        const decimal MaxDailyTransfer = 100_000_000m;
+        if (totalTransferredToday + request.Amount > MaxDailyTransfer)
+            throw new InvalidOperationException($"Daily transfer limit exceeded. Used: {totalTransferredToday:N0}, Limit: {MaxDailyTransfer:N0}");
 
         var balanceBefore = source.Balance;
         source.Balance -= request.Amount;
