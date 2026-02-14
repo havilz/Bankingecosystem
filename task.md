@@ -219,3 +219,16 @@
   - [x] End-to-End Test Run (Login -> Transaction -> Receipt)
     - Passed 50/50 tests.
     - Verified PIN encryption and fraud limits.
+
+## 🟣 Phase 6 — Documentation & Handover
+
+- [x] Project Documentation
+  - [x] Backend API (`src/BankingEcosystem.Backend/README.md`)
+  - [x] Admin UI (`src/BankingEcosystem.Admin.UI/README.md`)
+  - [x] ATM Client (`src/BankingEcosystem.Atm.Client/README.md`)
+  - [x] ATM AppLayer (`src/BankingEcosystem.Atm.AppLayer/README.md`)
+  - [x] Shared Library (`src/BankingEcosystem.Shared/README.md`)
+  - [x] Interop & Native (`src/BankingEcosystem.Interop/README.md`)
+  - [x] Hardware Simulation C++ (`src/BankingEcosystem.Hardware/README.md`)
+  - [x] Native Logic C++ (`src/BankingEcosystem.NativeLogic/README.md`)
+  - [x] Testing (`src/Testing/README.md`)

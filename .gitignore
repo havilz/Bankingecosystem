@@ -1,0 +1,25 @@
+# User requested excludes
+TestConsole/
+TestConsol/
+debug/
+output/
+log/
+build/
+*.log
+*.txt
+
+# Project Artifacts
+implementation*.md
+task.md
+walkthrough.md
+
+# Standard .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.pdb
+*.cache
