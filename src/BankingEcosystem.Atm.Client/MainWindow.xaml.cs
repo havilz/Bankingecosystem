@@ -8,20 +8,32 @@ namespace BankingEcosystem.Atm.UI;
 public partial class MainWindow : Window
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly BankingEcosystem.Atm.AppLayer.Services.IUiService _uiService;
 
-    public MainWindow(IServiceProvider serviceProvider)
+    public MainWindow(IServiceProvider serviceProvider, BankingEcosystem.Atm.AppLayer.Services.IUiService uiService)
     {
         _serviceProvider = serviceProvider;
+        _uiService = uiService;
 
         App.Log("MainWindow Constructor started");
         InitializeComponent();
         App.Log("MainWindow InitializeComponent finished");
+
+        _uiService.IsBusyChanged += OnIsBusyChanged;
 
         Loaded += (_, _) => App.Log("MainWindow Loaded");
         
         // Initial navigation
         NavigateTo<OnboardingView>();
         App.Log("MainWindow Initial Navigation done");
+    }
+
+    private void OnIsBusyChanged(bool isBusy)
+    {
+        Dispatcher.Invoke(() => 
+        {
+            LoadingOverlay.Visibility = isBusy ? Visibility.Visible : Visibility.Collapsed;
+        });
     }
 
     /// <summary>

@@ -19,21 +19,25 @@ public class TransactionService : ITransactionService
     private readonly AtmSessionService _sessionService;
     private readonly IHardwareInteropService _hardwareService;
     private readonly IAtmStateService _atmStateService;
+    private readonly IUiService _uiService;
 
-    public TransactionService(HttpClient httpClient, AtmSessionService sessionService, IHardwareInteropService hardwareService, IAtmStateService atmStateService)
+    public TransactionService(HttpClient httpClient, AtmSessionService sessionService, IHardwareInteropService hardwareService, IAtmStateService atmStateService, IUiService uiService)
     {
         _httpClient = httpClient;
         _sessionService = sessionService;
         _hardwareService = hardwareService;
         _atmStateService = atmStateService;
+        _uiService = uiService;
     }
 
     public async Task<decimal?> GetBalanceAsync()
     {
         if (!_sessionService.IsAuthenticated || _sessionService.AccountId == null) return null;
 
+        _uiService.SetBusy(true);
         try
         {
+            await Task.Delay(800); // Short delay for balance
             var response = await _httpClient.GetAsync($"api/transaction/balance/{_sessionService.AccountId}?atmId={_sessionService.AtmId}");
             if (!response.IsSuccessStatusCode) return null;
 
@@ -44,6 +48,10 @@ public class TransactionService : ITransactionService
         {
             return null;
         }
+        finally
+        {
+            _uiService.SetBusy(false);
+        }
     }
 
     public async Task<string> WithdrawAsync(decimal amount)
@@ -52,88 +60,101 @@ public class TransactionService : ITransactionService
         if (amount <= 0) return "Invalid amount";
         if (amount % 50000 != 0 && amount % 100000 != 0) return "Invalid denomination"; // Basic check
 
-        // FSM: Start Transaction
-        try 
-        { 
-            _atmStateService.TransitionTo(AtmState.Transaction); 
-        } 
-        catch 
-        { 
-            // Retry with recovery if state is stuck (e.g. Completed)
+        _uiService.SetBusy(true);
+        try
+        {
+            // FSM: Start Transaction
+            try 
+            { 
+                _atmStateService.TransitionTo(AtmState.Transaction); 
+            } 
+            catch 
+            { 
+                // Retry with recovery if state is stuck (e.g. Completed)
+                try
+                {
+                    _atmStateService.RecoverToAuthenticated();
+                    _atmStateService.TransitionTo(AtmState.Transaction);
+                }
+                catch
+                {
+                    return "Hardware state error"; 
+                }
+            }
+
+            await Task.Delay(1500); // Simulate processing
+
+            // 1. Check Hardware Cash
+            int amountInt = (int)amount;
+            int remainingCash = _hardwareService.GetRemainingCash();
+            if (remainingCash != -1 && remainingCash < amountInt)
+            {
+                try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
+                return "ATM insufficient cash";
+            }
+
             try
             {
-                _atmStateService.RecoverToAuthenticated();
-                _atmStateService.TransitionTo(AtmState.Transaction);
+                // 2. Call Backend to Debit (this will check account balance)
+                var request = new WithdrawRequest(_sessionService.AccountId.Value, _sessionService.AtmId, amount);
+                var response = await _httpClient.PostAsJsonAsync("api/transaction/withdraw", request);
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+                    try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
+                    return error?.Message ?? "Transaction failed";
+                }
+
+                // FSM: Dispensing
+                try { _atmStateService.TransitionTo(AtmState.Dispensing); } catch {}
+
+                await Task.Delay(1000); // Simulate dispensing sound/time
+
+                // 3. Dispense Cash
+                bool dispensed = _hardwareService.DispenseCash(amountInt);
+                if (!dispensed)
+                {
+                    // CRITICAL: Money deducted but not dispensed!
+                    // FSM: Error
+                    try { _atmStateService.TransitionTo(AtmState.Error); } catch {}
+                    return "Hardware error: Cash not dispensed. Please contact bank.";
+                }
+
+                // 4. Print Receipt
+                var receipt = new Helpers.ReceiptBuilder()
+                    .AddHeader("BANK ECOSYSTEM", _sessionService.AtmId.ToString())
+                    .AddBody("TRANSACTION", "WITHDRAWAL")
+                    .AddBody("DATE", DateTime.Now.ToString("dd/MM/yyyy"))
+                    .AddBody("TIME", DateTime.Now.ToString("HH:mm:ss"))
+                    .AddSeparator()
+                    .AddBody("AMOUNT", amount.ToString("C", new System.Globalization.CultureInfo("id-ID")))
+                    .AddBody("REF NO", Guid.NewGuid().ToString().Substring(0, 8).ToUpper())
+                    .AddFooter("Keep your receipt safe.")
+                    .ToString();
+                _hardwareService.PrintReceipt(receipt);
+
+                // FSM: Completion -> Authenticated (Ready for next)
+                try 
+                { 
+                    _atmStateService.TransitionTo(AtmState.Completed); 
+                    // Simulate user taking cash/receipt time?
+                    // await Task.Delay(2000); // Maybe?
+                    _atmStateService.TransitionTo(AtmState.Authenticated);
+                } 
+                catch {}
+
+                return "Success";
             }
             catch
             {
-                return "Hardware state error"; 
-            }
-        }
-
-        // 1. Check Hardware Cash
-        int amountInt = (int)amount;
-        int remainingCash = _hardwareService.GetRemainingCash();
-        if (remainingCash != -1 && remainingCash < amountInt)
-        {
-            try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
-            return "ATM insufficient cash";
-        }
-
-        try
-        {
-            // 2. Call Backend to Debit (this will check account balance)
-            var request = new WithdrawRequest(_sessionService.AccountId.Value, _sessionService.AtmId, amount);
-            var response = await _httpClient.PostAsJsonAsync("api/transaction/withdraw", request);
-            
-            if (!response.IsSuccessStatusCode)
-            {
-                var error = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
-                try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
-                return error?.Message ?? "Transaction failed";
-            }
-
-            // FSM: Dispensing
-            try { _atmStateService.TransitionTo(AtmState.Dispensing); } catch {}
-
-            // 3. Dispense Cash
-            bool dispensed = _hardwareService.DispenseCash(amountInt);
-            if (!dispensed)
-            {
-                // CRITICAL: Money deducted but not dispensed!
-                // FSM: Error
                 try { _atmStateService.TransitionTo(AtmState.Error); } catch {}
-                return "Hardware error: Cash not dispensed. Please contact bank.";
+                return "Network error";
             }
-
-            // 4. Print Receipt
-            var receipt = new Helpers.ReceiptBuilder()
-                .AddHeader("BANK ECOSYSTEM", _sessionService.AtmId.ToString())
-                .AddBody("TRANSACTION", "WITHDRAWAL")
-                .AddBody("DATE", DateTime.Now.ToString("dd/MM/yyyy"))
-                .AddBody("TIME", DateTime.Now.ToString("HH:mm:ss"))
-                .AddSeparator()
-                .AddBody("AMOUNT", amount.ToString("C", new System.Globalization.CultureInfo("id-ID")))
-                .AddBody("REF NO", Guid.NewGuid().ToString().Substring(0, 8).ToUpper())
-                .AddFooter("Keep your receipt safe.")
-                .ToString();
-            _hardwareService.PrintReceipt(receipt);
-
-            // FSM: Completion -> Authenticated (Ready for next)
-            try 
-            { 
-                _atmStateService.TransitionTo(AtmState.Completed); 
-                // Simulate user taking cash/receipt time?
-                _atmStateService.TransitionTo(AtmState.Authenticated);
-            } 
-            catch {}
-
-            return "Success";
         }
-        catch
+        finally
         {
-            try { _atmStateService.TransitionTo(AtmState.Error); } catch {}
-            return "Network error";
+            _uiService.SetBusy(false);
         }
     }
 
@@ -143,71 +164,81 @@ public class TransactionService : ITransactionService
         if (amount <= 0) return "Invalid amount";
         if (string.IsNullOrWhiteSpace(targetAccountNumber)) return "Invalid target account";
 
-        // FSM: Start Transaction
-        try 
-        { 
-            _atmStateService.TransitionTo(AtmState.Transaction); 
-        } 
-        catch 
-        { 
-             try
+        _uiService.SetBusy(true);
+        try
+        {
+            // FSM: Start Transaction
+            try 
+            { 
+                _atmStateService.TransitionTo(AtmState.Transaction); 
+            } 
+            catch 
+            { 
+                 try
+                {
+                    _atmStateService.RecoverToAuthenticated();
+                    _atmStateService.TransitionTo(AtmState.Transaction);
+                }
+                catch
+                {
+                    return "Hardware state error"; 
+                }
+            }
+
+            await Task.Delay(2000); // Simulate transfer processing
+
+            try
             {
-                _atmStateService.RecoverToAuthenticated();
-                _atmStateService.TransitionTo(AtmState.Transaction);
+                var request = new TransferRequest(_sessionService.AccountId.Value, targetAccountNumber, amount, "ATM Transfer");
+                var response = await _httpClient.PostAsJsonAsync("api/transaction/transfer", request);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+                    try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
+                    return error?.Message ?? "Transfer failed";
+                }
+
+                // Print Receipt
+                var receipt = new Helpers.ReceiptBuilder()
+                    .AddHeader("BANK ECOSYSTEM", _sessionService.AtmId.ToString())
+                    .AddBody("TRANSACTION", "TRANSFER")
+                    .AddBody("DATE", DateTime.Now.ToString("dd/MM/yyyy"))
+                    .AddBody("TIME", DateTime.Now.ToString("HH:mm:ss"))
+                    .AddSeparator()
+                    .AddBody("DEST ACCOUNT", targetAccountNumber)
+                    .AddBody("AMOUNT", amount.ToString("C", new System.Globalization.CultureInfo("id-ID")))
+                    .AddBody("REF NO", Guid.NewGuid().ToString().Substring(0, 8).ToUpper())
+                    .AddFooter("Transfer Successful.")
+                    .ToString();
+                try 
+                {
+                    _hardwareService.PrintReceipt(receipt);
+                }
+                catch 
+                { 
+                    // Ignore printer errors for now
+                }
+
+                // FSM: Completion -> Authenticated
+                try 
+                { 
+                    _atmStateService.TransitionTo(AtmState.Completed); 
+                    _atmStateService.TransitionTo(AtmState.Authenticated);
+                } 
+                catch {}
+
+                return "Success";
             }
             catch
             {
-                return "Hardware state error"; 
+                try { _atmStateService.TransitionTo(AtmState.Error); } catch {}
+                return "Network error";
             }
         }
-
-        try
+        finally
         {
-            var request = new TransferRequest(_sessionService.AccountId.Value, targetAccountNumber, amount, "ATM Transfer");
-            var response = await _httpClient.PostAsJsonAsync("api/transaction/transfer", request);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                var error = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
-                try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
-                return error?.Message ?? "Transfer failed";
-            }
-
-            // Print Receipt
-            var receipt = new Helpers.ReceiptBuilder()
-                .AddHeader("BANK ECOSYSTEM", _sessionService.AtmId.ToString())
-                .AddBody("TRANSACTION", "TRANSFER")
-                .AddBody("DATE", DateTime.Now.ToString("dd/MM/yyyy"))
-                .AddBody("TIME", DateTime.Now.ToString("HH:mm:ss"))
-                .AddSeparator()
-                .AddBody("DEST ACCOUNT", targetAccountNumber)
-                .AddBody("AMOUNT", amount.ToString("C", new System.Globalization.CultureInfo("id-ID")))
-                .AddBody("REF NO", Guid.NewGuid().ToString().Substring(0, 8).ToUpper())
-                .AddFooter("Transfer Successful.")
-                .ToString();
-            try 
-            {
-                _hardwareService.PrintReceipt(receipt);
-            }
-            catch 
-            { 
-                // Ignore printer errors for now
-            }
-
-            // FSM: Completion -> Authenticated
-            try 
-            { 
-                _atmStateService.TransitionTo(AtmState.Completed); 
-                _atmStateService.TransitionTo(AtmState.Authenticated);
-            } 
-            catch {}
-
-            return "Success";
-        }
-        catch
-        {
-            try { _atmStateService.TransitionTo(AtmState.Error); } catch {}
-            return "Network error";
+            _uiService.SetBusy(false);
         }
     }
 
@@ -216,77 +247,83 @@ public class TransactionService : ITransactionService
         if (!_sessionService.IsAuthenticated || _sessionService.AccountId == null) return "User not authenticated";
         if (amount <= 0) return "Invalid amount";
 
-        // FSM: Start Transaction
-        try 
-        { 
-            _atmStateService.TransitionTo(AtmState.Transaction); 
-        } 
-        catch 
-        { 
-             try
+        _uiService.SetBusy(true);
+        try
+        {
+            // FSM: Start Transaction
+            try 
+            { 
+                _atmStateService.TransitionTo(AtmState.Transaction); 
+            } 
+            catch 
+            { 
+                 try
+                {
+                    _atmStateService.RecoverToAuthenticated();
+                    _atmStateService.TransitionTo(AtmState.Transaction);
+                }
+                catch
+                {
+                    return "Hardware state error"; 
+                }
+            }
+
+            // 1. Simulate Accepting Cash Hardware
+            // In a real ATM, this would enable the shutter and wait for bills.
+            // potentially counting them.
+            // bool cashAccepted = _hardwareService.AcceptCash(); 
+            // Simulate hardware delay for counting money
+            await Task.Delay(3000); 
+
+            try
             {
-                _atmStateService.RecoverToAuthenticated();
-                _atmStateService.TransitionTo(AtmState.Transaction);
+                var request = new DepositRequest(_sessionService.AccountId.Value, _sessionService.AtmId, amount);
+                var response = await _httpClient.PostAsJsonAsync("api/transaction/deposit", request);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+                    try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
+                    return error?.Message ?? "Deposit failed";
+                }
+
+                // Print Receipt
+                 var receipt = new Helpers.ReceiptBuilder()
+                    .AddHeader("BANK ECOSYSTEM", _sessionService.AtmId.ToString())
+                    .AddBody("TRANSACTION", "DEPOSIT")
+                    .AddBody("DATE", DateTime.Now.ToString("dd/MM/yyyy"))
+                    .AddBody("TIME", DateTime.Now.ToString("HH:mm:ss"))
+                    .AddSeparator()
+                    .AddBody("AMOUNT", amount.ToString("C", new System.Globalization.CultureInfo("id-ID")))
+                    .AddBody("REF NO", Guid.NewGuid().ToString().Substring(0, 8).ToUpper())
+                    .AddFooter("Deposit Successful.")
+                    .ToString();
+                
+                try 
+                {
+                    _hardwareService.PrintReceipt(receipt);
+                }
+                catch {}
+
+                // FSM: Completion -> Authenticated
+                 try 
+                { 
+                    _atmStateService.TransitionTo(AtmState.Completed); 
+                    _atmStateService.TransitionTo(AtmState.Authenticated);
+                } 
+                catch {}
+
+                return "Success";
             }
             catch
             {
-                return "Hardware state error"; 
+                try { _atmStateService.TransitionTo(AtmState.Error); } catch {}
+                return "Network error";
             }
         }
-
-        // 1. Simulate Accepting Cash Hardware
-        // In a real ATM, this would enable the shutter and wait for bills.
-        // potentially counting them.
-        bool cashAccepted = _hardwareService.AcceptCash(); // We need to verify if this method exists or if we need to add it to Interface
-        // Wait, IHardwareInteropService might not have AcceptCash yet. Let's check. 
-        // Based on previous contexts, I simpler just proceed with API call for now 
-        // OR assuming it exists. If not I will add it.
-        // Let's assume for now we just process the transaction logically.
-        
-        try
+        finally
         {
-            var request = new DepositRequest(_sessionService.AccountId.Value, _sessionService.AtmId, amount);
-            var response = await _httpClient.PostAsJsonAsync("api/transaction/deposit", request);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                var error = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
-                try { _atmStateService.TransitionTo(AtmState.Authenticated); } catch {}
-                return error?.Message ?? "Deposit failed";
-            }
-
-            // Print Receipt
-             var receipt = new Helpers.ReceiptBuilder()
-                .AddHeader("BANK ECOSYSTEM", _sessionService.AtmId.ToString())
-                .AddBody("TRANSACTION", "DEPOSIT")
-                .AddBody("DATE", DateTime.Now.ToString("dd/MM/yyyy"))
-                .AddBody("TIME", DateTime.Now.ToString("HH:mm:ss"))
-                .AddSeparator()
-                .AddBody("AMOUNT", amount.ToString("C", new System.Globalization.CultureInfo("id-ID")))
-                .AddBody("REF NO", Guid.NewGuid().ToString().Substring(0, 8).ToUpper())
-                .AddFooter("Deposit Successful.")
-                .ToString();
-            
-            try 
-            {
-                _hardwareService.PrintReceipt(receipt);
-            }
-            catch {}
-
-            // FSM: Completion -> Authenticated
-             try 
-            { 
-                _atmStateService.TransitionTo(AtmState.Completed); 
-                _atmStateService.TransitionTo(AtmState.Authenticated);
-            } 
-            catch {}
-
-            return "Success";
-        }
-        catch
-        {
-            try { _atmStateService.TransitionTo(AtmState.Error); } catch {}
-            return "Network error";
+            _uiService.SetBusy(false);
         }
     }
 
@@ -294,8 +331,10 @@ public class TransactionService : ITransactionService
     {
         if (!_sessionService.IsAuthenticated || _sessionService.AccountId == null) return new List<TransactionDto>();
 
+        _uiService.SetBusy(true);
         try
         {
+            await Task.Delay(1000);
             var response = await _httpClient.GetAsync($"api/transaction/history/{_sessionService.AccountId}?pageSize={limit}");
             if (!response.IsSuccessStatusCode) return new List<TransactionDto>();
 
@@ -305,6 +344,10 @@ public class TransactionService : ITransactionService
         catch
         {
             return new List<TransactionDto>();
+        }
+        finally
+        {
+            _uiService.SetBusy(false);
         }
     }
 }

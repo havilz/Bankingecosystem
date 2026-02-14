@@ -37,6 +37,7 @@ public partial class App : Application
         .AddStandardResilienceHandler(); // Uses default exponential backoff
 
         // App Layer Services
+        services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.IUiService, BankingEcosystem.Atm.UI.Services.UiService>();
         services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.IAuthService, BankingEcosystem.Atm.AppLayer.Services.AuthService>();
         services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.IHardwareInteropService, BankingEcosystem.Atm.AppLayer.Services.HardwareInteropService>();
         services.AddSingleton<BankingEcosystem.Atm.AppLayer.Services.ITransactionService, BankingEcosystem.Atm.AppLayer.Services.TransactionService>();

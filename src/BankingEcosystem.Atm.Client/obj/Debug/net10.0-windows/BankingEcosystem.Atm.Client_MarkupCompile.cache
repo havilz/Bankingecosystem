@@ -12,7 +12,7 @@ TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_O
 C:\project\bank_ecosystem\src\BankingEcosystem.Atm.Client\App.xaml
 11-597039109
 
-18-1501650538
+19871219482
 24046798274
 MainWindow.xaml;Resources\AtmTheme.xaml;Views\ChangePinView.xaml;Views\DepositView.xaml;Views\ErrorView.xaml;Views\HistoryView.xaml;Views\MainMenuView.xaml;Views\OnboardingView.xaml;Views\PinEntryView.xaml;Views\TransferView.xaml;Views\WithdrawView.xaml;
 
