@@ -5,7 +5,8 @@ import '../ui/theme/app_colors.dart';
 import '../ui/theme/app_text_styles.dart';
 
 /// Builds the "shell" for the app with a styled BottomNavigationBar.
-/// QRIS icon is elevated above the navbar (floating center button).
+/// Uses Stack overlay so the navbar floats above the body without
+/// any grey wrapper/footer effect from Scaffold's bottomNavigationBar.
 class NavigationShell extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
@@ -17,58 +18,71 @@ class NavigationShell extends StatelessWidget {
     final currentIndex = navigationShell.currentIndex;
 
     return Scaffold(
-      body: navigationShell,
-      extendBody: true,
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-        height: 72,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 16,
-              offset: const Offset(0, -2),
+      backgroundColor: AppColors.lightGrey,
+      body: Stack(
+        children: [
+          // ===== Main content =====
+          navigationShell,
+
+          // ===== Floating bottom navbar =====
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: MediaQuery.of(context).padding.bottom + 8,
+            child: Container(
+              height: 72,
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 16,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
+                border: Border.all(
+                  color: AppColors.grey.withValues(alpha: 0.15),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildNavItem(
+                    0,
+                    Icons.home_outlined,
+                    Icons.home,
+                    'Home',
+                    currentIndex,
+                  ),
+                  _buildNavItem(
+                    1,
+                    Icons.credit_card_outlined,
+                    Icons.credit_card,
+                    'Product',
+                    currentIndex,
+                  ),
+                  _buildQrisItem(currentIndex),
+                  _buildNavItem(
+                    3,
+                    Icons.favorite_outline,
+                    Icons.favorite,
+                    'Sukha',
+                    currentIndex,
+                  ),
+                  _buildNavItem(
+                    4,
+                    Icons.settings_outlined,
+                    Icons.settings,
+                    'Settings',
+                    currentIndex,
+                  ),
+                ],
+              ),
             ),
-          ],
-          border: Border.all(color: AppColors.grey.withValues(alpha: 0.15)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildNavItem(
-              0,
-              Icons.home_outlined,
-              Icons.home,
-              'Home',
-              currentIndex,
-            ),
-            _buildNavItem(
-              1,
-              Icons.credit_card_outlined,
-              Icons.credit_card,
-              'Product',
-              currentIndex,
-            ),
-            _buildQrisItem(currentIndex),
-            _buildNavItem(
-              3,
-              Icons.favorite_outline,
-              Icons.favorite,
-              'Sukha',
-              currentIndex,
-            ),
-            _buildNavItem(
-              4,
-              Icons.settings_outlined,
-              Icons.settings,
-              'Settings',
-              currentIndex,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

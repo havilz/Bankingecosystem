@@ -10,6 +10,7 @@ class AppColors {
   static const Color danger = Colors.red;
   static const Color success = Colors.green;
   static const Color warning = Colors.orange;
+  static const Color accent = Color(0xFFFFB300);
 
   // Neutrals
   static const Color black = Colors.black;
