@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../ui/theme/app_colors.dart';
 import '../ui/theme/app_text_styles.dart';
@@ -7,22 +10,74 @@ import '../ui/theme/app_text_styles.dart';
 /// Builds the "shell" for the app with a styled BottomNavigationBar.
 /// Uses Stack overlay so the navbar floats above the body without
 /// any grey wrapper/footer effect from Scaffold's bottomNavigationBar.
-class NavigationShell extends StatelessWidget {
+///
+/// Implements Skeleton Loading on initial mount and tab switching.
+class NavigationShell extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
 
   const NavigationShell({required this.navigationShell, Key? key})
     : super(key: key ?? const ValueKey<String>('NavigationShell'));
 
   @override
+  State<NavigationShell> createState() => _NavigationShellState();
+}
+
+class _NavigationShellState extends State<NavigationShell> {
+  bool _isLoading = true;
+  Timer? _loadingTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Force initial loading when shell is first mounted
+    _isLoading = true;
+    _startLoadingTimer(const Duration(milliseconds: 1500));
+  }
+
+  @override
+  void dispose() {
+    _loadingTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startLoadingTimer(Duration duration) {
+    _loadingTimer?.cancel();
+    _loadingTimer = Timer(duration, () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+  }
+
+  void _onTapNav(int index) {
+    if (index == widget.navigationShell.currentIndex) return;
+
+    // Switch tab immediately
+    widget.navigationShell.goBranch(
+      index,
+      initialLocation: index == widget.navigationShell.currentIndex,
+    );
+
+    // Start loading effect on the NEW tab
+    setState(() {
+      _isLoading = true;
+    });
+
+    _startLoadingTimer(const Duration(milliseconds: 800));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final currentIndex = navigationShell.currentIndex;
+    final currentIndex = widget.navigationShell.currentIndex;
 
     return Scaffold(
       backgroundColor: AppColors.lightGrey,
       body: Stack(
         children: [
-          // ===== Main content =====
-          navigationShell,
+          // ===== Main content (Actual Screens) with Skeletonizer =====
+          Skeletonizer(enabled: _isLoading, child: widget.navigationShell),
 
           // ===== Floating bottom navbar =====
           Positioned(
@@ -93,8 +148,7 @@ class NavigationShell extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () =>
-            navigationShell.goBranch(2, initialLocation: 2 == currentIndex),
+        onTap: () => _onTapNav(2),
         child: Transform.translate(
           offset: const Offset(0, -16),
           child: Column(
@@ -153,10 +207,7 @@ class NavigationShell extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => navigationShell.goBranch(
-          index,
-          initialLocation: index == currentIndex,
-        ),
+        onTap: () => _onTapNav(index),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,

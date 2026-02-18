@@ -12,6 +12,12 @@ class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
+  static const TextStyle h2 = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
+
   // Medium Text (Body, Subtitles)
   static const TextStyle medium = TextStyle(
     fontSize: 16,

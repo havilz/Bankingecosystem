@@ -7,8 +7,8 @@ import 'widgets/ewallet_card.dart';
 import 'widgets/favorite_transaction_card.dart';
 import 'widgets/quick_pick_card.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

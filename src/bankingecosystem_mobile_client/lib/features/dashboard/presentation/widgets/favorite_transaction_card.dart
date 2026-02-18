@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/ui/theme/app_colors.dart';
 import '../../../../core/ui/theme/app_text_styles.dart';
@@ -109,19 +110,25 @@ class FavoriteTransactionCard extends StatelessWidget {
       ),
       itemCount: _favorites.length,
       itemBuilder: (context, index) {
+        final item = _favorites[index];
         return _buildFavoriteItem(
-          _favorites[index]['icon'] as IconData,
-          _favorites[index]['label'] as String,
+          context,
+          item['icon'] as IconData,
+          item['label'] as String,
         );
       },
     );
   }
 
   /// Single favorite item (icon circle + label)
-  Widget _buildFavoriteItem(IconData icon, String label) {
+  Widget _buildFavoriteItem(BuildContext context, IconData icon, String label) {
     return GestureDetector(
       onTap: () {
-        // TODO: Handle favorite transaction tap
+        if (label == 'Transfer') {
+          context.push('/transfer');
+        } else {
+          // TODO: Handle other transaction tap
+        }
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
