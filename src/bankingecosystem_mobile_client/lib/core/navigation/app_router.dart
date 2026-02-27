@@ -9,6 +9,9 @@ import '../../features/qris/presentation/qris_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/sukha/presentation/sukha_screen.dart';
 import '../../features/transfer/presentation/transfer_screen.dart';
+import '../../features/transfer/presentation/transfer_new_screen.dart';
+import '../../features/transfer/presentation/transfer_amount_screen.dart';
+import '../../features/messages/presentation/screens/message_screen.dart';
 import 'navigation_shell.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -39,6 +42,20 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/transfer',
         builder: (context, state) => const TransferScreen(),
+        routes: [
+          GoRoute(
+            path: 'new',
+            builder: (context, state) => const TransferNewScreen(),
+          ),
+          GoRoute(
+            path: 'amount',
+            builder: (context, state) => const TransferAmountScreen(),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/messages',
+        builder: (context, state) => const MessageScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

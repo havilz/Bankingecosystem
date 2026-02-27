@@ -41,7 +41,7 @@ class DashboardHeader extends StatelessWidget {
           // Notification (mail) icon
           IconButton(
             onPressed: () {
-              // TODO: Navigate to notifications
+              context.push('/messages');
             },
             icon: const Icon(Icons.mail_outline),
             color: AppColors.textPrimary,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/ui/theme/app_colors.dart';
 import '../../../../core/ui/theme/app_text_styles.dart';
@@ -7,13 +8,38 @@ import 'widgets/transfer_header.dart';
 import 'widgets/favorite_transfer_section.dart';
 import 'widgets/recent_transfer_section.dart';
 
-class TransferScreen extends StatelessWidget {
+import 'package:skeletonizer/skeletonizer.dart';
+
+class TransferScreen extends StatefulWidget {
   const TransferScreen({super.key});
 
   @override
+  State<TransferScreen> createState() => _TransferScreenState();
+}
+
+class _TransferScreenState extends State<TransferScreen> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Simulate loading
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
       backgroundColor: AppColors.primaryLight, // Light Blue / Sky Blue
+      resizeToAvoidBottomInset: false, // Prevent background from resizing
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -45,14 +71,17 @@ class TransferScreen extends StatelessWidget {
                   // Scrollable Content
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.only(bottom: 100),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          FavoriteTransferSection(),
-                          RecentTransferSection(title: 'Daftar Transfer'),
-                          RecentTransferSection(title: 'Rekening Lain'),
-                        ],
+                      padding: EdgeInsets.only(bottom: 100 + bottomPadding),
+                      child: Skeletonizer(
+                        enabled: _isLoading,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            FavoriteTransferSection(),
+                            RecentTransferSection(title: 'Daftar Transfer'),
+                            RecentTransferSection(title: 'Rekening Lain'),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -65,10 +94,10 @@ class TransferScreen extends StatelessWidget {
           Positioned(
             left: 16,
             right: 16,
-            bottom: 16, // Turunin lagi (24 -> 16)
+            bottom: 16, // Tetap di bawah (tidak ikut naik keyboard)
             child: SafeArea(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => context.push('/transfer/new'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryDark,
                   shape: RoundedRectangleBorder(
