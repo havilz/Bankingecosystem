@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/ui/theme/app_colors.dart';
-import '../../../../core/ui/theme/app_text_styles.dart';
+import '../../../../core/ui/ui.dart';
 
 /// Account card widget — Livin' Mandiri inspired.
 /// Contains a header row with "Rekening" on the left,

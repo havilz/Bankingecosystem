@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/ui/theme/app_colors.dart';
-import '../../../../core/ui/theme/app_text_styles.dart';
+import '../../../../core/ui/ui.dart';
 
 class FavoriteTransactionCard extends StatelessWidget {
   const FavoriteTransactionCard({super.key});

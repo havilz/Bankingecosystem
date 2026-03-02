@@ -3,9 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/ui/theme/app_colors.dart';
-import '../../../../core/ui/theme/app_input_types.dart';
-import '../../../../core/ui/theme/app_text_styles.dart';
+import '../../../../core/ui/ui.dart';
 
 /// Glassmorphism login overlay with PIN input, login button, and forget password.
 /// Called via [showLoginOverlay] static method.

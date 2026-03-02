@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/ui/theme/app_colors.dart';
+import '../../../core/ui/ui.dart';
 import 'widgets/account_card.dart';
 import 'widgets/dashboard_header.dart';
 import 'widgets/ewallet_card.dart';

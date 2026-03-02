@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../core/ui/theme/app_colors.dart';
-import '../../../core/ui/theme/app_text_styles.dart';
+import '../../../core/ui/ui.dart';
 import 'widgets/login_overlay.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -81,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -129,6 +129,25 @@ class LoginScreen extends StatelessWidget {
                         'Login',
                         style: AppTextStyles.button.copyWith(
                           color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Sign Up new account
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        context.push('/privacy-policy');
+                      },
+                      style: TextButton.styleFrom(
+                        overlayColor: Colors.transparent,
+                      ),
+                      child: Text(
+                        'Sign Up new account',
+                        style: AppTextStyles.small.copyWith(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

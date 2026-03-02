@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/ui/theme/app_colors.dart';
-import '../../../../core/ui/widgets/app_search_bar.dart';
+import '../../../../core/ui/ui.dart';
 import 'widgets/account_settings_card.dart';
 import 'widgets/feature_settings_card.dart';
 import 'widgets/info_settings_card.dart';
@@ -16,27 +15,21 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.lightGrey,
       body: SafeArea(
-        child: Column(
-          children: [
-            // ===== Search Bar =====
-            const AppSearchBar(hintText: 'Cari pengaturan yang ingin diubah'),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 100),
+          child: Column(
+            children: const [
+              // ===== Search Bar (scrolls with content) =====
+              AppSearchBar(hintText: 'Cari pengaturan yang ingin diubah'),
 
-            // ===== Settings List =====
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.only(bottom: 100), // Space for navbar
-                child: Column(
-                  children: const [
-                    InstantAccessSettingsCard(),
-                    AccountSettingsCard(),
-                    FeatureSettingsCard(),
-                    SecuritySettingsCard(),
-                    InfoSettingsCard(),
-                  ],
-                ),
-              ),
-            ),
-          ],
+              // ===== Settings Cards =====
+              InstantAccessSettingsCard(),
+              AccountSettingsCard(),
+              FeatureSettingsCard(),
+              SecuritySettingsCard(),
+              InfoSettingsCard(),
+            ],
+          ),
         ),
       ),
     );

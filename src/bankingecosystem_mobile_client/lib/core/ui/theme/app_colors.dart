@@ -20,6 +20,7 @@ class AppColors {
 
   // Text Colors
   static const Color textPrimary = Colors.black;
+  static const Color textSecondary = Color(0xFF757575);
   static const Color textInverse = Colors.white;
 
   // Bottom Nav

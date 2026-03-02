@@ -10,6 +10,7 @@ class AppSearchBar extends StatelessWidget {
   final VoidCallback? onTap;
   final bool readOnly;
   final EdgeInsetsGeometry margin;
+  final Color? backgroundColor;
 
   const AppSearchBar({
     super.key,
@@ -19,18 +20,23 @@ class AppSearchBar extends StatelessWidget {
     this.onTap,
     this.readOnly = false,
     this.margin = const EdgeInsets.all(16),
+    this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: margin,
-      color: AppColors.white,
+      color: backgroundColor ?? Colors.transparent,
       child: Container(
         height: 48,
         decoration: BoxDecoration(
-          color: AppColors.lightGrey,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: AppColors.grey.withValues(alpha: 0.35),
+            width: 1.5,
+          ),
         ),
         child: TextField(
           controller: controller,
