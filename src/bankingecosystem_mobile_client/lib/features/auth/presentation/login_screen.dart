@@ -99,8 +99,16 @@ class LoginScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildQuickAccessItem(Icons.qr_code_scanner, 'QRIS'),
-                      _buildQuickAccessItem(Icons.send, 'Transfer'),
+                      _buildQuickAccessItem(
+                        Icons.qr_code_scanner,
+                        'QRIS',
+                        onTap: () => context.push('/qris'),
+                      ),
+                      _buildQuickAccessItem(
+                        Icons.send,
+                        'Transfer',
+                        onTap: () => context.push('/transfer'),
+                      ),
                       _buildQuickAccessItem(Icons.phone_android, 'Pulsa'),
                       _buildQuickAccessItem(Icons.bolt, 'PLN'),
                       _buildQuickAccessItem(Icons.water_drop, 'PDAM'),
@@ -162,31 +170,40 @@ class LoginScreen extends StatelessWidget {
   }
 
   // ===== Quick Access Item Builder =====
-  Widget _buildQuickAccessItem(IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.primaryLight.withValues(alpha: 0.4),
-            border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.15),
+  Widget _buildQuickAccessItem(
+    IconData icon,
+    String label, {
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.primaryLight.withValues(alpha: 0.4),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.15),
+              ),
+            ),
+            child: Center(
+              child: Icon(icon, size: 24, color: AppColors.primary),
             ),
           ),
-          child: Center(child: Icon(icon, size: 24, color: AppColors.primary)),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          label,
-          style: AppTextStyles.small.copyWith(
-            color: AppColors.textPrimary,
-            fontSize: 11,
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: AppTextStyles.small.copyWith(
+              color: AppColors.textPrimary,
+              fontSize: 11,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

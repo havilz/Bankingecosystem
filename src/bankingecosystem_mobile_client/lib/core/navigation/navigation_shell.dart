@@ -120,14 +120,14 @@ class _NavigationShellState extends State<NavigationShell> {
                   ),
                   _buildQrisItem(currentIndex),
                   _buildNavItem(
-                    3,
+                    2,
                     Icons.favorite_outline,
                     Icons.favorite,
                     'Sukha',
                     currentIndex,
                   ),
                   _buildNavItem(
-                    4,
+                    3,
                     Icons.settings_outlined,
                     Icons.settings,
                     'Settings',
@@ -144,11 +144,10 @@ class _NavigationShellState extends State<NavigationShell> {
 
   // ===== QRIS center button (elevated) =====
   Widget _buildQrisItem(int currentIndex) {
-    final isActive = currentIndex == 2;
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => _onTapNav(2),
+        onTap: () => context.push('/qris'),
         child: Transform.translate(
           offset: const Offset(0, -16),
           child: Column(
@@ -184,8 +183,8 @@ class _NavigationShellState extends State<NavigationShell> {
                 'QRIS',
                 style: AppTextStyles.small.copyWith(
                   fontSize: 11,
-                  fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-                  color: isActive ? AppColors.primary : AppColors.grey,
+                  fontWeight: FontWeight.normal,
+                  color: AppColors.grey,
                 ),
               ),
             ],

@@ -23,9 +23,6 @@ final _shellNavigatorHomeKey = GlobalKey<NavigatorState>(
 final _shellNavigatorProductKey = GlobalKey<NavigatorState>(
   debugLabel: 'shellProduct',
 );
-final _shellNavigatorQrisKey = GlobalKey<NavigatorState>(
-  debugLabel: 'shellQris',
-);
 final _shellNavigatorSukhaKey = GlobalKey<NavigatorState>(
   debugLabel: 'shellSukha',
 );
@@ -48,6 +45,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: '/qris',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const QrisScreen(),
       ),
       GoRoute(
         path: '/transfer',
@@ -90,15 +92,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          StatefulShellBranch(
-            navigatorKey: _shellNavigatorQrisKey,
-            routes: [
-              GoRoute(
-                path: '/qris',
-                builder: (context, state) => const QrisScreen(),
-              ),
-            ],
-          ),
+          // QRIS removed from shell — it's now a top-level full-screen route
           StatefulShellBranch(
             navigatorKey: _shellNavigatorSukhaKey,
             routes: [
