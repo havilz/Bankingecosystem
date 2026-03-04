@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/ui/ui.dart';
-import 'widgets/account_settings_card.dart';
-import 'widgets/feature_settings_card.dart';
-import 'widgets/info_settings_card.dart';
-import 'widgets/instant_access_card.dart';
-import 'widgets/security_settings_card.dart';
+import '../widgets/account_settings_card.dart';
+import '../widgets/feature_settings_card.dart';
+import '../widgets/info_settings_card.dart';
+import '../widgets/instant_access_card.dart';
+import '../widgets/security_settings_card.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

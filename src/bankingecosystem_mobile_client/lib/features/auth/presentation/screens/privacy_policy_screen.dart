@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../core/ui/ui.dart';
-import 'widgets/privacy_policy_content.dart';
+import '../../../../core/ui/ui.dart';
+import '../widgets/privacy_policy_content.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
   const PrivacyPolicyScreen({super.key});

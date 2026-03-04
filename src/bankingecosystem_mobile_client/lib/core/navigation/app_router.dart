@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/auth/presentation/login_screen.dart';
-import '../../features/auth/presentation/privacy_policy_screen.dart';
-import '../../features/auth/presentation/register_screen.dart';
-import '../../features/dashboard/presentation/dashboard_screen.dart';
-import '../../features/product/presentation/product_screen.dart';
-import '../../features/qris/presentation/qris_screen.dart';
-import '../../features/settings/presentation/settings_screen.dart';
-import '../../features/sukha/presentation/sukha_screen.dart';
-import '../../features/transfer/presentation/transfer_screen.dart';
-import '../../features/transfer/presentation/transfer_new_screen.dart';
-import '../../features/transfer/presentation/transfer_amount_screen.dart';
+import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/privacy_policy_screen.dart';
+import '../../features/auth/presentation/screens/register_screen.dart';
+import '../../features/dashboard/presentation/screens/dashboard_screen.dart';
+import '../../features/product/presentation/screens/product_screen.dart';
+import '../../features/qris/presentation/screens/qris_screen.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/sukha/presentation/screens/sukha_screen.dart';
+import '../../features/transfer/presentation/screens/transfer_screen.dart';
+import '../../features/transfer/presentation/screens/transfer_new_screen.dart';
+import '../../features/transfer/presentation/screens/transfer_amount_screen.dart';
 import '../../features/messages/presentation/screens/message_screen.dart';
 import 'navigation_shell.dart';
 

@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/ui/theme/app_colors.dart';
 import '../../../../core/ui/theme/app_text_styles.dart';
-import 'widgets/transfer_new_header.dart';
-import 'widgets/transfer_success_bottom_sheet.dart';
+import '../widgets/transfer_new_header.dart';
+import '../widgets/transfer_success_bottom_sheet.dart';
 
 import 'package:skeletonizer/skeletonizer.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import '../../../core/ui/ui.dart';
+import '../../../../core/ui/ui.dart';
 
 class QrisScreen extends StatefulWidget {
   const QrisScreen({super.key});

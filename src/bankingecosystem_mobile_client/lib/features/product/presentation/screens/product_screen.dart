@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/ui/ui.dart';
+import '../../../../core/ui/ui.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key});

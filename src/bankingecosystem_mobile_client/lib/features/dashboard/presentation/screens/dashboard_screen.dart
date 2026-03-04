@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/ui/ui.dart';
-import 'widgets/account_card.dart';
-import 'widgets/dashboard_header.dart';
-import 'widgets/ewallet_card.dart';
-import 'widgets/favorite_transaction_card.dart';
-import 'widgets/quick_pick_card.dart';
+import '../../../../core/ui/ui.dart';
+import '../widgets/account_card.dart';
+import '../widgets/dashboard_header.dart';
+import '../widgets/ewallet_card.dart';
+import '../widgets/favorite_transaction_card.dart';
+import '../widgets/quick_pick_card.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
