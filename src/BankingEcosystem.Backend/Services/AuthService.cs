@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using BankingEcosystem.Backend.Data;
+using BankingEcosystem.Backend.Models;
 using BankingEcosystem.Shared.DTOs;
 
 namespace BankingEcosystem.Backend.Services;
@@ -133,5 +134,81 @@ public class AuthService(BankingDbContext db, IConfiguration config)
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public async Task<(bool Success, string Message, AuthResponse? Data)> RegisterMbankingAsync(
+        string cardNumber, string email, DateTime dateOfBirth, string password)
+    {
+        // 1. Verify card exists
+        var card = await db.Cards
+            .Include(c => c.Customer)
+            .Include(c => c.Account)
+            .FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+
+        if (card == null)
+            return (false, "Nomor kartu tidak ditemukan.", null);
+
+        if (card.IsBlocked)
+            return (false, "Kartu diblokir. Hubungi bank Anda.", null);
+
+        // 2. Verify date of birth matches customer record
+        if (card.Customer.DateOfBirth.Date != dateOfBirth.Date)
+            return (false, "Tanggal lahir tidak sesuai dengan data kartu.", null);
+
+        // 3. Check email not already registered
+        bool emailExists = await db.MbankingAccounts.AnyAsync(m => m.Email == email);
+        if (emailExists)
+            return (false, "Email sudah terdaftar untuk akun mbanking.", null);
+
+        // 4. Check card not already registered for mbanking
+        bool cardRegistered = await db.MbankingAccounts.AnyAsync(m => m.CardId == card.CardId);
+        if (cardRegistered)
+            return (false, "Kartu ini sudah terdaftar di mbanking.", null);
+
+        // 5. Create mbanking account
+        var mbanking = new MbankingAccount
+        {
+            CardId = card.CardId,
+            Email = email.ToLower().Trim(),
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+            IsActive = true,
+            RegisteredAt = DateTime.UtcNow
+        };
+        db.MbankingAccounts.Add(mbanking);
+        await db.SaveChangesAsync();
+
+        var token = GenerateJwt(card.Customer.FullName, card.Account.AccountNumber, "MBankingUser");
+        return (true, "Registrasi berhasil.",
+            new AuthResponse(token, card.Account.AccountNumber, card.Customer.FullName,
+                card.Account.Balance, card.AccountId));
+    }
+
+    public async Task<(bool Success, string Message, AuthResponse? Data)> LoginMbankingAsync(
+        string email, string password)
+    {
+        var mbanking = await db.MbankingAccounts
+            .Include(m => m.Card)
+                .ThenInclude(c => c.Customer)
+            .Include(m => m.Card)
+                .ThenInclude(c => c.Account)
+            .FirstOrDefaultAsync(m => m.Email == email.ToLower().Trim());
+
+        if (mbanking == null)
+            return (false, "Email tidak terdaftar.", null);
+
+        if (!mbanking.IsActive)
+            return (false, "Akun mbanking tidak aktif.", null);
+
+        if (!BCrypt.Net.BCrypt.Verify(password, mbanking.PasswordHash))
+            return (false, "Password salah.", null);
+
+        var card = mbanking.Card;
+        if (card.IsBlocked)
+            return (false, "Kartu Anda diblokir. Hubungi bank Anda.", null);
+
+        var token = GenerateJwt(card.Customer.FullName, card.Account.AccountNumber, "MBankingUser");
+        return (true, "Login berhasil.",
+            new AuthResponse(token, card.Account.AccountNumber, card.Customer.FullName,
+                card.Account.Balance, card.AccountId));
     }
 }

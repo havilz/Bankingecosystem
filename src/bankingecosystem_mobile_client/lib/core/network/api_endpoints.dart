@@ -1,6 +1,6 @@
 class ApiEndpoints {
   // Base URL (Android Emulator: 10.0.2.2, iOS Simulator: localhost)
-  static const String baseUrl = 'http://10.0.2.2:5046/api';
+  static const String baseUrl = 'http://192.168.100.86:5046/api';
 
   // --- Auth Endpoints (AuthController) ---
   // POST /Auth/verify-card { "cardNumber": "..." }
@@ -12,6 +12,12 @@ class ApiEndpoints {
 
   // POST /Auth/change-pin { "cardId": 1, "oldPin": "...", "newPin": "..." }
   static const String changePin = '/Auth/change-pin';
+
+  // POST /Auth/register-mbanking { "cardNumber", "email", "dateOfBirth", "password" }
+  static const String registerMbanking = '/Auth/register-mbanking';
+
+  // POST /Auth/login-mbanking { "email", "password" }
+  static const String loginMbanking = '/Auth/login-mbanking';
 
   // --- Transaction Endpoints (TransactionController) ---
 
@@ -25,4 +31,14 @@ class ApiEndpoints {
   // GET /Transaction/history/{accountId}?page=1&pageSize=20
   // Use string interpolation: "$history/$accountId"
   static const String history = '/Transaction/history';
+
+  // --- Bank Endpoints (BankController) ---
+  // GET /Bank
+  static const String banks = '/Bank';
+
+  // --- Transfer Favorites (TransferController) ---
+  // GET    /Transfer/favorites/{accountId}
+  // POST   /Transfer/favorites { accountId, accountNumber, nickname, bankName }
+  // DELETE /Transfer/favorites/{id}?accountId={accountId}
+  static const String favorites = '/Transfer/favorites';
 }

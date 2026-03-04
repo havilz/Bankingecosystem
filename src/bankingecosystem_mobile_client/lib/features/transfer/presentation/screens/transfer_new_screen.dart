@@ -1,41 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/ui/theme/app_colors.dart';
 import '../../../../core/ui/theme/app_text_styles.dart';
+import '../providers/bank_provider.dart';
 import '../widgets/transfer_new_header.dart';
 import '../widgets/transfer_success_bottom_sheet.dart';
 
 import 'package:skeletonizer/skeletonizer.dart';
 
-class TransferNewScreen extends StatefulWidget {
+class TransferNewScreen extends ConsumerStatefulWidget {
   const TransferNewScreen({super.key});
 
   @override
-  State<TransferNewScreen> createState() => _TransferNewScreenState();
+  ConsumerState<TransferNewScreen> createState() => _TransferNewScreenState();
 }
 
-class _TransferNewScreenState extends State<TransferNewScreen> {
+class _TransferNewScreenState extends ConsumerState<TransferNewScreen> {
   final TextEditingController _accountController = TextEditingController();
   bool _isButtonActive = false;
   bool _isLoading = true;
-  bool _isValidating = false; // Add validation loading state
-
-  // Mock selected bank for now
-  // ignore: prefer_final_fields
-  String _selectedBank = "BCA";
+  bool _isValidating = false;
+  String? _selectedBankCode;
+  String? _selectedBankName;
 
   @override
   void initState() {
     super.initState();
     _accountController.addListener(_validateInput);
-    // Simulate loading
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) setState(() => _isLoading = false);
     });
   }
 
@@ -187,55 +182,67 @@ class _TransferNewScreenState extends State<TransferNewScreen> {
   }
 
   void _handleValidation() async {
-    setState(() {
-      _isValidating = true;
-    });
-
-    // Simulate network delay
-    await Future.delayed(const Duration(milliseconds: 1500));
-
+    setState(() => _isValidating = true);
     if (!mounted) return;
-
-    setState(() {
-      _isValidating = false;
-    });
+    setState(() => _isValidating = false);
 
     final accountNumber = _accountController.text.trim();
-
-    // Mock validation logic
-    if (accountNumber == '1234567890') {
-      _showSuccessBottomSheet();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Nomor rekening tidak ditemukan',
-            style: AppTextStyles.small.copyWith(color: AppColors.white),
-          ),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
+    _showSuccessBottomSheet(accountNumber);
   }
 
-  void _showSuccessBottomSheet() {
+  void _showSuccessBottomSheet(String accountNumber) {
     TransferSuccessBottomSheet.show(
       context: context,
-      accountName: 'Budi Santoso',
-      bankName: _selectedBank,
-      accountNumber: _accountController.text,
+      accountName: 'Penerima',
+      bankName: _selectedBankName ?? 'Banking Ecosystem',
+      accountNumber: accountNumber,
       onContinue: () {
-        Navigator.pop(context); // Close bottom sheet
-        context.push('/transfer/amount');
+        Navigator.pop(context);
+        context.push(
+          '/transfer/amount',
+          extra: {
+            'targetAccountNumber': accountNumber,
+            'bankName': _selectedBankName ?? 'Internal',
+          },
+        );
       },
     );
   }
 
   Widget _buildBankSelector() {
+    final bankState = ref.watch(bankProvider);
+    final selectedName = _selectedBankName ?? 'Pilih Bank';
+
     return GestureDetector(
       onTap: () {
-        // TODO: Handle bank selection navigation
+        if (bankState.banks.isEmpty) return;
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (ctx) => SizedBox(
+            height: MediaQuery.of(ctx).size.height * 0.5,
+            child: ListView.builder(
+              itemCount: bankState.banks.length,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              itemBuilder: (ctx, i) {
+                final bank = bankState.banks[i];
+                return ListTile(
+                  title: Text(bank.name),
+                  trailing: _selectedBankCode == bank.code
+                      ? const Icon(Icons.check, color: AppColors.primary)
+                      : null,
+                  onTap: () {
+                    setState(() {
+                      _selectedBankCode = bank.code;
+                      _selectedBankName = bank.name;
+                    });
+                    Navigator.pop(ctx);
+                  },
+                );
+              },
+            ),
+          ),
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -257,12 +264,21 @@ class _TransferNewScreenState extends State<TransferNewScreen> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  _selectedBank,
-                  style: AppTextStyles.medium.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                bankState.isLoading
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(
+                        selectedName,
+                        style: AppTextStyles.medium.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: _selectedBankCode == null
+                              ? AppColors.grey
+                              : AppColors.textPrimary,
+                        ),
+                      ),
               ],
             ),
             const Icon(Icons.keyboard_arrow_down, color: AppColors.textPrimary),

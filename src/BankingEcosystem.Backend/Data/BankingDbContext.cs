@@ -17,6 +17,9 @@ public class BankingDbContext : DbContext
     public DbSet<AtmCashInventory> AtmCashInventories => Set<AtmCashInventory>();
     public DbSet<Employee> Employees => Set<Employee>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<MbankingAccount> MbankingAccounts => Set<MbankingAccount>();
+    public DbSet<FavoriteTransfer> FavoriteTransfers => Set<FavoriteTransfer>();
+    public DbSet<Bank> Banks => Set<Bank>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -200,6 +203,61 @@ public class BankingDbContext : DbContext
                   .WithMany(e => e.AuditLogs)
                   .HasForeignKey(e => e.EmployeeId)
                   .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        // ─── MbankingAccount ───
+        modelBuilder.Entity<MbankingAccount>(entity =>
+        {
+            entity.HasKey(e => e.MbankingAccountId);
+            entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.PasswordHash).IsRequired().HasMaxLength(256);
+            entity.HasIndex(e => e.Email).IsUnique();
+
+            entity.HasOne(e => e.Card)
+                  .WithMany()
+                  .HasForeignKey(e => e.CardId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // ─── FavoriteTransfer ───
+        modelBuilder.Entity<FavoriteTransfer>(entity =>
+        {
+            entity.HasKey(e => e.FavoriteId);
+            entity.Property(e => e.FavoriteAccountNumber).IsRequired().HasMaxLength(20);
+            entity.Property(e => e.Nickname).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.BankName).IsRequired().HasMaxLength(100);
+
+            entity.HasOne(e => e.Account)
+                  .WithMany()
+                  .HasForeignKey(e => e.AccountId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // ─── Bank ───
+        modelBuilder.Entity<Bank>(entity =>
+        {
+            entity.HasKey(e => e.BankId);
+            entity.Property(e => e.BankCode).IsRequired().HasMaxLength(20);
+            entity.Property(e => e.BankName).IsRequired().HasMaxLength(100);
+
+            // Seed: common Indonesian banks
+            entity.HasData(
+                new Bank { BankId = 1,  BankCode = "BCA",     BankName = "Bank Central Asia (BCA)" },
+                new Bank { BankId = 2,  BankCode = "BRI",     BankName = "Bank Rakyat Indonesia (BRI)" },
+                new Bank { BankId = 3,  BankCode = "BNI",     BankName = "Bank Negara Indonesia (BNI)" },
+                new Bank { BankId = 4,  BankCode = "MANDIRI", BankName = "Bank Mandiri" },
+                new Bank { BankId = 5,  BankCode = "BSI",     BankName = "Bank Syariah Indonesia (BSI)" },
+                new Bank { BankId = 6,  BankCode = "CIMB",    BankName = "CIMB Niaga" },
+                new Bank { BankId = 7,  BankCode = "DANAMON", BankName = "Bank Danamon" },
+                new Bank { BankId = 8,  BankCode = "PERMATA", BankName = "Bank Permata" },
+                new Bank { BankId = 9,  BankCode = "BTN",     BankName = "Bank Tabungan Negara (BTN)" },
+                new Bank { BankId = 10, BankCode = "MEGA",    BankName = "Bank Mega" },
+                new Bank { BankId = 11, BankCode = "OCBC",    BankName = "OCBC Indonesia" },
+                new Bank { BankId = 12, BankCode = "PANIN",   BankName = "Bank Panin" },
+                new Bank { BankId = 13, BankCode = "MAYBANK", BankName = "Maybank Indonesia" },
+                new Bank { BankId = 14, BankCode = "JAGO",    BankName = "Bank Jago" },
+                new Bank { BankId = 15, BankCode = "ECOSYS",  BankName = "Banking Ecosystem (Internal)" }
+            );
         });
     }
 }

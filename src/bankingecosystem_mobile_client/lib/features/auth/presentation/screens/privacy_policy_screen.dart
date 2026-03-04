@@ -66,7 +66,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
               color: AppColors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
+                  color: Colors.black.withValues(alpha: 0.06),
                   blurRadius: 12,
                   offset: const Offset(0, -4),
                 ),
@@ -114,7 +114,9 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                         : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      disabledBackgroundColor: AppColors.grey.withOpacity(0.3),
+                      disabledBackgroundColor: AppColors.grey.withValues(
+                        alpha: 0.3,
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),

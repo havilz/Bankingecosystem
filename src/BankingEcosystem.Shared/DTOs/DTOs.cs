@@ -10,6 +10,18 @@ public record AuthResponse(string Token, string AccountNumber, string CustomerNa
 public record EmployeeLoginRequest(string EmployeeCode, string Password);
 public record EmployeeLoginResponse(string Token, string FullName, string Role);
 
+// ─── MBanking Auth ───
+public record RegisterMbankingRequest(string CardNumber, string Email, DateTime DateOfBirth, string Password);
+public record LoginMbankingRequest(string Email, string Password);
+
+// ─── Favorites ───
+public record FavoriteDto(int FavoriteId, string AccountNumber, string Nickname, string BankName);
+public record AddFavoriteRequest(int AccountId, string AccountNumber, string Nickname, string BankName);
+
+// ─── Bank ───
+public record BankDto(int BankId, string BankCode, string BankName);
+
+
 // ─── Account ───
 public record AccountDto(int AccountId, string AccountNumber, string AccountTypeName, decimal Balance, decimal DailyLimit, bool IsActive, DateTime CreatedAt);
 public record CreateAccountRequest(int CustomerId, int AccountTypeId, decimal InitialDeposit);

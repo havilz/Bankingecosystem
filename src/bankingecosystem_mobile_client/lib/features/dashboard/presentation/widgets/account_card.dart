@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/ui/ui.dart';
+import '../providers/dashboard_provider.dart';
 
 /// Account card widget — Livin' Mandiri inspired.
 /// Contains a header row with "Rekening" on the left,
 /// "Saldo" (eye icon) and "Atur" (filter icon) on the right.
 /// Body content will be added incrementally below.
-class AccountCard extends StatefulWidget {
+class AccountCard extends ConsumerStatefulWidget {
   const AccountCard({super.key});
 
   @override
-  State<AccountCard> createState() => _AccountCardState();
+  ConsumerState<AccountCard> createState() => _AccountCardState();
 }
 
-class _AccountCardState extends State<AccountCard> {
+class _AccountCardState extends ConsumerState<AccountCard> {
   bool _isBalanceVisible = true;
   int _activeCategory = 0;
   final PageController _pageController = PageController();
@@ -291,6 +293,11 @@ class _AccountCardState extends State<AccountCard> {
 
   /// Tabungan: Account name + balance nominal
   Widget _buildTabunganContent() {
+    final balance = ref.watch(dashboardProvider).balance?.balance;
+    final formatted = balance != null
+        ? 'Rp ${balance.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.').replaceAll(',', '.')}'
+        : 'Rp —';
+
     return _buildContentCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -306,7 +313,7 @@ class _AccountCardState extends State<AccountCard> {
           ),
           const SizedBox(height: 8),
           Text(
-            _isBalanceVisible ? 'Rp 1.250.000' : '••••••••',
+            _isBalanceVisible ? formatted : '••••••••',
             style: AppTextStyles.large.copyWith(
               fontSize: 20,
               fontWeight: FontWeight.bold,

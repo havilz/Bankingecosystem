@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/ui/ui.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 
 /// Dashboard header widget.
 /// Left: Greeting with username.
 /// Right: Notification (mail) icon + Logout icon.
-class DashboardHeader extends StatelessWidget {
+class DashboardHeader extends ConsumerWidget {
   final String username;
 
   const DashboardHeader({super.key, required this.username});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
@@ -52,7 +54,7 @@ class DashboardHeader extends StatelessWidget {
 
           // Logout icon
           IconButton(
-            onPressed: () => _handleLogout(context),
+            onPressed: () => _handleLogout(context, ref),
             icon: const Icon(Icons.logout),
             color: AppColors.danger,
             iconSize: 24,
@@ -64,8 +66,8 @@ class DashboardHeader extends StatelessWidget {
     );
   }
 
-  void _handleLogout(BuildContext context) {
-    // Navigate back to login screen
-    context.go('/login');
+  void _handleLogout(BuildContext context, WidgetRef ref) {
+    final router = GoRouter.of(context);
+    ref.read(authProvider.notifier).logout(router);
   }
 }

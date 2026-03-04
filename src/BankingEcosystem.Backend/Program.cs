@@ -11,6 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+// CORS — allow Flutter mobile client (emulator & physical device)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MobileClient", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 // EF Core
 builder.Services.AddDbContext<BankingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -22,6 +33,8 @@ builder.Services.AddScoped<TransactionService>();
 builder.Services.AddScoped<CardService>();
 builder.Services.AddScoped<AdminService>();
 builder.Services.AddScoped<AuditLogService>();
+builder.Services.AddScoped<FavoriteTransferService>();
+builder.Services.AddScoped<BankService>();
 
 // JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "BankingEcosystemSuperSecretKey2026!@#$%^&*()";
@@ -49,7 +62,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("MobileClient");
+// NOTE: UseHttpsRedirection removed — mobile client calls plain HTTP
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

@@ -50,4 +50,28 @@ public class AuthController(AuthService authService) : ControllerBase
 
         return Ok(new ApiResponse<EmployeeLoginResponse>(true, "Login successful", result));
     }
+
+    [HttpPost("register-mbanking")]
+    public async Task<IActionResult> RegisterMbanking([FromBody] RegisterMbankingRequest request)
+    {
+        var (success, message, data) = await authService.RegisterMbankingAsync(
+            request.CardNumber, request.Email, request.DateOfBirth, request.Password);
+
+        if (!success)
+            return BadRequest(new ApiResponse<object>(false, message, null));
+
+        return Ok(new ApiResponse<AuthResponse>(true, message, data));
+    }
+
+    [HttpPost("login-mbanking")]
+    public async Task<IActionResult> LoginMbanking([FromBody] LoginMbankingRequest request)
+    {
+        var (success, message, data) = await authService.LoginMbankingAsync(
+            request.Email, request.Password);
+
+        if (!success)
+            return Unauthorized(new ApiResponse<object>(false, message, null));
+
+        return Ok(new ApiResponse<AuthResponse>(true, message, data));
+    }
 }

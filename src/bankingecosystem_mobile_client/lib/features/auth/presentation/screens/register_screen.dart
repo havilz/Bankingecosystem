@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../core/ui/ui.dart';
+import '../providers/auth_provider.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _cardNumberController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -196,6 +197,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: AppColors.textSecondary,
                         ),
                       ),
+
+                      // ─── Inline Error Banner ───
+                      Builder(
+                        builder: (context) {
+                          final state = ref.watch(authProvider);
+                          if (state is! AuthError) {
+                            return const SizedBox.shrink();
+                          }
+                          return Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade50,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.red.shade200),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.error_outline,
+                                  color: Colors.red.shade700,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    state.message,
+                                    style: AppTextStyles.small.copyWith(
+                                      color: Colors.red.shade700,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -218,9 +261,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _isFormValid
-                      ? () {
-                          // TODO: call register provider
+                  onPressed:
+                      _isFormValid && ref.watch(authProvider) is! AuthLoading
+                      ? () async {
+                          final router = GoRouter.of(context);
+                          await ref
+                              .read(authProvider.notifier)
+                              .registerMbanking(
+                                cardNumber: _cardNumberController.text.trim(),
+                                email: _emailController.text.trim(),
+                                dateOfBirth: _selectedDate!,
+                                password: _passwordController.text.trim(),
+                                router: router,
+                              );
+                          // Error shown inline via authProvider state
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
@@ -234,13 +288,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     elevation: 0,
                   ),
-                  child: Text(
-                    'Daftar',
-                    style: AppTextStyles.button.copyWith(
-                      color: _isFormValid ? AppColors.white : AppColors.grey,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: ref.watch(authProvider) is AuthLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.white,
+                          ),
+                        )
+                      : Text(
+                          'Daftar',
+                          style: AppTextStyles.button.copyWith(
+                            color: _isFormValid
+                                ? AppColors.white
+                                : AppColors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
               ),
             ),
