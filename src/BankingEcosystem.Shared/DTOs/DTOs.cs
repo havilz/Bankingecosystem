@@ -13,6 +13,7 @@ public record EmployeeLoginResponse(string Token, string FullName, string Role);
 // ─── MBanking Auth ───
 public record RegisterMbankingRequest(string CardNumber, string Email, DateTime DateOfBirth, string Password);
 public record LoginMbankingRequest(string Email, string Password);
+public record VerifyMbankingPinRequest(int AccountId, string Pin);
 
 // ─── Favorites ───
 public record FavoriteDto(int FavoriteId, string AccountNumber, string Nickname, string BankName);
@@ -20,6 +21,10 @@ public record AddFavoriteRequest(int AccountId, string AccountNumber, string Nic
 
 // ─── Bank ───
 public record BankDto(int BankId, string BankCode, string BankName);
+
+// ─── MBanking Admin ───
+public record MbankingAccountDto(int MbankingAccountId, int CardId, string CardNumber, string CustomerName, string AccountNumber, string Email, DateTime RegisteredAt);
+public record UpdateMbankingEmailRequest(int MbankingAccountId, string NewEmail);
 
 
 // ─── Account ───
@@ -45,6 +50,7 @@ public record TransactionDto(int TransactionId, string TransactionType, decimal 
 public record WithdrawRequest(int AccountId, int AtmId, decimal Amount);
 public record DepositRequest(int AccountId, int AtmId, decimal Amount);
 public record TransferRequest(int AccountId, string TargetAccountNumber, decimal Amount, string? Description);
+public record AccountLookupDto(string AccountNumber, string CustomerName);
 
 // ─── ATM ───
 public record AtmDto(int AtmId, string AtmCode, string Location, bool IsOnline, decimal TotalCash, DateTime? LastRefill);

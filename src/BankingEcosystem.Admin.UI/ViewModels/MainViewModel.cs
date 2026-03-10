@@ -125,6 +125,13 @@ public partial class MainViewModel : ObservableObject
         CurrentView = vm;
     }
 
+    [RelayCommand]
+    private void NavigateToMbanking()
+    {
+        var vm = new MbankingListViewModel(_apiService);
+        CurrentView = vm;
+    }
+
     private void ShowRefillAtm(int atmId, Action onRefillDone)
     {
         var vm = new RefillAtmViewModel(

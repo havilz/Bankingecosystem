@@ -129,4 +129,28 @@ public class AdminApiService(HttpClient httpClient)
         var resp = await httpClient.GetFromJsonAsync<ApiResponse<List<AuditLogDto>>>(url, JsonOpts);
         return resp?.Data ?? [];
     }
+
+    // ─── MBanking Account Admin ───
+    public async Task<List<MbankingAccountDto>> GetMbankingAccountsAsync()
+    {
+        var resp = await httpClient.GetFromJsonAsync<ApiResponse<List<MbankingAccountDto>>>("api/admin/mbanking", JsonOpts);
+        return resp?.Data ?? [];
+    }
+
+    public async Task UpdateMbankingEmailAsync(int mbankingAccountId, string newEmail)
+    {
+        var resp = await httpClient.PutAsJsonAsync("api/admin/mbanking/email",
+            new UpdateMbankingEmailRequest(mbankingAccountId, newEmail));
+        var body = await resp.Content.ReadFromJsonAsync<ApiResponse<object>>(JsonOpts);
+        if (body is not { Success: true })
+            throw new Exception(body?.Message ?? "Gagal memperbarui email.");
+    }
+
+    public async Task DeleteMbankingAccountAsync(int mbankingAccountId)
+    {
+        var resp = await httpClient.DeleteAsync($"api/admin/mbanking/{mbankingAccountId}");
+        var body = await resp.Content.ReadFromJsonAsync<ApiResponse<object>>(JsonOpts);
+        if (body is not { Success: true })
+            throw new Exception(body?.Message ?? "Gagal menghapus akun mbanking.");
+    }
 }

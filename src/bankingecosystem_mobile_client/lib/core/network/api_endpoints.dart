@@ -1,6 +1,6 @@
 class ApiEndpoints {
   // Base URL (Android Emulator: 10.0.2.2, iOS Simulator: localhost)
-  static const String baseUrl = 'http://192.168.100.86:5046/api';
+  static const String baseUrl = 'http://10.148.20.246:5046/api';
 
   // --- Auth Endpoints (AuthController) ---
   // POST /Auth/verify-card { "cardNumber": "..." }
@@ -12,6 +12,9 @@ class ApiEndpoints {
 
   // POST /Auth/change-pin { "cardId": 1, "oldPin": "...", "newPin": "..." }
   static const String changePin = '/Auth/change-pin';
+
+  // POST /Auth/verify-mbanking-pin { "accountId": 1, "pin": "123456" }
+  static const String verifyMbankingPin = '/Auth/verify-mbanking-pin';
 
   // POST /Auth/register-mbanking { "cardNumber", "email", "dateOfBirth", "password" }
   static const String registerMbanking = '/Auth/register-mbanking';
@@ -31,6 +34,10 @@ class ApiEndpoints {
   // GET /Transaction/history/{accountId}?page=1&pageSize=20
   // Use string interpolation: "$history/$accountId"
   static const String history = '/Transaction/history';
+
+  // GET /Transaction/lookup/{accountNumber}
+  // Returns: { accountNumber, customerName }
+  static const String accountLookup = '/Transaction/lookup';
 
   // --- Bank Endpoints (BankController) ---
   // GET /Bank

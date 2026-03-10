@@ -87,5 +87,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> logout() => _tokenStorage.clearAll();
+  Future<({bool success, String message})> verifyMbankingPin(
+    int accountId,
+    String pin,
+  ) {
+    return _datasource.verifyMbankingPin(accountId: accountId, pin: pin);
+  }
+
+  @override
+  Future<void> logout() => _tokenStorage.clearSession();
 }

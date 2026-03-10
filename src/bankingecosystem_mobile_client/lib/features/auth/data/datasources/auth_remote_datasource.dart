@@ -69,4 +69,25 @@ class AuthRemoteDatasource {
       return (success: false, message: msg, data: null);
     }
   }
+
+  Future<({bool success, String message})> verifyMbankingPin({
+    required int accountId,
+    required String pin,
+  }) async {
+    try {
+      final response = await _client.dio.post(
+        ApiEndpoints.verifyMbankingPin,
+        data: {'accountId': accountId, 'pin': pin},
+      );
+      final body = response.data as Map<String, dynamic>;
+      return (
+        success: body['success'] as bool? ?? true,
+        message: body['message'] as String? ?? 'PIN Valid',
+      );
+    } on DioException catch (e) {
+      final msg =
+          e.response?.data?['message'] as String? ?? 'PIN Salah atau Error.';
+      return (success: false, message: msg);
+    }
+  }
 }

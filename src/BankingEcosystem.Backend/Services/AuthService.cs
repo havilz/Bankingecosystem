@@ -60,6 +60,29 @@ public class AuthService(BankingDbContext db, IConfiguration config)
         return new AuthResponse(token, card.Account.AccountNumber, card.Customer.FullName, card.Account.Balance, card.AccountId);
     }
 
+    public async Task<bool> VerifyMbankingPinAsync(int accountId, string pin)
+    {
+        // Find the active card associated with this account
+        var card = await db.Cards
+            .FirstOrDefaultAsync(c => c.AccountId == accountId && !c.IsBlocked);
+
+        if (card == null) return false;
+
+        if (!BCrypt.Net.BCrypt.Verify(pin, card.PinHash))
+        {
+            card.FailedAttempts++;
+            if (card.FailedAttempts >= 3) card.IsBlocked = true;
+            await db.SaveChangesAsync();
+            return false;
+        }
+
+        // reset attempts
+        card.FailedAttempts = 0;
+        await db.SaveChangesAsync();
+
+        return true;
+    }
+
     public async Task<bool> ChangePinAsync(int cardId, string encryptedOldPin, string encryptedNewPin)
     {
         var card = await db.Cards.FindAsync(cardId);

@@ -13,6 +13,8 @@ import '../../features/sukha/presentation/screens/sukha_screen.dart';
 import '../../features/transfer/presentation/screens/transfer_screen.dart';
 import '../../features/transfer/presentation/screens/transfer_new_screen.dart';
 import '../../features/transfer/presentation/screens/transfer_amount_screen.dart';
+import '../../features/transfer/presentation/screens/transfer_pin_screen.dart';
+import '../../features/transfer/presentation/screens/transfer_receipt_screen.dart';
 import '../../features/messages/presentation/screens/message_screen.dart';
 import 'navigation_shell.dart';
 
@@ -61,7 +63,29 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'amount',
-            builder: (context, state) => const TransferAmountScreen(),
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>? ?? {};
+              return TransferAmountScreen(
+                targetAccountNumber:
+                    extra['targetAccountNumber'] as String? ?? '',
+                bankName: extra['bankName'] as String? ?? '',
+                recipientName: extra['recipientName'] as String? ?? 'Penerima',
+              );
+            },
+          ),
+          GoRoute(
+            path: 'pin',
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>? ?? {};
+              return TransferPinScreen(transactionDetails: extra);
+            },
+          ),
+          GoRoute(
+            path: 'receipt',
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>? ?? {};
+              return TransferReceiptScreen(transactionDetails: extra);
+            },
           ),
         ],
       ),

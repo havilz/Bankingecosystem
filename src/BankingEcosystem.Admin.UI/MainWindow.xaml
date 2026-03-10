@@ -41,6 +41,9 @@
         <DataTemplate DataType="{x:Type vm:AuditLogViewModel}">
             <views:AuditLogView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:MbankingListViewModel}">
+            <views:MbankingListView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid Background="{StaticResource LightGrayBrush}">
@@ -71,6 +74,8 @@
                     <Button Content="Transaksi" Command="{Binding NavigateToTransactionsCommand}" 
                             Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
                     <Button Content="Audit Log" Command="{Binding NavigateToAuditLogsCommand}" 
+                            Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
+                    <Button Content="MBanking" Command="{Binding NavigateToMbankingCommand}" 
                             Style="{StaticResource NavBarButtonStyle}" Margin="0,0,10,0"/>
                     <!-- More nav buttons will be added in later steps -->
                 </StackPanel>

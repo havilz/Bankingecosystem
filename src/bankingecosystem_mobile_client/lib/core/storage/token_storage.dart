@@ -50,5 +50,17 @@ class TokenStorage {
   }
 
   // ─── Clear ───
+
+  /// Logout: hanya hapus token & accountId.
+  /// Email, customerName, accountNumber tetap disimpan
+  /// agar login overlay bisa auto-load email saat login berikutnya.
+  Future<void> clearSession() async {
+    await Future.wait([
+      _storage.delete(key: _keyToken),
+      _storage.delete(key: _keyAccountId),
+    ]);
+  }
+
+  /// Full wipe — hapus semua data (untuk uninstall / factory reset).
   Future<void> clearAll() => _storage.deleteAll();
 }

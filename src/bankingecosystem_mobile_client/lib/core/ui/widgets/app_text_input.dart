@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
@@ -11,6 +12,7 @@ class AppTextInput extends StatelessWidget {
   final String? errorText;
   final ValueChanged<String>? onChanged;
   final Widget? suffixIcon;
+  final List<TextInputFormatter>? inputFormatters;
 
   const AppTextInput({
     super.key,
@@ -22,6 +24,7 @@ class AppTextInput extends StatelessWidget {
     this.errorText,
     this.onChanged,
     this.suffixIcon,
+    this.inputFormatters,
   });
 
   @override
@@ -41,6 +44,7 @@ class AppTextInput extends StatelessWidget {
           obscureText: obscureText,
           keyboardType: keyboardType,
           onChanged: onChanged,
+          inputFormatters: inputFormatters,
           style: AppTextStyles.medium,
           decoration: InputDecoration(
             hintText: hint,

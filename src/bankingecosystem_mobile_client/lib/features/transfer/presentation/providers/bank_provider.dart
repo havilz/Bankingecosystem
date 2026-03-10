@@ -52,17 +52,36 @@ class BankNotifier extends Notifier<BankListState> {
     return const BankListState(isLoading: true);
   }
 
+  // Bank internal — selalu ada di posisi pertama
+  static const _internalBank = BankModel(
+    id: 0,
+    code: 'ECOSYS',
+    name: 'Banking Ecosystem (Internal)',
+  );
+
   Future<void> _fetchBanks() async {
     try {
       final dio = ref.read(dioClientProvider).dio;
       final response = await dio.get(ApiEndpoints.banks);
       final items = response.data['data'] as List<dynamic>;
-      final banks = items
+      final fromApi = items
           .map((e) => BankModel.fromJson(e as Map<String, dynamic>))
+          // hapus duplikat bank internal yang mungkin ada dari API
+          .where((b) => b.code != 'ECOSYS')
           .toList();
-      state = state.copyWith(isLoading: false, banks: banks);
+
+      // Selalu tampilkan bank internal di paling atas
+      state = state.copyWith(
+        isLoading: false,
+        banks: [_internalBank, ...fromApi],
+      );
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      // Jika API gagal, minimal bank internal tetap tersedia
+      state = state.copyWith(
+        isLoading: false,
+        banks: [_internalBank],
+        error: e.toString(),
+      );
     }
   }
 }

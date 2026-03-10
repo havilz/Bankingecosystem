@@ -15,5 +15,10 @@ abstract class AuthRepository {
   Future<({bool success, String message, SessionEntity? session})>
   loginMbanking({required String email, required String password});
 
+  Future<({bool success, String message})> verifyMbankingPin(
+    int accountId,
+    String pin,
+  );
+
   Future<void> logout();
 }

@@ -31,6 +31,16 @@ public class AuthController(AuthService authService) : ControllerBase
         return Ok(new ApiResponse<AuthResponse>(true, "Authenticated", result));
     }
 
+    [HttpPost("verify-mbanking-pin")]
+    public async Task<IActionResult> VerifyMbankingPin([FromBody] VerifyMbankingPinRequest request)
+    {
+        var success = await authService.VerifyMbankingPinAsync(request.AccountId, request.Pin);
+        if (!success)
+            return BadRequest(new ApiResponse<object>(false, "PIN Salah atau Kartu Diblokir", null));
+
+        return Ok(new ApiResponse<object>(true, "PIN Valid", null));
+    }
+
     [HttpPost("change-pin")]
     public async Task<IActionResult> ChangePin([FromBody] ChangePinRequest request)
     {

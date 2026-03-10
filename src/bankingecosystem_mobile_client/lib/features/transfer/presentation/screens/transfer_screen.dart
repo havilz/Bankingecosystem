@@ -94,32 +94,14 @@ class _TransferScreenState extends State<TransferScreen> {
             right: 16,
             bottom: 16, // Tetap di bawah (tidak ikut naik keyboard)
             child: SafeArea(
-              child: ElevatedButton(
+              child: AppButton(
+                label: 'Transfer ke penerima baru',
+                isFullWidth: true,
                 onPressed: () => context.push('/transfer/new'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryDark,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Transfer ke penerima baru',
-                      style: AppTextStyles.medium.copyWith(
-                        color: AppColors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Icon(
-                      Icons.queue_play_next,
-                      color: AppColors.white,
-                      size: 20,
-                    ),
-                  ],
+                icon: const Icon(
+                  Icons.queue_play_next,
+                  color: AppColors.white,
+                  size: 20,
                 ),
               ),
             ),

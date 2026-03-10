@@ -42,35 +42,68 @@ class _LoginOverlayContent extends ConsumerStatefulWidget {
 
 class _LoginOverlayContentState extends ConsumerState<_LoginOverlayContent> {
   final _passwordController = TextEditingController();
+  final _emailInputController = TextEditingController();
   bool _obscure = true;
-  String? _email;
+  String?
+  _storedEmail; // email dari storage (sudah pernah register di device ini)
+  bool _isEmailLoaded = false;
 
   @override
   void initState() {
     super.initState();
+    // Reset error state saat overlay dibuka
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(authProvider.notifier).reset();
+    });
     _loadEmail();
   }
 
   @override
   void dispose() {
     _passwordController.dispose();
+    _emailInputController.dispose();
     super.dispose();
   }
 
   Future<void> _loadEmail() async {
     final email = await ref.read(tokenStorageProvider).getEmail();
-    if (mounted) setState(() => _email = email);
+    if (mounted) {
+      setState(() {
+        _storedEmail = email;
+        _isEmailLoaded = true;
+      });
+    }
   }
 
   Future<void> _login() async {
-    if (_email == null || _email!.isEmpty) return;
+    // Ambil email: dari storage atau dari input manual
+    final email = (_storedEmail != null && _storedEmail!.isNotEmpty)
+        ? _storedEmail!
+        : _emailInputController.text.trim();
+
+    if (email.isEmpty) return;
     final password = _passwordController.text.trim();
     if (password.isEmpty) return;
 
+    // Capture context-dependent objects BEFORE any await
     final router = GoRouter.of(context);
+
+    // Simpan email ke storage kalau belum ada (login manual pertama kali)
+    if (_storedEmail == null || _storedEmail!.isEmpty) {
+      await ref
+          .read(tokenStorageProvider)
+          .saveSession(
+            token: '',
+            accountId: 0,
+            customerName: '',
+            email: email,
+            accountNumber: '',
+          );
+    }
+
     await ref
         .read(authProvider.notifier)
-        .loginMbanking(email: _email!, password: password, router: router);
+        .loginMbanking(email: email, password: password, router: router);
 
     // Close overlay on success
     final authState = ref.read(authProvider);
@@ -108,12 +141,58 @@ class _LoginOverlayContentState extends ConsumerState<_LoginOverlayContent> {
                           fontSize: 24,
                         ),
                       ),
-                      if (_email != null) ...[
+
+                      // Tampilkan email tersimpan ATAU input email manual
+                      if (_storedEmail != null && _storedEmail!.isNotEmpty) ...[
                         const SizedBox(height: 8),
                         Text(
-                          _email!,
+                          _storedEmail!,
                           style: AppTextStyles.small.copyWith(
                             color: AppColors.white.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ] else if (_isEmailLoaded) ...[
+                        // Email belum tersimpan — tampilkan field input
+                        const SizedBox(height: 24),
+                        TextField(
+                          controller: _emailInputController,
+                          keyboardType: TextInputType.emailAddress,
+                          enabled: !isLoading,
+                          style: AppTextStyles.medium.copyWith(
+                            color: AppColors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                          onChanged: (_) => setState(() {}),
+                          decoration: InputDecoration(
+                            hintText: 'Email',
+                            hintStyle: AppTextStyles.medium.copyWith(
+                              color: AppColors.white.withValues(alpha: 0.5),
+                            ),
+                            filled: true,
+                            fillColor: AppColors.white.withValues(alpha: 0.15),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 14,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: AppColors.white.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: AppColors.white.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: AppColors.white,
+                                width: 2,
+                              ),
+                            ),
                           ),
                         ),
                       ],

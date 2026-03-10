@@ -1,21 +1,57 @@
 import 'package:flutter/material.dart';
-import '../../../../core/ui/ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TransferAmountScreen extends StatefulWidget {
-  const TransferAmountScreen({super.key});
+import '../../../../core/storage/token_storage.dart';
+import '../../../../core/ui/ui.dart';
+import '../widgets/transfer_confirmation_sheet.dart';
+import '../../../dashboard/presentation/providers/dashboard_provider.dart';
+
+class TransferAmountScreen extends ConsumerStatefulWidget {
+  final String targetAccountNumber;
+  final String bankName;
+  final String recipientName;
+
+  const TransferAmountScreen({
+    super.key,
+    required this.targetAccountNumber,
+    required this.bankName,
+    required this.recipientName,
+  });
 
   @override
-  State<TransferAmountScreen> createState() => _TransferAmountScreenState();
+  ConsumerState<TransferAmountScreen> createState() =>
+      _TransferAmountScreenState();
 }
 
-class _TransferAmountScreenState extends State<TransferAmountScreen> {
+class _TransferAmountScreenState extends ConsumerState<TransferAmountScreen> {
   final TextEditingController _amountController = TextEditingController();
   bool _isButtonActive = false;
+  String _sourceAccountNumber = '';
+  String? _selectedPurpose;
+
+  final List<String> _purposes = [
+    'Investasi',
+    'Transfer Kekayaan',
+    'Pembelian Barang',
+    'Pembayaran Jasa',
+    'Lainnya',
+  ];
 
   @override
   void initState() {
     super.initState();
     _amountController.addListener(_validateInput);
+    _loadSourceAccount();
+  }
+
+  Future<void> _loadSourceAccount() async {
+    final tokenStorage = ref.read(tokenStorageProvider);
+    final accountNum = await tokenStorage.getAccountNumber();
+    if (mounted) {
+      setState(() {
+        _sourceAccountNumber = accountNum ?? '-';
+      });
+    }
   }
 
   @override
@@ -28,18 +64,26 @@ class _TransferAmountScreenState extends State<TransferAmountScreen> {
     setState(() {
       _isButtonActive =
           _amountController.text.isNotEmpty &&
-          _amountController.text != '0'; // Basic validation
+          _amountController.text != '0' &&
+          _selectedPurpose != null; // Require purpose selection
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final balanceState = ref.watch(dashboardProvider).balance;
+    final balanceStr = balanceState != null
+        ? _formatCurrency(balanceState.balance)
+        : 'Rp -';
+
     return Scaffold(
       backgroundColor: AppColors.white, // No rounded corners, full white bg
       resizeToAvoidBottomInset:
           false, // Prevent button from rising with keyboard
       appBar: AppBar(
         backgroundColor: AppColors.white,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
@@ -59,15 +103,45 @@ class _TransferAmountScreenState extends State<TransferAmountScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildRecipientDetails(),
+                AppRecipientCard(
+                  recipientName: widget.recipientName,
+                  bankName: widget.bankName,
+                  accountNumber: widget.targetAccountNumber,
+                ),
                 const SizedBox(height: 32),
-                _buildNominalCard(),
+                AppNominalInput(
+                  controller: _amountController,
+                  onClear: () {
+                    _amountController.clear();
+                  },
+                ),
                 const SizedBox(height: 24),
-                _buildSourceAccountSection(),
+                AppSourceAccountCard(
+                  bankName: 'Banking Ecosystem',
+                  accountNumber: _sourceAccountNumber,
+                  balanceStr: balanceStr,
+                ),
                 const SizedBox(height: 24),
-                _buildTransferMethodCard(),
+                AppSelectionCard(
+                  label: 'Metode transfer',
+                  value: 'BI Fast',
+                  trailingIcon: const Icon(
+                    Icons.edit,
+                    size: 20,
+                    color: AppColors.primary,
+                  ),
+                ),
                 const SizedBox(height: 24),
-                _buildTransactionPurposeCard(),
+                AppSelectionCard(
+                  label: 'Tujuan transaksi',
+                  value: _selectedPurpose ?? 'Pilih tujuan',
+                  highlightValue: _selectedPurpose == null,
+                  trailingIcon: const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: AppColors.grey,
+                  ),
+                  onTap: _showPurposeSelectionSheet,
+                ),
               ],
             ),
           ),
@@ -77,30 +151,14 @@ class _TransferAmountScreenState extends State<TransferAmountScreen> {
             right: 16,
             bottom: 32,
             child: SafeArea(
-              child: ElevatedButton(
+              child: AppButton(
+                label: 'Lanjut',
+                isFullWidth: true,
                 onPressed: _isButtonActive
                     ? () {
-                        // TODO: Proceed to confirmation
+                        _showConfirmationBottomSheet();
                       }
                     : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _isButtonActive
-                      ? AppColors.primary
-                      : AppColors.grey,
-                  disabledBackgroundColor: AppColors.grey,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: Text(
-                  'Lanjut',
-                  style: AppTextStyles.button.copyWith(
-                    color: _isButtonActive
-                        ? AppColors.white
-                        : AppColors.white.withValues(alpha: 0.8),
-                  ),
-                ),
               ),
             ),
           ),
@@ -109,219 +167,86 @@ class _TransferAmountScreenState extends State<TransferAmountScreen> {
     );
   }
 
-  Widget _buildRecipientDetails() {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 32,
-          backgroundColor: AppColors.lightGrey,
-          child: Text(
-            'BS', // Mock initials
-            style: AppTextStyles.h2.copyWith(
-              color: AppColors.grey,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        // Added back the Text widget wrapper that was accidentally removed
-        Text(
-          'Budi Santoso', // Mock name
-          style: AppTextStyles.large.copyWith(fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'BCA - 1234567890', // Mock bank details
-          style: AppTextStyles.medium.copyWith(color: AppColors.grey),
-          textAlign: TextAlign.center,
-        ),
-      ],
+  void _showConfirmationBottomSheet() {
+    final amountText = _amountController.text.replaceAll(RegExp(r'\D'), '');
+    final amount = int.tryParse(amountText) ?? 0;
+    final fee =
+        widget.bankName.contains('Internal') ||
+            widget.bankName.contains('Ecosystem')
+        ? 0
+        : 2500; // Mock fee for BI Fast external
+    final total = amount + fee;
+
+    TransferConfirmationSheet.show(
+      context: context,
+      amount: amount,
+      fee: fee,
+      total: total,
+      bankName: widget.bankName,
+      targetAccountNumber: widget.targetAccountNumber,
+      recipientName: widget.recipientName,
+      selectedPurpose: _selectedPurpose,
+      formatCurrency: _formatCurrency,
     );
   }
 
-  Widget _buildNominalCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.lightGrey, width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.grey.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Nominal',
-            style: AppTextStyles.small.copyWith(color: AppColors.grey),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Rp ',
+  void _showPurposeSelectionSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) => SizedBox(
+        height: MediaQuery.of(ctx).size.height * 0.5,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Pilih Tujuan Transaksi',
                 style: AppTextStyles.large.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
                 ),
               ),
-              Expanded(
-                child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  style: AppTextStyles.large.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                  decoration: const InputDecoration(
-                    hintText: '0',
-                    hintStyle: TextStyle(color: AppColors.grey),
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                ),
+            ),
+            const Divider(height: 1),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _purposes.length,
+                itemBuilder: (context, index) {
+                  final purpose = _purposes[index];
+                  return ListTile(
+                    title: Text(purpose),
+                    trailing: _selectedPurpose == purpose
+                        ? const Icon(Icons.check, color: AppColors.primary)
+                        : null,
+                    onTap: () {
+                      setState(() {
+                        _selectedPurpose = purpose;
+                        _validateInput();
+                      });
+                      Navigator.pop(ctx);
+                    },
+                  );
+                },
               ),
-              if (_amountController.text.isNotEmpty)
-                GestureDetector(
-                  onTap: () {
-                    _amountController.clear();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: AppColors.lightGrey,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.close,
-                      size: 16,
-                      color: AppColors.grey,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSourceAccountSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Rekening Sumber',
-          style: AppTextStyles.small.copyWith(color: AppColors.grey),
+            ),
+          ],
         ),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.lightGrey, width: 1),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Mandiri - 0987654321', // Mock user account
-                    style: AppTextStyles.medium.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Saldo: Rp 10.500.000', // Mock balance
-                    style: AppTextStyles.small.copyWith(color: AppColors.grey),
-                  ),
-                ],
-              ),
-              const Icon(Icons.keyboard_arrow_down, color: AppColors.grey),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTransferMethodCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.lightGrey, width: 1),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Metode transfer',
-                style: AppTextStyles.small.copyWith(color: AppColors.grey),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'BI Fast', // Default
-                style: AppTextStyles.medium.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const Icon(Icons.edit, size: 20, color: AppColors.primary),
-        ],
       ),
     );
   }
 
-  Widget _buildTransactionPurposeCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.lightGrey, width: 1),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Tujuan transaksi',
-                style: AppTextStyles.small.copyWith(color: AppColors.grey),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Pilih tujuan',
-                style: AppTextStyles.medium.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-              ),
-            ],
-          ),
-          const Icon(Icons.keyboard_arrow_down, color: AppColors.grey),
-        ],
-      ),
-    );
+  String _formatCurrency(num amount) {
+    final str = amount.toInt().toString();
+    var result = '';
+    int count = 0;
+    for (int i = str.length - 1; i >= 0; i--) {
+      if (count != 0 && count % 3 == 0) {
+        result = '.$result';
+      }
+      result = '${str[i]}$result';
+      count++;
+    }
+    return 'Rp $result';
   }
 }

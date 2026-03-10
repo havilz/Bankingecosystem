@@ -35,6 +35,7 @@ builder.Services.AddScoped<AdminService>();
 builder.Services.AddScoped<AuditLogService>();
 builder.Services.AddScoped<FavoriteTransferService>();
 builder.Services.AddScoped<BankService>();
+builder.Services.AddScoped<MbankingAdminService>();
 
 // JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "BankingEcosystemSuperSecretKey2026!@#$%^&*()";

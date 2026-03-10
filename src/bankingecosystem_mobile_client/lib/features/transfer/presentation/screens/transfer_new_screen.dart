@@ -1,9 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/ui/theme/app_colors.dart';
-import '../../../../core/ui/theme/app_text_styles.dart';
+import '../../../../core/network/api_endpoints.dart';
+import '../../../../core/network/dio_client.dart';
+import '../../../../core/ui/ui.dart';
 import '../providers/bank_provider.dart';
 import '../widgets/transfer_new_header.dart';
 import '../widgets/transfer_success_bottom_sheet.dart';
@@ -22,6 +24,7 @@ class _TransferNewScreenState extends ConsumerState<TransferNewScreen> {
   bool _isButtonActive = false;
   bool _isLoading = true;
   bool _isValidating = false;
+  String? _lookupError; // error dari validasi nomor rekening
   String? _selectedBankCode;
   String? _selectedBankName;
 
@@ -101,30 +104,39 @@ class _TransferNewScreenState extends ConsumerState<TransferNewScreen> {
                             const SizedBox(height: 8),
                             // Using a standard TextField for now, or AppTextInput if adaptable
                             // User requested "form untuk input nomor rekening"
-                            TextField(
+                            // Using reusable core input widget
+                            AppTextInput(
+                              label: 'Masukkan nomor rekening',
                               controller: _accountController,
-                              keyboardType: TextInputType.number,
-                              style: AppTextStyles.medium.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: 'Masukkan nomor rekening',
-                                hintStyle: AppTextStyles.medium.copyWith(
-                                  color: AppColors.grey,
-                                ),
-                                filled: true,
-                                fillColor: AppColors
-                                    .lightGrey, // Assuming variable exists or grey[50]
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 16,
-                                ),
-                              ),
+                              keyboardType: AppInputTypes.number,
+                              onChanged: (_) {
+                                if (_lookupError != null) {
+                                  setState(() => _lookupError = null);
+                                }
+                              },
                             ),
+
+                            // Error: nomor rekening tidak valid
+                            if (_lookupError != null) ...[
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.error_outline,
+                                    size: 14,
+                                    color: Colors.red,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    _lookupError!,
+                                    style: AppTextStyles.small.copyWith(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -141,38 +153,13 @@ class _TransferNewScreenState extends ConsumerState<TransferNewScreen> {
             right: 16,
             bottom: 32,
             child: SafeArea(
-              child: ElevatedButton(
+              child: AppButton(
+                label: 'Lanjut',
+                isFullWidth: true,
+                isLoading: _isValidating,
                 onPressed: _isButtonActive && !_isValidating
                     ? _handleValidation
                     : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _isButtonActive
-                      ? AppColors.primary
-                      : AppColors.grey,
-                  disabledBackgroundColor:
-                      AppColors.grey, // Background when disabled
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: _isValidating
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: AppColors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Text(
-                        'Lanjut',
-                        style: AppTextStyles.button.copyWith(
-                          color: _isButtonActive
-                              ? AppColors.white
-                              : AppColors.grey, // Dark grey text when inactive
-                        ),
-                      ),
               ),
             ),
           ),
@@ -181,19 +168,64 @@ class _TransferNewScreenState extends ConsumerState<TransferNewScreen> {
     );
   }
 
-  void _handleValidation() async {
-    setState(() => _isValidating = true);
-    if (!mounted) return;
-    setState(() => _isValidating = false);
-
+  Future<void> _handleValidation() async {
     final accountNumber = _accountController.text.trim();
-    _showSuccessBottomSheet(accountNumber);
+    if (accountNumber.isEmpty) return;
+
+    final bankCode = _selectedBankCode; // e.g. 'ECOSYS' for internal
+    setState(() {
+      _isValidating = true;
+      _lookupError = null;
+    });
+
+    if (!mounted) return;
+
+    String recipientName;
+
+    if (bankCode == 'ECOSYS') {
+      // Internal bank — wajib validasi ke backend
+      try {
+        final dio = ref.read(dioClientProvider).dio;
+        final response = await dio.get(
+          '${ApiEndpoints.accountLookup}/$accountNumber',
+        );
+        final data = response.data['data'] as Map<String, dynamic>?;
+        if (data == null) {
+          setState(() {
+            _isValidating = false;
+            _lookupError = 'Nomor rekening tidak ditemukan.';
+          });
+          return;
+        }
+        recipientName = data['customerName'] as String? ?? 'Nasabah';
+      } on DioException catch (e) {
+        final msg = e.response?.data?['message'] as String?;
+        setState(() {
+          _isValidating = false;
+          _lookupError = msg ?? 'Nomor rekening tidak ditemukan.';
+        });
+        return;
+      } catch (_) {
+        setState(() {
+          _isValidating = false;
+          _lookupError = 'Gagal memvalidasi nomor rekening.';
+        });
+        return;
+      }
+    } else {
+      // Bank lain — tidak bisa verifikasi, gunakan nama generik
+      recipientName = 'Transfer Antarbank';
+    }
+
+    setState(() => _isValidating = false);
+    if (!mounted) return;
+    _showSuccessBottomSheet(accountNumber, recipientName);
   }
 
-  void _showSuccessBottomSheet(String accountNumber) {
+  void _showSuccessBottomSheet(String accountNumber, String accountName) {
     TransferSuccessBottomSheet.show(
       context: context,
-      accountName: 'Penerima',
+      accountName: accountName,
       bankName: _selectedBankName ?? 'Banking Ecosystem',
       accountNumber: accountNumber,
       onContinue: () {
@@ -203,6 +235,7 @@ class _TransferNewScreenState extends ConsumerState<TransferNewScreen> {
           extra: {
             'targetAccountNumber': accountNumber,
             'bankName': _selectedBankName ?? 'Internal',
+            'recipientName': accountName,
           },
         );
       },

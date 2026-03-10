@@ -183,6 +183,16 @@ public class TransactionService(BankingDbContext db)
             .ToListAsync();
     }
 
+    public async Task<AccountLookupDto?> LookupAccountAsync(string accountNumber)
+    {
+        var account = await db.Accounts
+            .Include(a => a.Customer)
+            .FirstOrDefaultAsync(a => a.AccountNumber == accountNumber && a.IsActive);
+
+        if (account is null) return null;
+        return new AccountLookupDto(account.AccountNumber, account.Customer.FullName);
+    }
+
     private static string GenerateRefNumber()
     {
         return $"TXN{DateTime.UtcNow:yyyyMMddHHmmss}{Random.Shared.Next(1000, 9999)}";

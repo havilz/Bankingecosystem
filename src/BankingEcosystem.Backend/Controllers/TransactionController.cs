@@ -70,4 +70,15 @@ public class TransactionController(TransactionService transactionService) : Cont
         var results = await transactionService.GetHistoryAsync(accountId, page, pageSize);
         return Ok(new ApiResponse<List<TransactionDto>>(true, "OK", results));
     }
+
+    // GET /api/Transaction/lookup/{accountNumber}
+    // Validate account number and return account holder name (for transfer confirmation)
+    [HttpGet("lookup/{accountNumber}")]
+    public async Task<IActionResult> LookupAccount(string accountNumber)
+    {
+        var result = await transactionService.LookupAccountAsync(accountNumber);
+        if (result is null)
+            return NotFound(new ApiResponse<object>(false, "Nomor rekening tidak ditemukan.", null));
+        return Ok(new ApiResponse<AccountLookupDto>(true, "OK", result));
+    }
 }

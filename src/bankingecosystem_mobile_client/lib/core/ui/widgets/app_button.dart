@@ -10,6 +10,7 @@ class AppButton extends StatelessWidget {
   final AppButtonType type;
   final bool isFullWidth;
   final bool isLoading;
+  final Widget? icon;
 
   const AppButton({
     super.key,
@@ -18,6 +19,7 @@ class AppButton extends StatelessWidget {
     this.type = AppButtonType.primary,
     this.isFullWidth = false,
     this.isLoading = false,
+    this.icon,
   });
 
   @override
@@ -111,6 +113,14 @@ class AppButton extends StatelessWidget {
         // Leaving it to standard style inheriting from button theme.
       ),
     );
+
+    if (icon != null) {
+      content = Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [content, const SizedBox(width: 8), icon!],
+      );
+    }
 
     if (isLoading) {
       content = SizedBox(
