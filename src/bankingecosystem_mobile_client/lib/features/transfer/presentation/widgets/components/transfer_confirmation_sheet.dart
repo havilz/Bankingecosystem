@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/ui/ui.dart'; // import app_colors, app_text_styles, app_detail_row, app_button
+import '../../../../../core/ui/ui.dart'; // import app_colors, app_text_styles, app_detail_row, app_button
 
 class TransferConfirmationSheet {
   static void show({

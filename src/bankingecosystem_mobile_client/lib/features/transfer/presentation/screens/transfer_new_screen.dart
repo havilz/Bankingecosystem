@@ -7,8 +7,7 @@ import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/ui/ui.dart';
 import '../providers/bank_provider.dart';
-import '../widgets/transfer_new_header.dart';
-import '../widgets/transfer_success_bottom_sheet.dart';
+import '../widgets/widgets.dart';
 
 import 'package:skeletonizer/skeletonizer.dart';
 

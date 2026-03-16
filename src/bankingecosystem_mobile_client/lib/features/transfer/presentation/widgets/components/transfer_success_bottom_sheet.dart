@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/ui/ui.dart';
+import '../../../../../core/ui/ui.dart';
 
 class TransferSuccessBottomSheet extends StatelessWidget {
   final String accountName;

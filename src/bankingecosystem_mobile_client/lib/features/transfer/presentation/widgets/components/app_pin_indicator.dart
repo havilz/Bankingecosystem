@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
+import '../../../../../../core/ui/theme/app_colors.dart';
 
 class AppPinIndicator extends StatelessWidget {
   final int length;

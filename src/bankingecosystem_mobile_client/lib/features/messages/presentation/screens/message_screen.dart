@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../../core/ui/ui.dart';
 
-import 'widgets/receipt_list_tab.dart';
-import 'widgets/notification_list_tab.dart';
-import 'widgets/promo_list_tab.dart';
+import '../widgets/receipt_list_tab.dart';
+import '../widgets/notification_list_tab.dart';
+import '../widgets/promo_list_tab.dart';
 
 class MessageScreen extends StatelessWidget {
   const MessageScreen({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/ui/ui.dart';
+import '../../../../../core/ui/ui.dart';
 
 class NotificationListTab extends StatelessWidget {
   const NotificationListTab({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/ui/ui.dart';
+import '../../../../../core/ui/ui.dart';
 
 class TransferHeader extends StatelessWidget {
   const TransferHeader({super.key});

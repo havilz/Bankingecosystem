@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../../../core/ui/ui.dart';
+import '../../../../../../core/ui/ui.dart';
 
 class TransactionListItem extends StatelessWidget {
   final IconData icon;
